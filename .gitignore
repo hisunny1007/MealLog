@@ -1,0 +1,202 @@
+############################
+#        OS 공통
+############################
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+
+############################
+#        IDE
+############################
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+!src/**/resources/**
+
+# VSCode
+.vscode/
+.history/
+
+# Eclipse / STS
+.project
+.classpath
+.settings/
+.apt_generated/
+.sts4-cache/
+.factorypath
+
+# NetBeans
+nbproject/
+nbactions.xml
+nb-configuration.xml
+
+
+############################
+#     Java / Spring Boot
+############################
+target/
+bin/
+*.class
+*.jar
+*.war
+*.ear
+*.jpi
+*.hprof
+
+# Cache & logs
+logs/
+*.log
+*.tmp
+*.bak
+*.pid
+*.swp
+hs_err_pid*
+replay_pid*
+
+# Application local config
+application-local.yml
+application-local.properties
+application-dev.yml
+application-dev.properties
+
+
+############################
+#          Gradle
+############################
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!gradlew
+!gradlew.bat
+.gradle-cache/
+gradle-app.setting
+
+
+############################
+#          Maven
+############################
+.mvn/
+mvnw
+mvnw.cmd
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+target/
+
+
+############################
+#     Node / Vue / Vite
+############################
+node_modules/
+dist/
+dist-ssr/
+.npm/
+.npmrc
+.pnpm/
+.pnpm-store/
+.yarn/
+.yarnrc
+.yarn-cache/
+.yarn-integrity
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Vite cache
+.vite/
+vite.config.timestamp-*
+*.local
+
+
+############################
+#         Vue
+############################
+*.vue.ts
+*.vue.js.map
+
+
+############################
+#     Environment Files
+############################
+.env
+.env.*
+!.env.example
+
+
+############################
+#    Databases / Cache
+############################
+# Redis
+dump.rdb
+
+# SQLite, H2, other local DB
+*.sql
+*.sqlite
+*.sqlite3
+*.db.mv.db
+*.db.trace.db
+
+# Mongo
+*.bson
+
+
+############################
+#           Docker
+############################
+docker-compose.override.yml
+docker-compose.dev.yml
+.docker/
+docker-data/
+*.tar
+
+
+############################
+#            CI/CD
+############################
+/.github/
+.gitlab/
+.jenkins/
+*.code-workspace
+
+
+############################
+#        Miscellaneous
+############################
+*.orig
+*.rej
+*.patch
+*.bak
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Coverage & Test
+coverage/
+.nyc_output/
+.cypress/
+test-output/
+test-results/
+
+# Trash
+.Trash-*
+.nfs*
