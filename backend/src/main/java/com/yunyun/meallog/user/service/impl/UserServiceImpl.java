@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public Long logIn(LoginRequestDto loginRequestDto, HttpSession session) {
+    public Long login(LoginRequestDto loginRequestDto, HttpSession session) {
         User user = userDao.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAILED));
 
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void logOut(HttpSession session) {
+    public void logout(HttpSession session) {
         session.invalidate();
     }
 }

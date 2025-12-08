@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpSession;
 public interface UserService {
     Long signUp(UserRequestDto userRequestDto);
 
-    Long logIn(LoginRequestDto loginRequestDto, HttpSession session);
+    Long login(LoginRequestDto loginRequestDto, HttpSession session);
 
-    void logOut(HttpSession session);
+    void logout(HttpSession session);
 }

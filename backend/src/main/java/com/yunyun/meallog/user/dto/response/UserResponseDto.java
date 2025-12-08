@@ -34,8 +34,8 @@ public class UserResponseDto {
                 .gender(user.getGender())
                 .height(user.getHeight())
                 .weight(user.getWeight())
-                .exerciseFrequency(user.getExerciseFrequency())
-                .exerciseGoal(user.getExerciseGoal())
+                .exerciseFrequency(String.valueOf(user.getExerciseFrequency()))
+                .exerciseGoal(String.valueOf(user.getExerciseGoal()))
                 .rewardPoint(user.getRewardPoint())
                 .createdAt(user.getCreatedAt())
                 .build();
