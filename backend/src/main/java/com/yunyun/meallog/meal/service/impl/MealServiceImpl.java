@@ -1,0 +1,88 @@
+package com.yunyun.meallog.meal.service.impl;
+
+import com.yunyun.meallog.meal.dao.MealDao;
+import com.yunyun.meallog.meal.domain.Meal;
+import com.yunyun.meallog.meal.dto.request.MealRequestDto;
+import com.yunyun.meallog.meal.dto.response.MealResponseDto;
+import com.yunyun.meallog.meal.service.MealService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class MealServiceImpl implements MealService {
+
+    private final MealDao mealDao;
+
+    @Override
+    public MealResponseDto createMeal(Long userId, MealRequestDto requestDto) {
+        // 같은 날짜, 같은 식단 타입 존재하는지 확인 필요
+        boolean exist = mealDao.existsByDateAndMealType(userId, requestDto.getDate(), requestDto.getMealType());
+
+        if (exist) {
+            throw new IllegalArgumentException(requestDto.getMealType() + "식단은 이미 등록되어 있습니다.");
+        }
+
+        Meal meal = requestDto.toEntity(userId);
+        mealDao.insertMeal(meal);
+
+        return MealResponseDto.from(meal);
+    }
+
+
+    @Override
+    public MealResponseDto getMeal(Long userId, Long mealId) {
+        Meal meal = mealDao.findById(mealId);
+
+        if (meal == null || !meal.getUserId().equals(userId)) {
+            throw new IllegalArgumentException("해당 식단을 찾을 수 없습니다.");
+        }
+        return MealResponseDto.from(meal);
+    }
+
+    // 특정 날짜 식단 조회
+    @Override
+    public List<MealResponseDto> getMealsByDate(Long userId, LocalDate date) {
+       List<Meal> meals = mealDao.findByDate(userId, date);
+
+       // list 형식 stream으로
+       return meals.stream()
+                .map(MealResponseDto::from)
+                .sorted((m1, m2) -> m1.getMealType().compareTo(m2.getMealType())) // 아침-점심-저녁 순서 정렬
+                .collect(Collectors.toList());
+    }
+
+
+
+    @Override
+    public MealResponseDto updateMeal(Long userId, Long mealId, MealRequestDto requestDto) {
+        Meal meal = mealDao.findById(mealId);
+        if (meal == null || !meal.getUserId().equals(userId)) {
+            throw new IllegalArgumentException("해당 식단을 찾을 수 없습니다.");
+        }
+
+        // 같은 날짜, 같은 mealType 체크  필요
+        boolean exist = mealDao.existsByDateAndMealType(userId, requestDto.getDate(), requestDto.getMealType());
+        if (exist && !meal.getMealType().equals(requestDto.getMealType())) {
+            throw new IllegalArgumentException("해당 날짜에는 이미 같은 식단 종류가 존재합니다.");
+        }
+
+        Meal updated = requestDto.toEntity(userId);
+        updated.setId(mealId);
+        mealDao.insertMeal(updated); // update 쿼리 필요
+        return MealResponseDto.from(updated);
+    }
+
+    @Override
+    public void deleteMeal(Long userId, Long mealId) {
+        Meal meal = mealDao.findById(mealId);
+        if (meal == null || !meal.getUserId().equals(userId)) {
+            throw new IllegalArgumentException("해당 식단을 삭제할 수 없습니다.");
+        }
+        mealDao.deleteMeal(mealId);
+    }
+}

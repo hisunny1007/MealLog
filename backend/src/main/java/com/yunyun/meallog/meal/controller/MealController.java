@@ -1,0 +1,74 @@
+package com.yunyun.meallog.meal.controller;
+
+import com.yunyun.meallog.meal.dto.request.MealRequestDto;
+import com.yunyun.meallog.meal.dto.response.MealResponseDto;
+import com.yunyun.meallog.meal.service.MealService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/meals")
+public class MealController {
+
+    private final MealService mealService;
+
+    // 식단 등록
+    @PostMapping
+    public ResponseEntity<MealResponseDto> createMeal(
+            @RequestAttribute("userId") Long userId,
+            @RequestBody MealRequestDto requestDto) {
+        MealResponseDto response = mealService.createMeal(userId, requestDto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
+    }
+
+    // 식단 단건 조회
+    @GetMapping("/{mealId}")
+    public ResponseEntity<MealResponseDto> getMeal(
+            @RequestAttribute("userId") Long userId,
+            @PathVariable Long mealId) {
+        MealResponseDto response = mealService.getMeal(userId, mealId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    // 특정 날짜 식단 조회
+    @GetMapping("/date/{date}")
+    public ResponseEntity<List<MealResponseDto>> getMealByDate(
+            @RequestAttribute("userId") Long userId,
+            @PathVariable LocalDate date) {
+        List<MealResponseDto> response = mealService.getMealsByDate(userId, date);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    // 식단 수정
+    @PutMapping("/{mealId}")
+    public ResponseEntity<MealResponseDto> updateMeal(
+            @RequestAttribute("userId") Long userId,
+            @PathVariable Long mealId,
+            @RequestBody MealRequestDto requestDto) {
+        MealResponseDto response = mealService.updateMeal(userId, mealId, requestDto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    // 식단 삭제
+    @DeleteMapping("/{mealId}")
+    public ResponseEntity<Void> deleteMeal(
+            @RequestAttribute("userId") Long userId,
+            @PathVariable Long mealId) {
+        mealService.deleteMeal(userId, mealId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+}
