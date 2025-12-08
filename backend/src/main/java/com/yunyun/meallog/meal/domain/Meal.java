@@ -4,6 +4,5 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @NoArgsConstructor
-@
 public class Meal {
 }
