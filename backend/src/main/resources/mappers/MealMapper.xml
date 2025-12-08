@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunyun.meallog.meal.dao.MealDao">
+
+    <!-- Meal 객체 매핑 -->
+    <resultMap id="MealResultMap" type="com.yunyun.meallog.meal.domain.Meal">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="date" column="date"/>
+        <result property="mealType" column="meal_type"/>
+        <result property="memo" column="memo"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="foodId" column="food_id"/>
+        <result property="foodName" column="food_name"/>
+        <result property="score" column="score"/>
+        <result property="calories" column="calories"/>
+        <result property="carbs" column="carbs"/>
+        <result property="protein" column="protein"/>
+        <result property="fat" column="fat"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <!-- C -->
+    <insert id="insertMeal" parameterType="Meal" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO meals (
+            user_id, date, meal_type, memo, image_url,
+            food_id, food_name, score,
+            calories, carbs, protein, fat,
+            created_at
+        )
+        VALUES (
+                   #{userId}, #{date}, #{mealType}, #{memo}, #{imageUrl},
+                   #{foodId}, #{foodName}, #{score},
+                   #{calories}, #{carbs}, #{protein}, #{fat},
+                   NOW()
+               )
+    </insert>
+
+    <!-- R - id -->
+    <select id="findById" parameterType="long" resultMap="MealResultMap">
+        SELECT *
+        FROM meals
+        WHERE id = #{id}
+    </select>
+
+    <!-- R - date -->
+<!--    mybatis는 파라미터 하나만 직접 인식하기 때문에 파라미터 2개 이상인 메서드는 무조건 map 써야 함-->
+    <select id="findByDate" resultMap="MealResultMap">
+        SELECT *
+        FROM meals
+        WHERE user_id = #{userId}
+          AND date = #{date}
+        ORDER BY meal_type
+    </select>
+
+    <!-- U -->
+    <update id="updateMeal" parameterType="Meal">
+        UPDATE meals
+        SET date = #{date},
+            meal_type = #{mealType},
+            memo = #{memo},
+            image_url = #{imageUrl},
+            food_id = #{foodId},
+            food_name = #{foodName},
+            score = #{score},
+            calories = #{calories},
+            carbs = #{carbs},
+            protein = #{protein},
+            fat = #{fat}
+        WHERE id = #{id}
+          AND user_id = #{userId}
+    </update>
+
+    <!-- D -->
+    <delete id="deleteMeal" parameterType="long">
+        DELETE FROM meals
+        WHERE id = #{id}
+    </delete>
+
+    <!-- existsByDateAndMealType -->
+    <select id="existsByDateAndMealType" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END
+        FROM meals
+        WHERE user_id = #{userId}
+          AND date = #{date}
+          AND meal_type = #{mealType}
+    </select>
+
+    <!-- countByDate -->
+    <select id="countByDate" resultType="int">
+        SELECT COUNT(*)
+        FROM meals
+        WHERE user_id = #{userId}
+          AND date = #{date}
+    </select>
+
+</mapper>
