@@ -2,12 +2,12 @@ package com.yunyun.meallog.user.service.impl;
 
 import com.yunyun.meallog.global.exception.CustomException;
 import com.yunyun.meallog.global.exception.ErrorCode;
+import com.yunyun.meallog.global.jwt.JwtUtil;
 import com.yunyun.meallog.user.dao.UserDao;
 import com.yunyun.meallog.user.domain.User;
 import com.yunyun.meallog.user.dto.request.LoginRequestDto;
 import com.yunyun.meallog.user.dto.request.UserRequestDto;
 import com.yunyun.meallog.user.service.UserService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
+    private final JwtUtil jwtUtil;
 
     @Override
     @Transactional
@@ -35,20 +36,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public Long login(LoginRequestDto loginRequestDto, HttpSession session) {
+    public String login(LoginRequestDto loginRequestDto) {
         User user = userDao.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAILED));
 
         if (!user.getPassword().equals(loginRequestDto.getPassword())) {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
+
         }
+        return jwtUtil.generateToken(String.valueOf(user.getId()));
 
-        session.setAttribute("userId", user.getId());
-        return user.getId();
+
     }
 
-    @Override
-    public void logout(HttpSession session) {
-        session.invalidate();
-    }
+
+
+
 }
