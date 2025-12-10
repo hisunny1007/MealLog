@@ -1,8 +1,11 @@
 package com.yunyun.meallog.global.config;
 
+import com.yunyun.meallog.global.MockUserFilter;
 import com.yunyun.meallog.global.interceptor.AdminInterceptor;
 import com.yunyun.meallog.global.interceptor.JwtInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
