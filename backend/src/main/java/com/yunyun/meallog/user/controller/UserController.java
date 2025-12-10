@@ -2,6 +2,7 @@ package com.yunyun.meallog.user.controller;
 
 import com.yunyun.meallog.user.dto.request.LoginRequestDto;
 import com.yunyun.meallog.user.dto.request.UserRequestDto;
+import com.yunyun.meallog.user.dto.response.LoginResponseDto;
 import com.yunyun.meallog.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -30,9 +31,9 @@ public class UserController {
      * 로그인
      */
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto, HttpSession session) {
-        userService.login(loginRequestDto, session);
-        return ResponseEntity.ok("로그인 되었습니다.");
+    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto) {
+        String token = String.valueOf(userService.login(loginRequestDto));
+        return ResponseEntity.ok(String.valueOf(new LoginResponseDto(token)));
     }
 
     /**
@@ -40,7 +41,6 @@ public class UserController {
      */
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {
-        userService.logout(session);
         return ResponseEntity.ok("로그아웃 되었습니다.");
     }
 }
