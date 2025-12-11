@@ -1,6 +1,5 @@
 package com.yunyun.meallog.global.config;
 
-import com.yunyun.meallog.global.MockUserFilter;
 import com.yunyun.meallog.global.interceptor.AdminInterceptor;
 import com.yunyun.meallog.global.interceptor.JwtInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowedMethods("GET", "POST")
