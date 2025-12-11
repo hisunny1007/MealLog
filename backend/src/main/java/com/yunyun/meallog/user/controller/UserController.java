@@ -31,9 +31,11 @@ public class UserController {
      * 로그인
      */
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto) {
-        String token = String.valueOf(userService.login(loginRequestDto));
-        return ResponseEntity.ok(String.valueOf(new LoginResponseDto(token)));
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+
+        LoginResponseDto response = userService.login(loginRequestDto);
+
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -41,6 +43,7 @@ public class UserController {
      */
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {
+
         return ResponseEntity.ok("로그아웃 되었습니다.");
     }
 }

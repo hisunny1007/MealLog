@@ -2,10 +2,11 @@ package com.yunyun.meallog.user.service;
 
 import com.yunyun.meallog.user.dto.request.LoginRequestDto;
 import com.yunyun.meallog.user.dto.request.UserRequestDto;
+import com.yunyun.meallog.user.dto.response.LoginResponseDto;
 import jakarta.servlet.http.HttpSession;
 
 public interface UserService {
-    Long signUp(UserRequestDto userRequestDto);
+    void signUp(UserRequestDto userRequestDto);
 
-    String login(LoginRequestDto loginRequestDto);
+    LoginResponseDto login(LoginRequestDto loginRequestDto);
 }
