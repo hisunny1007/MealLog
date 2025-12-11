@@ -35,24 +35,12 @@ public class  FoodController {
     }
 
     // 음식 직접 추가 (커스텀 음식 등록)
-//    @PostMapping
-//    //is_custom = true
-//    //created_by = userId
-//    public void createCustomFood(
-//            @RequestAttribute("userId") Long userId,
-//            @RequestBody FoodRequestDto requestDto) {
-//        foodService.createCustomFood(userId, requestDto);
-//    }
-
-    // 임시 테스트용
     @PostMapping
+    //is_custom = true
+    //created_by = userId
     public void createCustomFood(
-            @RequestHeader(value = "userId", required = false) Long userId,
+            @RequestAttribute("userId") Long userId,
             @RequestBody FoodRequestDto requestDto) {
-
-        if (userId == null) userId = 1L; // 임시 테스트용
         foodService.createCustomFood(userId, requestDto);
     }
-
-
 }

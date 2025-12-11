@@ -19,6 +19,8 @@ public class MealController {
     private final MealService mealService;
 
     // 식단 등록
+    //foodId 있으면 Food DB 값 사용
+    //foodId 없으면 직접 입력 값 사용
     @PostMapping
     public ResponseEntity<MealResponseDto> createMeal(
             @RequestAttribute("userId") Long userId,
