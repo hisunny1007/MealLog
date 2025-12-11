@@ -3,8 +3,6 @@ package com.yunyun.meallog.global.config;
 import com.yunyun.meallog.global.interceptor.AdminInterceptor;
 import com.yunyun.meallog.global.interceptor.JwtInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -33,7 +31,8 @@ public class WebConfig implements WebMvcConfigurer {
 
 
         // "/users" 경로로 요청이 오면 JwtInterceptor가 먼저 실행된 후, AdminInterceptor가 실행
-        registry.addInterceptor(adminInterceptor).addPathPatterns("/users");
+        registry.addInterceptor(adminInterceptor)
+                .addPathPatterns("/api/v1/users");
     }
 
     @Override

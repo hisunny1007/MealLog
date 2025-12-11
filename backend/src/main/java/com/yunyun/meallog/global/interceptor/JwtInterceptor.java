@@ -23,7 +23,13 @@ public class JwtInterceptor implements HandlerInterceptor {
         }
         String authHeader = request.getHeader("Authorization");
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+        // 토큰 없는 요청은 통과 (signup, login 등)
+        if (authHeader == null || authHeader.isEmpty()) {
+            return true;
+        }
+
+        // Bearer 토큰인지 확인
+        if (!authHeader.startsWith("Bearer ")) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
 
