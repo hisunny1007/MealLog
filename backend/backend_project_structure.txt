@@ -1,0 +1,139 @@
+D:\SSAFY\Final PJT\PJT-FINAL-H-YAMYAM\backend\
+├── .gradle
+│   ├── 8.14.3
+│   │   ├── checksums
+│   │   ├── executionHistory
+│   │   ├── expanded
+│   │   ├── fileChanges
+│   │   ├── fileHashes
+│   │   └── vcsMetadata
+│   ├── buildOutputCleanup
+│   └── vcs-1
+├── .idea
+│   ├── dataSources
+│   │   └── e2ab49f3-8529-41ef-8ddb-db9d18f3e325
+│   │       └── storage_v2
+│   │           └── _src_
+│   │               └── schema
+│   └── modules
+├── build
+│   ├── classes
+│   │   └── java
+│   │       ├── main
+│   │       │   └── com
+│   │       │       └── yunyun
+│   │       │           └── meallog
+│   │       │               ├── food
+│   │       │               ├── global
+│   │       │               ├── meal
+│   │       │               └── user
+│   │       └── test
+│   │           └── com
+│   │               └── yunyun
+│   │                   └── meallog
+│   │                       ├── global
+│   │                       └── user
+│   ├── generated
+│   │   └── sources
+│   │       ├── annotationProcessor
+│   │       │   └── java
+│   │       │       ├── main
+│   │       │       └── test
+│   │       └── headers
+│   │           └── java
+│   │               ├── main
+│   │               └── test
+│   ├── libs
+│   ├── reports
+│   │   ├── problems
+│   │   └── tests
+│   │       └── test
+│   │           ├── classes
+│   │           ├── css
+│   │           ├── js
+│   │           └── packages
+│   ├── resources
+│   │   └── main
+│   │       └── mappers
+│   ├── test-results
+│   │   └── test
+│   │       └── binary
+│   └── tmp
+│       ├── bootJar
+│       ├── compileJava
+│       │   └── compileTransaction
+│       │       ├── backup-dir
+│       │       └── stash-dir
+│       ├── compileTestJava
+│       │   └── compileTransaction
+│       │       ├── backup-dir
+│       │       └── stash-dir
+│       ├── jar
+│       └── test
+├── gradle
+│   └── wrapper
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── com
+│   │   │       └── yunyun
+│   │   │           └── meallog
+│   │   │               ├── food
+│   │   │               │   ├── controller
+│   │   │               │   ├── dao
+│   │   │               │   ├── domain
+│   │   │               │   ├── dto
+│   │   │               │   │   ├── request
+│   │   │               │   │   └── response
+│   │   │               │   └── service
+│   │   │               │       └── impl
+│   │   │               ├── global
+│   │   │               │   ├── config
+│   │   │               │   ├── exception
+│   │   │               │   ├── interceptor
+│   │   │               │   └── jwt
+│   │   │               ├── meal
+│   │   │               │   ├── controller
+│   │   │               │   ├── dao
+│   │   │               │   ├── domain
+│   │   │               │   ├── dto
+│   │   │               │   │   ├── request
+│   │   │               │   │   └── response
+│   │   │               │   └── service
+│   │   │               │       └── impl
+│   │   │               ├── user
+│   │   │               │   ├── controller
+│   │   │               │   ├── dao
+│   │   │               │   ├── domain
+│   │   │               │   ├── dto
+│   │   │               │   │   ├── request
+│   │   │               │   │   └── response
+│   │   │               │   └── service
+│   │   │               │       └── impl
+│   │   │               └── MealLogApplication.java
+│   │   └── resources
+│   │       ├── mappers
+│   │       │   ├── FoodMapper.xml
+│   │       │   ├── MealMapper.xml
+│   │       │   └── UserMapper.xml
+│   │       └── application.properties
+│   └── test
+│       └── java
+│           ├── com
+│           │   └── example
+│           │       └── meal_log
+│           │           └── MealLogApplicationTests.java
+│           └── yunyun
+│               └── meallog
+│                   ├── global
+│                   │   └── jwt
+│                   │       └── JwtTest.java
+│                   └── user
+│                       └── controller
+│                           └── UserControllerTest.java
+├── .gitattributes
+├── .gitignore
+├── build.gradle
+├── gradlew
+├── gradlew.bat
+└── settings.gradle

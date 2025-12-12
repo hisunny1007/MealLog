@@ -1,7 +1,8 @@
 package com.yunyun.meallog.user.controller;
 
 import com.yunyun.meallog.user.dto.request.LoginRequestDto;
-import com.yunyun.meallog.user.dto.request.UserRequestDto;
+import com.yunyun.meallog.user.dto.request.SignupStep1RequestDto;
+import com.yunyun.meallog.user.dto.request.SignupStep2RequestDto;
 import com.yunyun.meallog.user.dto.response.LoginResponseDto;
 import com.yunyun.meallog.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -9,10 +10,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,10 +22,21 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * "userId"라는 키를 통해 이 값이 무엇을 의미하는지 명확하게 함
+     * 회원가입 시 추가적인 정보를 함께 반환해야 할 경우 Map에 새로운 키-값 쌍을 추가하여 확장 가능
+     */
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@Valid @RequestBody UserRequestDto userRequestDto) { // "signIn" -> "signUp"
-        userService.signUp(userRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("회원가입이 완료되었습니다.");
+    public ResponseEntity<Map<String, Long>> signUp(@Valid @RequestBody SignupStep1RequestDto requestDto) {
+        Long userId = userService.signUp(requestDto);
+        Map<String, Long> response = Collections.singletonMap("userId", userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PutMapping("/{userId}/profile")
+    public ResponseEntity<String> updateProfile(@PathVariable Long userId, @RequestBody SignupStep2RequestDto requestDto) {
+        userService.updateProfile(userId, requestDto);
+        return ResponseEntity.ok("프로필이 성공적으로 업데이트되었습니다.");
     }
 
     /**
