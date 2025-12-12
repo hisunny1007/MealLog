@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -44,7 +45,7 @@ public class MealController {
 
     // 특정 날짜 식단 조회
     @GetMapping("/date/{date}")
-    public ResponseEntity<List<MealResponseDto>> getMealByDate(
+    public ResponseEntity<List<MealResponseDto>> getMealsByDate(
             @RequestAttribute("userId") Long userId,
             @PathVariable LocalDate date) {
         List<MealResponseDto> response = mealService.getMealsByDate(userId, date);
@@ -72,5 +73,16 @@ public class MealController {
             @PathVariable Long mealId) {
         mealService.deleteMeal(userId, mealId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    // 이미지 업로드
+    // @RequestPart : multipart/form-data 형식으로 전송된 요청에서 파일과 JSON 데이터를 동시에 처리할 때 사용
+    @PostMapping("/images")
+    public ResponseEntity<MealResponseDto> createMealWithImage(
+            @RequestAttribute("userId") Long userId,
+            @RequestPart(value = "data") MealRequestDto requestDto,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+        return ResponseEntity.ok(mealService.createMealWithImage(userId, requestDto, image));
+
     }
 }

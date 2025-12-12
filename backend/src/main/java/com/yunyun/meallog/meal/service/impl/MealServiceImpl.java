@@ -1,12 +1,15 @@
 package com.yunyun.meallog.meal.service.impl;
 
+import com.yunyun.meallog.global.common.FileService;
 import com.yunyun.meallog.meal.dao.MealDao;
 import com.yunyun.meallog.meal.domain.Meal;
 import com.yunyun.meallog.meal.dto.request.MealRequestDto;
 import com.yunyun.meallog.meal.dto.response.MealResponseDto;
 import com.yunyun.meallog.meal.service.MealService;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.stream.Collectors;
 public class MealServiceImpl implements MealService {
 
     private final MealDao mealDao;
+    private final FileService fileService;
 
     @Override
     public MealResponseDto createMeal(Long userId, MealRequestDto requestDto) {
@@ -84,5 +88,24 @@ public class MealServiceImpl implements MealService {
             throw new IllegalArgumentException("해당 식단을 삭제할 수 없습니다.");
         }
         mealDao.deleteMeal(mealId);
+    }
+
+    @Override
+    public MealResponseDto createMealWithImage(Long userId, MealRequestDto requestDto, MultipartFile image) {
+        String imageUrl = null;
+
+        try {
+            if(image != null && !image.isEmpty()) {
+                imageUrl = fileService.saveFile(image);
+            }
+        } catch (FileUploadException e) {
+            throw new RuntimeException("이미지 업로드에 실패했습니다.");
+        }
+
+        Meal meal = requestDto.toEntity(userId);
+        meal.setImageUrl(imageUrl);
+        mealDao.insertMeal(meal);
+
+        return MealResponseDto.from(meal);
     }
 }
