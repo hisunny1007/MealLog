@@ -1,5 +1,6 @@
 package com.yunyun.meallog.meal.dto.request;
 
+import com.yunyun.meallog.food.dto.response.FoodResponseDto;
 import com.yunyun.meallog.meal.domain.Meal;
 import com.yunyun.meallog.meal.domain.MealType;
 import jakarta.validation.constraints.Max;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,20 +44,24 @@ public class MealRequestDto {
     private float protein;
     private float fat;
 
+    // 음식 정보
+    private FoodResponseDto selectedFood;
+
     public Meal toEntity(Long userId) {
         return Meal.builder()
                 .userId(userId)
                 .date(this.date)
                 .mealType(this.mealType)
-                .foodId(this.foodId)
-                .foodName(this.foodName)
+                .foodId(selectedFood != null ? selectedFood.getId() : null) // db에 있으면 foodId가져오고 아니면 null
+                .foodName(selectedFood != null ? selectedFood.getName() : this.foodName) // db에 있으면 foodName 가져오고 아니면 직접 등록
                 .score(this.score)
                 .imageUrl(this.imageUrl)
                 .memo(this.memo)
-                .calories(this.calories)
-                .carbs(this.carbs)
-                .protein(this.protein)
-                .fat(this.fat)
+                .calories(selectedFood != null ? selectedFood.getCalories() : this.calories)
+                .carbs(selectedFood != null ? selectedFood.getCarbs() : this.carbs)
+                .protein(selectedFood != null ? selectedFood.getProtein() : this.protein)
+                .fat(selectedFood != null ? selectedFood.getFat() : this.fat)
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 }

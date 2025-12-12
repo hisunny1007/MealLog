@@ -1,5 +1,8 @@
 package com.yunyun.meallog.meal.service.impl;
 
+import com.yunyun.meallog.food.dto.request.FoodRequestDto;
+import com.yunyun.meallog.food.dto.response.FoodResponseDto;
+import com.yunyun.meallog.food.service.FoodService;
 import com.yunyun.meallog.global.common.FileService;
 import com.yunyun.meallog.meal.dao.MealDao;
 import com.yunyun.meallog.meal.domain.Meal;
@@ -21,6 +24,7 @@ public class MealServiceImpl implements MealService {
 
     private final MealDao mealDao;
     private final FileService fileService;
+    private final FoodService foodService;
 
     @Override
     public MealResponseDto createMeal(Long userId, MealRequestDto requestDto) {
@@ -28,9 +32,30 @@ public class MealServiceImpl implements MealService {
         boolean exist = mealDao.existsByDateAndMealType(userId, requestDto.getDate(), requestDto.getMealType());
 
         if (exist) {
-            throw new IllegalArgumentException(requestDto.getMealType() + "식단은 이미 등록되어 있습니다.");
+            throw new IllegalArgumentException(requestDto.getMealType() + " 식단은 이미 등록되어 있습니다.");
         }
 
+        // DB에서 음식 조회
+        List<FoodResponseDto> foods = foodService.searchFood(requestDto.getFoodName());
+        FoodResponseDto selectedFood;
+
+        //  DB에 있으면 음식 선택
+        if(!foods.isEmpty() && foods.get(0).getName().equals(requestDto.getFoodName())) {
+            selectedFood = foods.get(0);
+        } else {
+            // 없으면 직접 등록함
+            selectedFood = foodService.createCustomFood(userId, FoodRequestDto.builder()
+                    .name(requestDto.getFoodName())
+                    .calories(requestDto.getCalories())
+                    .carbs(requestDto.getCarbs())
+                    .protein(requestDto.getProtein())
+                    .fat(requestDto.getFat())
+                    .build());
+        }
+
+        requestDto.setSelectedFood(selectedFood);
+
+        // dto -> entity
         Meal meal = requestDto.toEntity(userId);
         mealDao.insertMeal(meal);
 

@@ -17,32 +17,29 @@ public class JwtInterceptor implements HandlerInterceptor {
     private final JwtUtil jwtUtil;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if("OPTIONS".equals(request.getMethod())){
-            return true;
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Object handler) throws Exception {
+
+        String header = request.getHeader("Authorization");
+
+        if (header != null && header.startsWith("Bearer ")) {
+
+            String token = header.substring(7);
+
+            if (jwtUtil.isTokenValid(token)) {
+                // String -> Long 변환
+                Long userId = Long.parseLong(jwtUtil.getUserId(token));
+                request.setAttribute("userId", userId);
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return false;
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return false;
         }
-        String authHeader = request.getHeader("Authorization");
-
-        // 토큰 없는 요청은 통과 (signup, login 등)
-        if (authHeader == null || authHeader.isEmpty()) {
-            return true;
-        }
-
-        // Bearer 토큰인지 확인
-        if (!authHeader.startsWith("Bearer ")) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
-
-        String token = authHeader.substring(7);
-
-        if(!jwtUtil.isTokenValid(token)){
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
-
-        String userId = jwtUtil.getUserId(token);
-        request.setAttribute("userId", Long.parseLong(userId));
 
         return true;
     }
-
 }
