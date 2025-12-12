@@ -1,8 +1,8 @@
 package com.yunyun.meallog.meal.service;
 
-import com.yunyun.meallog.meal.domain.Meal;
 import com.yunyun.meallog.meal.dto.request.MealRequestDto;
 import com.yunyun.meallog.meal.dto.response.MealResponseDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,4 +21,7 @@ public interface MealService {
     MealResponseDto updateMeal(Long userId, Long mealId, MealRequestDto requestDto);
 
     void deleteMeal(Long userId, Long mealId);
+
+    // 이미지 업로드
+    MealResponseDto createMealWithImage(Long userId, MealRequestDto requestDto, MultipartFile image);
 }

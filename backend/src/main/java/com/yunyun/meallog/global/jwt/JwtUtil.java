@@ -57,7 +57,7 @@ public class JwtUtil {
     //토큰에서 클레임 정보를 추출
     private Claims getClaims(String token) {
         return Jwts.parser()
-                .verifyWith(secretKey)
+                .setSigningKey(secretKey) // 라이브러리 버전 수정
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
