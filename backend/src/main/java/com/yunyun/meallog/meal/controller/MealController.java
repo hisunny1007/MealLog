@@ -44,10 +44,11 @@ public class MealController {
     }
 
     // 특정 날짜 식단 조회
-    @GetMapping("/date/{date}")
+    // meals?date=2025-12-14
+    @GetMapping
     public ResponseEntity<List<MealResponseDto>> getMealsByDate(
             @RequestAttribute("userId") Long userId,
-            @PathVariable LocalDate date) {
+            @RequestParam LocalDate date) {
         List<MealResponseDto> response = mealService.getMealsByDate(userId, date);
         return ResponseEntity
                 .status(HttpStatus.OK)
