@@ -7,10 +7,7 @@ const mealApi = {
   // 식단 생성 api
   createMeal : async(formData) => {
     const response = await api.post(`${ENDPOINT}`, formData);
-    console.log(response.data);
-    console.log(response);
-    return response;
-    // return response.data;
+    return response.data;
   },
 
   // 식단 조회 api
@@ -18,6 +15,12 @@ const mealApi = {
     const response = await api.get(`${ENDPOINT}?date=${date}`);
     return response.data;
   },
+
+  // // 단일 식단 조회 (수정/상세용)
+  // getMeal(mealId) {
+  //   return api.get(`${ENDPOINT}/${mealId}`)
+  //     .then(res => res.data)
+  // },
 
   // 식단 수정 api
   updateMeal : async(id, data) => {
