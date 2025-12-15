@@ -5,9 +5,31 @@ const ENDPOINT = '/meals'
 
 const mealApi = {
   // 식단 생성 api
-  createMeal : async(data) => {
-    const response = await api.post(`${ENDPOINT}`, data);
+  createMeal : async(formData) => {
+    const response = await api.post(`${ENDPOINT}`, formData);
     console.log(response.data);
+    console.log(response);
+    return response;
+    // return response.data;
+  },
+
+  // 식단 조회 api
+  getMealsByDate : async(date) => {
+    const response = await api.get(`${ENDPOINT}?date=${date}`);
+    return response.data;
+  },
+
+  // 식단 수정 api
+  updateMeal : async(id, data) => {
+    const response = await api.put(`${ENDPOINT}/${id}`, data);
+    return response.data;
+  },
+
+  // 식단 삭제 api
+  deleteMeal : async(id) => {
+    const response = await api.delete(`${ENDPOINT}/${id}`);
     return response.data;
   }
 }
+
+export default mealApi;
