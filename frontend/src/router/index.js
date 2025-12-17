@@ -31,18 +31,17 @@ const router = createRouter({
       component: MyPageView,
     },
     {
-      path: '/meals/new',
+      path: '/meals/create',
       name: 'MealCreate',
-      component: MealCreateView
+      component: MealCreateView,
     },
     {
       path: '/meals/date/:date',
       name: 'MealDaily',
       component: MealDailyView,
-      props: true
-    }
+      props: true,
+    },
   ],
 })
-
 
 export default router
