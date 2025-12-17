@@ -6,7 +6,7 @@ import com.yunyun.meallog.user.dto.request.SignupStep2RequestDto;
 import com.yunyun.meallog.user.dto.response.LoginResponseDto;
 
 public interface UserService {
-    Long signUp(SignupStep1RequestDto requestDto);
+    Integer signUp(SignupStep1RequestDto requestDto);
 
     LoginResponseDto login(LoginRequestDto loginRequestDto);
 

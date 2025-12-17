@@ -6,12 +6,12 @@
 
     <form @submit.prevent="handleLogin" class="login-form">
       <div class="input-group">
-        <label for="email">이메일</label>
-        <input type="email" id="email" v-model="email" required>
+
+        <input type="email" placeholder="이메일" id="email" v-model="email" required>
       </div>
       <div class="input-group">
-        <label for="password">비밀번호</label>
-        <input type="password" id="password" v-model="password" required>
+
+        <input type="password" placeholder="비밀번호" id="password" v-model="password" required>
       </div>
 
       <button type="submit" class="btn btn-login">로그인</button>
@@ -53,15 +53,62 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
-/* UI 시안에 맞춘 스타일 적용 필요 */
-.login-container { max-width: 400px; margin: 50px auto; text-align: center; }
-.logo-area { margin-bottom: 20px; }
-.logo { width: 100px; }
-.input-group { margin-bottom: 15px; text-align: left; }
-.input-group label { display: block; margin-bottom: 5px; }
-.input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
-.btn-login { background-color: #6474F2; color: white; }
-.btn-signup { background-color: #A9A9A9; color: white; margin-top: 10px; }
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px 20px;
+  min-height: 100vh;
+  background-color: #F8F8F8;
+}
+
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 5px;
+  color: #4B2E1E;
+}
+
+p {
+ color: #4B2E1E;
+}
+
+.login-form {
+  display: flex;
+  width: 300px;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 0;
+}
+.input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #444;
+}
+.input-group input {
+  width: 100%;
+  padding: 12px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+.btn-login {
+  background-color: #5C4533;
+  color: white;
+  padding: 12px;
+}
+.btn-signup {
+  background-color: #A99A8D;
+  color: white;
+  margin-top: 10px;
+  padding: 12px;
+}
 </style>
 
 

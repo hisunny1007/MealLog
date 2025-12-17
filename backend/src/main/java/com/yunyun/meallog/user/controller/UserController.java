@@ -27,9 +27,9 @@ public class UserController {
      * 회원가입 시 추가적인 정보를 함께 반환해야 할 경우 Map에 새로운 키-값 쌍을 추가하여 확장 가능
      */
     @PostMapping("/signup")
-    public ResponseEntity<Map<String, Long>> signUp(@Valid @RequestBody SignupStep1RequestDto requestDto) {
-        Long userId = userService.signUp(requestDto);
-        Map<String, Long> response = Collections.singletonMap("userId", userId);
+    public ResponseEntity<Map<String, Integer>> signUp(@Valid @RequestBody SignupStep1RequestDto requestDto) {
+        Integer userId = userService.signUp(requestDto);
+        Map<String, Integer> response = Collections.singletonMap("userId", userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

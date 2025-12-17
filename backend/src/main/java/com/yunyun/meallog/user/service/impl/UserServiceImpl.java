@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Long signUp(SignupStep1RequestDto requestDto) {
+    public Integer signUp(SignupStep1RequestDto requestDto) {
         // 이메일 중복 체크
         userDao.findByEmail(requestDto.getEmail())
                 .ifPresent(user -> { throw new CustomException(ErrorCode.DUPLICATE_EMAIL); });
