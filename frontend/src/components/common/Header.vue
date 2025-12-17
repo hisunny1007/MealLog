@@ -12,16 +12,24 @@
         />
       </router-link>
 
-      <!-- 오른쪽 메뉴 - 로그인했을 시 변경 필요-->
+      <!-- 오른쪽 메뉴 -->
       <div class="d-flex gap-3">
-        <router-link to="/mypage" class="btn btn-outline-primary">
-          마이페이지
-        </router-link>
+        <!-- 로그인 상태일 때 -->
+        <template v-if="authStore.isAuthenticated">
+          <router-link to="/mypage" class="btn btn-outline-primary">
+            마이페이지
+          </router-link>
+          <button @click="handleLogout" class="btn btn-primary">
+            로그아웃
+          </button>
+        </template>
 
-        <router-link to="/login" class="btn btn-primary">
-          로그인
-        </router-link>
-
+        <!-- 로그아웃 상태일 때 -->
+        <template v-else>
+          <router-link to="/login" class="btn btn-primary">
+            로그인
+          </router-link>
+        </template>
       </div>
 
     </div>
@@ -29,7 +37,17 @@
 </template>
 
 <script setup>
-import logo from "@/assets/logo.png"
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+const handleLogout = () => {
+  authStore.setLogout();
+  alert('로그아웃 되었습니다.');
+  router.push('/');
+};
 </script>
 
 <style scoped>

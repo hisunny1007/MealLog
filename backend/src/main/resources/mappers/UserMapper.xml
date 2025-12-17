@@ -5,12 +5,10 @@
 
     <insert id="signUp" parameterType="com.yunyun.meallog.user.domain.User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO users (
-            email, password, nickname, gender,
-            age, height, weight, exercise_frequency, exercise_goal
+            email, password, nickname
         )
         VALUES (
-            #{email}, #{password}, #{nickname}, #{gender},
-            #{age}, #{height}, #{weight}, #{exerciseFrequency}, #{exerciseGoal}
+            #{email}, #{password}, #{nickname}
         )
     </insert>
 
@@ -22,5 +20,26 @@
         FROM users
         WHERE email = #{email}
     </select>
+
+    <select id="findById" parameterType="Long" resultType="com.yunyun.meallog.user.domain.User">
+        SELECT
+            id, email, password, nickname, gender,
+            age, height, weight, exercise_frequency, exercise_goal,
+            reward_point
+        FROM users
+        WHERE id = #{id}
+    </select>
+
+    <update id="updateProfile" parameterType="com.yunyun.meallog.user.domain.User">
+        UPDATE users
+        SET
+            gender = #{gender},
+            height = #{height},
+            weight = #{weight},
+            age = #{age},
+            exercise_frequency = #{exerciseFrequency},
+            exercise_goal = #{exerciseGoal}
+        WHERE id = #{id}
+    </update>
 
 </mapper>
