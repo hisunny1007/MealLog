@@ -1,0 +1,7 @@
+/* 전역 공통 스타일 */
+:root {
+  --main-brown: #4b2e1e;
+  --brown-50: rgba(75, 46, 30, 0.5);
+  --bg-main: #fff9f1;
+  --border: #614c40;
+}
