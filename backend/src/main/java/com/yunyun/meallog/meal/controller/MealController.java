@@ -1,6 +1,7 @@
 package com.yunyun.meallog.meal.controller;
 
 import com.yunyun.meallog.meal.dto.request.MealRequestDto;
+import com.yunyun.meallog.meal.dto.response.MealCalendarSummaryResponseDto;
 import com.yunyun.meallog.meal.dto.response.MealResponseDto;
 import com.yunyun.meallog.meal.service.MealService;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,25 @@ public class MealController {
     // 식단 등록
     //foodId 있으면 Food DB 값 사용
     //foodId 없으면 직접 입력 값 사용
+//    @PostMapping
+//    public ResponseEntity<MealResponseDto> createMeal(
+//            @RequestAttribute("userId") Long userId,
+//            @RequestBody MealRequestDto requestDto) {
+//
+//
+//        MealResponseDto response = mealService.createMeal(userId, requestDto);
+//        return ResponseEntity
+//                .status(HttpStatus.CREATED)
+//                .body(response);
+//    }
+
     @PostMapping
     public ResponseEntity<MealResponseDto> createMeal(
-            @RequestAttribute("userId") Long userId,
             @RequestBody MealRequestDto requestDto) {
+
+        Long userId = 1L; // ⭐ 개발용 더미 유저
         MealResponseDto response = mealService.createMeal(userId, requestDto);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
@@ -45,14 +60,22 @@ public class MealController {
 
     // 특정 날짜 식단 조회
     // meals?date=2025-12-14
+//    @GetMapping("/date/{date}")
+//    public ResponseEntity<List<MealResponseDto>> getMealsByDate(
+//            @RequestAttribute("userId") Long userId,
+//            @PathVariable LocalDate date) {
+//        List<MealResponseDto> response = mealService.getMealsByDate(userId, date);
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(response);
+//    }
+
     @GetMapping("/date/{date}")
     public ResponseEntity<List<MealResponseDto>> getMealsByDate(
-            @RequestAttribute("userId") Long userId,
             @PathVariable LocalDate date) {
-        List<MealResponseDto> response = mealService.getMealsByDate(userId, date);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(response);
+
+        Long userId = 1L; // 개발용
+        return ResponseEntity.ok(mealService.getMealsByDate(userId, date));
     }
 
     // 식단 수정
@@ -85,5 +108,14 @@ public class MealController {
             @RequestPart(value = "image", required = false) MultipartFile image) {
         return ResponseEntity.ok(mealService.createMealWithImage(userId, requestDto, image));
 
+    }
+
+    //캘린더 요약 표시용 api
+    @GetMapping("/calendar")
+    public List<MealCalendarSummaryResponseDto> getCalendarSummary(
+            @RequestAttribute("userId") Long userId,
+            @RequestParam int year,
+            @RequestParam int month) {
+        return mealService.getCalendarSummary(userId, year, month);
     }
 }
