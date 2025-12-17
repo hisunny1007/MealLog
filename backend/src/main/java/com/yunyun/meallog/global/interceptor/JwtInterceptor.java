@@ -22,6 +22,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                              Object handler) throws Exception {
 
         String header = request.getHeader("Authorization");
+        System.out.println("👉 Authorization header = " + header);
 
         if (header != null && header.startsWith("Bearer ")) {
 
@@ -29,7 +30,10 @@ public class JwtInterceptor implements HandlerInterceptor {
 
             if (jwtUtil.isTokenValid(token)) {
                 // String -> Long 변환
-                Long userId = Long.parseLong(jwtUtil.getUserId(token));
+//                Long userId = Long.parseLong(jwtUtil.getUserId(token)); [수정]
+                Long userId = jwtUtil.getUserId(token);
+                System.out.println("👉 parsed userId = " + userId); // ⭐ 이 줄 추가
+
                 request.setAttribute("userId", userId);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

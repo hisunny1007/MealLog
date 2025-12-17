@@ -2,6 +2,7 @@ package com.yunyun.meallog.meal.dao;
 
 import com.yunyun.meallog.meal.domain.Meal;
 import com.yunyun.meallog.meal.domain.MealType;
+import com.yunyun.meallog.meal.dto.response.MealCalendarSummaryResponseDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -33,4 +34,10 @@ public interface MealDao {
     // 식단 개수 확인
     int countByDate(@Param("userId") Long userId,
                     @Param("date") LocalDate date);
+
+    // 캘린더 요약 표시
+    List<MealCalendarSummaryResponseDto> findCalendarSummary(@Param("userId") Long userId,
+                                                             @Param("date") LocalDate start,
+                                                             @Param("date") LocalDate end);
+
 }
