@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -18,6 +19,12 @@ public class FileService {
     @Value("${file.dir}")
     // spring 환경 설정 값을 직접 필드에 주입할 때 사용
     private String fileDir;
+
+    private static final List<String> DEFAULT_MEAL_IMAGES = List.of(
+            "default/meal1.png",
+            "default/meal2.png"
+    );
+
 
     public String saveFile(MultipartFile image) throws FileUploadException {
         try {
@@ -47,5 +54,11 @@ public class FileService {
         } catch (IOException e){
             throw new FileUploadException();
         }
+    }
+
+    // 랜덤이미지
+    public String getRandomDefaultMealImage() {
+        int idx = (int) (Math.random() * DEFAULT_MEAL_IMAGES.size());
+        return DEFAULT_MEAL_IMAGES.get(idx);
     }
 }
