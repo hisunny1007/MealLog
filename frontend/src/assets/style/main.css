@@ -1,3 +1,7 @@
+/* 전역 기본 (폰트, body, 색상) import */
+@import './variable.css';
+@import './common.css';
+
 /* 전역 폰트 */
 * {
   font-family:
@@ -8,10 +12,10 @@
     Roboto,
     'Noto Sans KR',
     sans-serif;
-  color: var(--text-main);
+  color: var(--main-brown);
 }
 
-/* 배경 - 식별을 위해 임시로 추가*/ 
+/* 배경 - 식별을 위해 임시로 추가*/
 body {
   background-color: #fafafa;
 }
