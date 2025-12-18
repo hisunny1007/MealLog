@@ -28,7 +28,7 @@ public class MealServiceImpl implements MealService {
     private final FoodService foodService;
 
     @Override
-    public MealResponseDto createMeal(Long userId, MealRequestDto requestDto) {
+    public MealResponseDto createMeal(Long userId, MealRequestDto requestDto, MultipartFile image) {
         // 같은 날짜, 같은 식단 타입 존재하는지 확인 필요
         boolean exist = mealDao.existsByDateAndMealType(userId, requestDto.getDate(), requestDto.getMealType());
 
@@ -56,8 +56,23 @@ public class MealServiceImpl implements MealService {
 
         requestDto.setSelectedFood(selectedFood);
 
+        // 이미지 처리
+        String imageUrl;
+
+        try {
+            if(image != null && !image.isEmpty()) {
+                imageUrl = fileService.saveFile(image);
+            } else {
+                imageUrl = fileService.getRandomDefaultMealImage();
+            }
+        } catch (FileUploadException e) {
+            throw new RuntimeException("이미지 처리 실패");
+        }
+
         // dto -> entity
         Meal meal = requestDto.toEntity(userId);
+        meal.setImageUrl(imageUrl);
+
         mealDao.insertMeal(meal);
 
         return MealResponseDto.from(meal);
@@ -114,25 +129,6 @@ public class MealServiceImpl implements MealService {
             throw new IllegalArgumentException("해당 식단을 삭제할 수 없습니다.");
         }
         mealDao.deleteMeal(mealId);
-    }
-
-    @Override
-    public MealResponseDto createMealWithImage(Long userId, MealRequestDto requestDto, MultipartFile image) {
-        String imageUrl = null;
-
-        try {
-            if(image != null && !image.isEmpty()) {
-                imageUrl = fileService.saveFile(image);
-            }
-        } catch (FileUploadException e) {
-            throw new RuntimeException("이미지 업로드에 실패했습니다.");
-        }
-
-        Meal meal = requestDto.toEntity(userId);
-        meal.setImageUrl(imageUrl);
-        mealDao.insertMeal(meal);
-
-        return MealResponseDto.from(meal);
     }
 
     // 캘린더 표시용
