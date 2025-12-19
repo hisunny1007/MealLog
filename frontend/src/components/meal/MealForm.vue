@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="submit">
-    <!-- 이미지 -->
+    <!-- 이미지 등록 -->
     <div class="col-md-4">
       <div
         class="image-box border rounded-4 d-flex flex-column justify-content-center align-items-center"
@@ -157,6 +157,8 @@ const emit = defineEmits(['submit'])
 const keyword = ref('')
 const foods = ref([])
 
+const imageFile = ref(null)
+
 const form = reactive({
   mealType: null, // 기본 선택 없음
   foodId: null,
@@ -187,12 +189,20 @@ const selectFood = (food) => {
   foods.value = []
 }
 
+const onImageChange = (e) => {
+  const file = e.target.files[0]
+  if (file) {
+    imageFile.value = file
+  }
+}
+
 const submit = () => {
   console.log('submit 직전 form:', form)
 
   emit('submit', {
     ...form,
     date: props.date,
+    imageFile: imageFile.value,
   })
 }
 </script>

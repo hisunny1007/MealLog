@@ -5,7 +5,6 @@
       v-for="meal in meals"
       :key="meal.type"
       class="meal-label d-flex align-items-center gap-2"
-      :class="{ disabled: meal.hasMeal }"
     >
       <!-- @click="handleClickMeal(meal)" -->
       <!-- 상태 점 -->
@@ -26,12 +25,6 @@ const props = defineProps({
   },
 })
 
-// const emit = defineEmits(['select'])
-
-// // const handleClickMeal = (meal) => {
-// //   if (meal.hasMeal) return;   // 식단 이미 있으면 막기
-// //   emit('select', meal.type);  // ❗ 없을 때만 폼 열기
-// // };
 </script>
 
 <style scoped>

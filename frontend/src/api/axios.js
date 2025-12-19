@@ -1,24 +1,35 @@
-import axios from "axios";
-import { useAuthStore } from "@/stores/auth"; 
+import { useAuthStore } from '@/stores/authStore'
+import axios from 'axios'
 
-// vite.config.js 프록시 추가
 const api = axios.create({
   baseURL: '/api/v1',
 })
 
+// 요청 인터셉터
+api.interceptors.request.use(
+  (config) => {
+    const authStore = useAuthStore()
+    const token = authStore.token
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  
- 
-  console.log('Attaching token to request header:', token);
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    } else {
+    }
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
+    return config
+  },
+  (error) => Promise.reject(error),
+)
+
+// 응답 인터셉터 (401 확인용)
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      console.error('인증 실패')
+    }
+    return Promise.reject(error)
+  },
+)
 
 export default api

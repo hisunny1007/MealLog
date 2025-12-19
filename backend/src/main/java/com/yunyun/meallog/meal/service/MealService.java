@@ -13,7 +13,7 @@ public interface MealService {
 
     //service는 dto주고받는 레이어라 엔티티 대신 dto 반환이 더 바람직함
 
-    MealResponseDto createMeal(Long userId, MealRequestDto requestDto);
+    MealResponseDto createMeal(Long userId, MealRequestDto requestDto, MultipartFile image);
 
     MealResponseDto getMeal(Long userId, Long mealId);
 
@@ -22,9 +22,6 @@ public interface MealService {
     MealResponseDto updateMeal(Long userId, Long mealId, MealRequestDto requestDto);
 
     void deleteMeal(Long userId, Long mealId);
-
-    // 이미지 업로드
-    MealResponseDto createMealWithImage(Long userId, MealRequestDto requestDto, MultipartFile image);
 
     // 캘린더 요약 표시용
     List<MealCalendarSummaryResponseDto> getCalendarSummary(Long userId, int year, int month);

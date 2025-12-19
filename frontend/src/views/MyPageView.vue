@@ -1,6 +1,5 @@
 <template>
   <div class="mypage-container">
-
     <div class="mypage-content">
       <h1>마이 페이지</h1>
 
@@ -32,7 +31,6 @@
       </nav>
 
       <div class="bottom-links">
-
         <button class="deactivate-link">회원 탈퇴</button>
       </div>
     </div>
@@ -40,82 +38,75 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
 
-const router = useRouter();
-const authStore = useAuthStore();
-
+const router = useRouter()
+const authStore = useAuthStore()
 
 onMounted(() => {
-  authStore.fetchUser();
-});
+  authStore.fetchUser()
+})
 
 // 사용자 정보가 없으면, 홈으로 이동
 if (!authStore.isAuthenticated) {
-  router.replace('/login');
+  router.replace('/login')
 }
 
 const goToEditProfile = () => {
-  alert('회원정보 수정 페이지로 이동');
+  alert('회원정보 수정 페이지로 이동')
   // router.push('/mypage/edit');
-};
+}
 
 const goToInquiry = () => {
-  alert('문의하기 페이지로 이동');
+  alert('문의하기 페이지로 이동')
   // router.push('/inquiry');
-};
+}
 
 const handleLogout = () => {
-  authStore.setLogout();
-  alert('로그아웃 되었습니다.');
-  router.push('/');
-};
+  authStore.setLogout()
+  alert('로그아웃 되었습니다.')
+  router.push('/')
+}
 </script>
 
 <style scoped>
-
-
-
 .mypage-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
   padding: 50px 20px;
-  background-color: #F8F8F8;
+  background-color: #f8f8f8;
 }
 
 .mypage-content {
   max-width: 600px;
   width: 100%;
-  background-color: #FFF;
+  background-color: #fff;
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-
 }
 
 h1 {
   font-size: 2em;
   text-align: center;
   margin-bottom: 40px;
-  color: #4B2E1E;
+  color: #4b2e1e;
 }
-
 
 .user-profile-card {
   display: flex;
   align-items: flex-start;
   padding: 10px;
   margin-bottom: 20px;
-
 }
 
 .profile-icon {
   font-size: 40px;
-  background-color: #E0E0E0;
+  background-color: #e0e0e0;
   border-radius: 50%;
   width: 70px;
   height: 70px;
@@ -141,7 +132,7 @@ h1 {
 
 .point-balance {
   font-size: 1.2em;
-  color: #8D6E63;
+  color: #8d6e63;
   margin-bottom: 10px;
 }
 
@@ -163,12 +154,11 @@ h1 {
   margin: 30px 0;
 }
 
-
 .mypage-nav {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  color: #4B2E1E;
+  color: #4b2e1e;
 }
 
 .nav-item {
@@ -194,7 +184,6 @@ h1 {
   text-align: center;
 }
 
-
 .bottom-links {
   text-align: center;
   margin-top: 40px;
@@ -203,7 +192,8 @@ h1 {
   gap: 20px;
 }
 
-.logout-link, .deactivate-link {
+.logout-link,
+.deactivate-link {
   background: none;
   border: none;
   color: #999;

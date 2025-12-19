@@ -23,28 +23,18 @@ public class MealController {
     // 식단 등록
     //foodId 있으면 Food DB 값 사용
     //foodId 없으면 직접 입력 값 사용
-//    @PostMapping
-//    public ResponseEntity<MealResponseDto> createMeal(
-//            @RequestAttribute("userId") Long userId,
-//            @RequestBody MealRequestDto requestDto) {
-//
-//
-//        MealResponseDto response = mealService.createMeal(userId, requestDto);
-//        return ResponseEntity
-//                .status(HttpStatus.CREATED)
-//                .body(response);
-//    }
+    // @RequestPart : multipart/form-data 형식으로 전송된 요청에서 파일과 JSON 데이터를 동시에 처리할 때 사용
 
+    // 식단 등록 시 이미지 함께 업로드 + 이미지 없을 시 랜덤 이미지 제공
     @PostMapping
     public ResponseEntity<MealResponseDto> createMeal(
-            @RequestBody MealRequestDto requestDto) {
+            @RequestAttribute("userId") Long userId,
+            @RequestPart(value = "data") MealRequestDto requestDto,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
 
-        Long userId = 1L; // ⭐ 개발용 더미 유저
-        MealResponseDto response = mealService.createMeal(userId, requestDto);
+        MealResponseDto response = mealService.createMeal(userId, requestDto, image);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // 식단 단건 조회
@@ -60,22 +50,14 @@ public class MealController {
 
     // 특정 날짜 식단 조회
     // meals?date=2025-12-14
-//    @GetMapping("/date/{date}")
-//    public ResponseEntity<List<MealResponseDto>> getMealsByDate(
-//            @RequestAttribute("userId") Long userId,
-//            @PathVariable LocalDate date) {
-//        List<MealResponseDto> response = mealService.getMealsByDate(userId, date);
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(response);
-//    }
-
     @GetMapping("/date/{date}")
     public ResponseEntity<List<MealResponseDto>> getMealsByDate(
+            @RequestAttribute("userId") Long userId,
             @PathVariable LocalDate date) {
-
-        Long userId = 1L; // 개발용
-        return ResponseEntity.ok(mealService.getMealsByDate(userId, date));
+        List<MealResponseDto> response = mealService.getMealsByDate(userId, date);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
     }
 
     // 식단 수정
@@ -97,17 +79,6 @@ public class MealController {
             @PathVariable Long mealId) {
         mealService.deleteMeal(userId, mealId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    // 이미지 업로드
-    // @RequestPart : multipart/form-data 형식으로 전송된 요청에서 파일과 JSON 데이터를 동시에 처리할 때 사용
-    @PostMapping("/images")
-    public ResponseEntity<MealResponseDto> createMealWithImage(
-            @RequestAttribute("userId") Long userId,
-            @RequestPart(value = "data") MealRequestDto requestDto,
-            @RequestPart(value = "image", required = false) MultipartFile image) {
-        return ResponseEntity.ok(mealService.createMealWithImage(userId, requestDto, image));
-
     }
 
     //캘린더 요약 표시용 api
