@@ -19,13 +19,15 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => token.value !== null)
 
-  function setLogin(newToken, newUser) {
+  function setLogin(newToken, newUser = null) {
+    // 기본값 설정
     token.value = newToken
-    user.value = newUser
-
-    // 여기서 token과 user 저장
     localStorage.setItem('token', newToken)
-    localStorage.setItem('user', JSON.stringify(newUser))
+
+    if (newUser) {
+      user.value = newUser
+      localStorage.setItem('user', JSON.stringify(newUser))
+    }
   }
 
   function setLogout() {
