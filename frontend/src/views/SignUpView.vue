@@ -4,38 +4,93 @@
 
     <form v-if="step === 1" @submit.prevent="handleSignupStep1" class="signup-form">
       <div class="input-group">
-        <input type="email" placeholder="이메일 입력" id="email" v-model="step1Data.email" required>
+        <input
+          type="email"
+          placeholder="이메일 입력"
+          id="email"
+          v-model="step1Data.email"
+          required
+        />
       </div>
       <div class="input-group">
-        <input type="password" placeholder="비밀번호 입력" id="password" v-model="step1Data.password" required>
+        <input
+          type="password"
+          placeholder="비밀번호 입력"
+          id="password"
+          v-model="step1Data.password"
+          required
+        />
         <small v-if="step1Data.password" class="error-msg">8 ~ 16자리를 입력해 주세요.</small>
       </div>
       <div class="input-group">
-        <input type="password" placeholder="비밀번호 재입력" id="confirm-password" v-model="confirmPassword" required>
-        <p v-if="step1Data.password && confirmPassword && step1Data.password !== confirmPassword" class="error-msg">비밀번호가 일치하지 않습니다.</p>
+        <input
+          type="password"
+          placeholder="비밀번호 재입력"
+          id="confirm-password"
+          v-model="confirmPassword"
+          required
+        />
+        <p
+          v-if="step1Data.password && confirmPassword && step1Data.password !== confirmPassword"
+          class="error-msg"
+        >
+          비밀번호가 일치하지 않습니다.
+        </p>
       </div>
       <div class="input-group">
-        <input type="text" placeholder="닉네임" id="nickname" v-model="step1Data.nickname" required>
+        <input
+          type="text"
+          placeholder="닉네임"
+          id="nickname"
+          v-model="step1Data.nickname"
+          required
+        />
         <small v-if="step1Data.nickname" class="error-msg">2 ~ 12자를 입력해 주세요.</small>
       </div>
 
-      <button type="submit" :disabled="step1Data.password !== confirmPassword" class="btn btn-next">다음</button>
+      <button type="submit" :disabled="step1Data.password !== confirmPassword" class="btn btn-next">
+        다음
+      </button>
     </form>
 
     <form v-else @submit.prevent="handleSignupStep2" class="signup-form">
       <div class="form-section align-start">
         <label>성별</label>
         <div class="radio-group">
-          <button type="button" :class="{ selected: step2Data.gender === 'M' }" @click="step2Data.gender = 'M'">남</button>
-          <button type="button" :class="{ selected: step2Data.gender === 'F' }" @click="step2Data.gender = 'F'">여</button>
+          <button
+            type="button"
+            :class="{ selected: step2Data.gender === 'M' }"
+            @click="step2Data.gender = 'M'"
+          >
+            남
+          </button>
+          <button
+            type="button"
+            :class="{ selected: step2Data.gender === 'F' }"
+            @click="step2Data.gender = 'F'"
+          >
+            여
+          </button>
         </div>
       </div>
 
       <div class="form-section align-start">
         <label>운동 목표</label>
         <div class="radio-group goal-group">
-          <button type="button" :class="{ selected: step2Data.exerciseGoal === 'DIET' }" @click="step2Data.exerciseGoal = 'DIET'">다이어트</button>
-          <button type="button" :class="{ selected: step2Data.exerciseGoal === 'MUSCLE' }" @click="step2Data.exerciseGoal = 'MUSCLE'">근육 증가</button>
+          <button
+            type="button"
+            :class="{ selected: step2Data.exerciseGoal === 'DIET' }"
+            @click="step2Data.exerciseGoal = 'DIET'"
+          >
+            다이어트
+          </button>
+          <button
+            type="button"
+            :class="{ selected: step2Data.exerciseGoal === 'MUSCLE' }"
+            @click="step2Data.exerciseGoal = 'MUSCLE'"
+          >
+            근육 증가
+          </button>
         </div>
       </div>
 
@@ -44,9 +99,13 @@
           <label>주 운동 빈도</label>
           <div class="frequency-buttons">
             <div class="radio-group frequency-group">
-              <button v-for="n in 5" :key="n" type="button"
-                      :class="{ selected: step2Data.exerciseFrequency === n.toString() }"
-                      @click="step2Data.exerciseFrequency = n.toString()">
+              <button
+                v-for="n in 5"
+                :key="n"
+                type="button"
+                :class="{ selected: step2Data.exerciseFrequency === n.toString() }"
+                @click="step2Data.exerciseFrequency = n.toString()"
+              >
                 {{ n }}
               </button>
             </div>
@@ -58,18 +117,35 @@
           <span class="label-under">이하</span>
           <span class="label-over">이상</span>
         </div>
-
       </div>
 
       <div class="input-group-inline last-input-group">
         <div class="input-wrapper">
-          <input type="text" inputmode="numeric" placeholder="키" v-model.number="step2Data.height" required>
+          <input
+            type="text"
+            inputmode="numeric"
+            placeholder="키"
+            v-model.number="step2Data.height"
+            required
+          />
         </div>
         <div class="input-wrapper">
-          <input type="text" inputmode="numeric" placeholder="몸무게" v-model.number="step2Data.weight" required>
+          <input
+            type="text"
+            inputmode="numeric"
+            placeholder="몸무게"
+            v-model.number="step2Data.weight"
+            required
+          />
         </div>
         <div class="input-wrapper">
-          <input type="text" inputmode="numeric" placeholder="나이" v-model.number="step2Data.age" required>
+          <input
+            type="text"
+            inputmode="numeric"
+            placeholder="나이"
+            v-model.number="step2Data.age"
+            required
+          />
         </div>
       </div>
 
@@ -79,23 +155,22 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
-import { useRouter } from 'vue-router';
-import { signup, signupComplete } from '@/api/auth';
+import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { signup, signupComplete } from '@/api/authApi'
 
-const router = useRouter();
+const router = useRouter()
 
 // Step 1: 상태 관리
-const step = ref(1); // 1 또는 2
-const userId = ref(null); // 1단계 성공 후 백엔드에서 받은 사용자 ID
-const confirmPassword = ref('');
+const step = ref(1) // 1 또는 2
+const userId = ref(null) // 1단계 성공 후 백엔드에서 받은 사용자 ID
+const confirmPassword = ref('')
 
 const step1Data = reactive({
   email: '',
   password: '',
   nickname: '',
-
-});
+})
 
 // Step 2: 상태 관리
 const step2Data = reactive({
@@ -104,55 +179,51 @@ const step2Data = reactive({
   height: '',
   weight: '',
   exerciseGoal: '',
-  exerciseFrequency: ''
-});
+  exerciseFrequency: '',
+})
 
 // **TODO 3: 회원가입 1단계 API 연동 로직 구현**
 const handleSignupStep1 = async () => {
   if (step1Data.password !== confirmPassword.value) {
-    alert('비밀번호가 일치하지 않습니다.');
-    return;
+    alert('비밀번호가 일치하지 않습니다.')
+    return
   }
 
   try {
-    const response = await signup(step1Data);
+    const response = await signup(step1Data)
 
     // 1단계 성공 시, 백엔드에서 사용자 ID를 반환
-    userId.value = response.data.userId;
+    userId.value = response.data.userId
 
-    alert('회원가입 1단계 성공! 추가 정보를 입력해주세요.');
-    step.value = 2; // 다음 단계로 이동
-
+    alert('회원가입 1단계 성공! 추가 정보를 입력해주세요.')
+    step.value = 2 // 다음 단계로 이동
   } catch (error) {
-    console.error('회원가입 1단계 실패:', error);
-    alert('회원가입 실패: 이미 존재하는 이메일입니다.');
+    console.error('회원가입 1단계 실패:', error)
+    alert('회원가입 실패: 이미 존재하는 이메일입니다.')
   }
-};
+}
 
 // TODO 3: 회원가입 2단계 API 연동 로직 구현
 const handleSignupStep2 = async () => {
   if (!userId.value) {
-    alert('잘못된 접근입니다. 다시 시작해주세요.');
-    router.push('/signup');
-    return;
+    alert('잘못된 접근입니다. 다시 시작해주세요.')
+    router.push('/signup')
+    return
   }
 
   try {
-    await signupComplete(userId.value, step2Data);
+    await signupComplete(userId.value, step2Data)
 
-    alert('회원가입이 완료되었습니다. 로그인해 주세요.');
-    router.push('/login'); // 로그인 페이지로 이동
-
+    alert('회원가입이 완료되었습니다. 로그인해 주세요.')
+    router.push('/login') // 로그인 페이지로 이동
   } catch (error) {
-    console.error('회원가입 2단계 실패:', error);
-    alert('정보 저장에 실패했습니다. 다시 시도해 주세요.');
+    console.error('회원가입 2단계 실패:', error)
+    alert('정보 저장에 실패했습니다. 다시 시도해 주세요.')
   }
-};
+}
 </script>
 
 <style scoped>
-
-
 .form-section {
   position: relative;
   display: flex;
@@ -198,12 +269,9 @@ const handleSignupStep2 = async () => {
 }
 
 .frequency-group {
-
   gap: 8px;
   display: inline-flex;
 }
-
-
 
 .frequency-labels {
   position: absolute;
@@ -222,7 +290,7 @@ const handleSignupStep2 = async () => {
   text-align: center;
 }
 
-.frequency-labels .label-count{
+.frequency-labels .label-count {
   left: -10px;
   width: 10%;
 }
@@ -240,7 +308,7 @@ const handleSignupStep2 = async () => {
   align-items: center;
   padding: 50px 20px;
   min-height: 100vh;
-  background-color: #F8F8F8;
+  background-color: #f8f8f8;
 }
 h1 {
   font-size: 2em;
@@ -281,9 +349,14 @@ h1 {
   flex-grow: 1;
 }
 
-.error-msg { color: red; font-size: 0.8em; margin-top: 5px; }
-.btn-next, .btn-complete {
-  background-color: #A99A8D;
+.error-msg {
+  color: red;
+  font-size: 0.8em;
+  margin-top: 5px;
+}
+.btn-next,
+.btn-complete {
+  background-color: #a99a8d;
   color: white;
   width: 100%;
   padding: 12px;
@@ -299,7 +372,7 @@ h1 {
 }
 
 .radio-group button {
-  background-color: #EAEAEA;
+  background-color: #eaeaea;
   border: 1px solid #ccc;
   padding: 8px 15px;
   margin-right: 10px;
@@ -310,18 +383,16 @@ h1 {
 }
 
 .radio-group button.selected {
-
-  background-color: #79665A;
+  background-color: #79665a;
   color: white;
-  border-color: #79665A;
+  border-color: #79665a;
 }
 
 .radio-group button.selected {
-  background-color: #79665A;
+  background-color: #79665a;
   color: white;
   font-weight: bold;
 }
-
 
 .input-group-inline {
   display: flex;
