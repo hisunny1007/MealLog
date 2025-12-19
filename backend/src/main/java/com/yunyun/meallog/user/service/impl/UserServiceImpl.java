@@ -11,6 +11,7 @@ import com.yunyun.meallog.user.dto.request.LoginRequestDto;
 import com.yunyun.meallog.user.dto.request.SignupStep1RequestDto;
 import com.yunyun.meallog.user.dto.request.SignupStep2RequestDto;
 import com.yunyun.meallog.user.dto.response.LoginResponseDto;
+import com.yunyun.meallog.user.dto.response.UserResponseDto;
 import com.yunyun.meallog.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateProfile(Long userId, SignupStep2RequestDto requestDto) {
+    public void updateProfile(Integer userId, SignupStep2RequestDto requestDto) {
         User userToUpdate = userDao.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -99,6 +100,13 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         userDao.updateProfile(updatedUser);
+    }
+
+    @Override
+    public UserResponseDto getMyProfile(Integer userId) {
+        User user = userDao.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return UserResponseDto.from(user);
     }
 }
 

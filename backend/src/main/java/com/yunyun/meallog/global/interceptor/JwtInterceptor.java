@@ -29,11 +29,8 @@ public class JwtInterceptor implements HandlerInterceptor {
             String token = header.substring(7);
 
             if (jwtUtil.isTokenValid(token)) {
-                // String -> Long 변환
-//                Long userId = Long.parseLong(jwtUtil.getUserId(token)); [수정]
-                Long userId = jwtUtil.getUserId(token);
-                System.out.println("👉 parsed userId = " + userId); // ⭐ 이 줄 추가
-
+                
+                Integer userId = Integer.parseInt(jwtUtil.getUserId(token));
                 request.setAttribute("userId", userId);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

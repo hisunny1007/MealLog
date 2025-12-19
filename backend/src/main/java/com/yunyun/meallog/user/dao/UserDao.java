@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface UserDao {
     int signUp(User user);
     Optional<User> findByEmail(String email);
-    Optional<User> findById(Long id);
+    Optional<User> findById(Integer id);
     void updateProfile(User user);
 }

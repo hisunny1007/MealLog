@@ -40,11 +40,17 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 
 const router = useRouter();
 const authStore = useAuthStore();
+
+
+onMounted(() => {
+  authStore.fetchUser();
+});
 
 // 사용자 정보가 없으면, 홈으로 이동
 if (!authStore.isAuthenticated) {
