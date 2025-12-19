@@ -47,9 +47,9 @@ public class JwtUtil {
 //    }
 
     // [수정]
-    public Long getUserId(String token) {
+    public Integer getUserId(String token) {
         Claims claims = getClaims(token);
-        return Long.parseLong(claims.get("id").toString()); // [수정]
+        return Integer.parseInt(claims.get("id").toString()); // [수정]
     }
 
 
