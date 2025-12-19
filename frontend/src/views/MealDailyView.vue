@@ -1,9 +1,10 @@
 <template>
-  <h2 class="text-center fw-bold mb-4">오늘의 식단 기록</h2>
+  <h2 class="text-center fw-bold mb-4">{{ formattedDate }} 식단 기록</h2>
+  <button class="btn btn-outline-secondary mb-4" @click="goToAnalysis">데일리 레포트</button>
+
   <div class="meal-daily-layout">
     <!-- 왼쪽 -->
     <section class="meal-left">
-
       <MealTimeSection
         v-for="section in mealSections"
         :key="section.type"
@@ -23,19 +24,34 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import mealApi from '@/api/meal'
+import mealApi from '@/api/mealApi'
 
 import MealTimeSection from '@/components/daily/MealTimeSection.vue'
 import ProductRecommendation from '@/components/daily/ProductRecommendation.vue'
+import DailyAnalysisView from './DailyAnalysisView.vue'
 
 const route = useRoute()
 const router = useRouter()
 const date = route.params.date
 
+const formattedDate = computed(() => {
+  const rawDate = new Date(date)
+  const year = rawDate.getFullYear()
+  const month = rawDate.getMonth() + 1
+  const day = rawDate.getDate()
+  return `${year}년 ${month}월 ${day}일`
+})
+
 const meals = ref([])
 
 onMounted(async () => {
-  meals.value = await mealApi.getMealsByDate(date)
+  try {
+    const response = await mealApi.getMealsByDate(date)
+    meals.value = response || []
+  } catch (error) {
+    console.error('식단 조회 실패:', error)
+    meals.value = []
+  }
 })
 
 const mealSections = computed(() => [
@@ -60,6 +76,17 @@ const goToCreate = (mealType) => {
   router.push({
     name: 'MealCreate',
     query: { date, mealType },
+  })
+}
+
+const props = defineProps({
+  date: String,
+})
+
+const goToAnalysis = () => {
+  router.push({
+    name: 'MealDailyAnalysis',
+    params: { date: props.date },
   })
 }
 </script>
