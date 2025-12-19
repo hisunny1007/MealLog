@@ -35,7 +35,7 @@ const handleLogin = async () => {
 
     const token = response.data.accessToken
 
-    authStore.setLogin(token, user)
+    authStore.setLogin(token)
     await authStore.fetchUser()
 
     alert('로그인 성공!')
