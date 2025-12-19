@@ -22,7 +22,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                              Object handler) throws Exception {
 
         String header = request.getHeader("Authorization");
-        System.out.println("👉 Authorization header = " + header);
+        System.out.println("Authorization header = " + header);
 
         if (header != null && header.startsWith("Bearer ")) {
 
@@ -30,7 +30,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
             if (jwtUtil.isTokenValid(token)) {
                 
-                Integer userId = Integer.parseInt(jwtUtil.getUserId(token));
+                Integer userId = Integer.parseInt(String.valueOf(jwtUtil.getUserId(token)));
                 request.setAttribute("userId", userId);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
