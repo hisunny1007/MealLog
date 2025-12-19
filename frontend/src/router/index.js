@@ -5,6 +5,7 @@ import MyPageView from '@/views/MyPageView.vue'
 import CalendarView from '@/views/CalendarView.vue'
 import MealCreateView from '@/views/MealCreateView.vue'
 import MealDailyView from '@/views/MealDailyView.vue'
+import DailyAnalysisView from '@/views/DailyAnalysisView.vue'
 
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +41,11 @@ const router = createRouter({
       name: 'MealDaily',
       component: MealDailyView,
       props: true,
+    },
+    {
+      path: '/meals/date/:date/analysis',
+      name: 'MealDailyAnalysis',
+      component: DailyAnalysisView,
     },
   ],
 })
