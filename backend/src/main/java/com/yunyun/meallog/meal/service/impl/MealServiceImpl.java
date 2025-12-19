@@ -7,6 +7,7 @@ import com.yunyun.meallog.global.common.FileService;
 import com.yunyun.meallog.meal.dao.MealDao;
 import com.yunyun.meallog.meal.domain.Meal;
 import com.yunyun.meallog.meal.dto.request.MealRequestDto;
+import com.yunyun.meallog.meal.dto.response.MealCalendarSummaryResponseDto;
 import com.yunyun.meallog.meal.dto.response.MealResponseDto;
 import com.yunyun.meallog.meal.service.MealService;
 import lombok.RequiredArgsConstructor;
@@ -132,5 +133,15 @@ public class MealServiceImpl implements MealService {
         mealDao.insertMeal(meal);
 
         return MealResponseDto.from(meal);
+    }
+
+    // 캘린더 표시용
+    @Override
+    public List<MealCalendarSummaryResponseDto> getCalendarSummary(Long userId, int year, int month) {
+
+        LocalDate start = LocalDate.of(year, month, 1);
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+
+        return mealDao.findCalendarSummary(userId, start, end);
     }
 }

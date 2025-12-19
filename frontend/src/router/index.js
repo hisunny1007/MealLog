@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 import MyPageView from '@/views/MyPageView.vue'
-import DailyMealView from '@/views/DailyMealView.vue'
+import CalendarView from '@/views/CalendarView.vue'
+import MealCreateView from '@/views/MealCreateView.vue'
+import MealDailyView from '@/views/MealDailyView.vue'
 
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,7 +13,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView,
+      component: CalendarView,
     },
     {
       path: '/login',
@@ -29,10 +30,16 @@ const router = createRouter({
       name: 'mypage',
       component: MyPageView,
     },
-        {
-      path: '/meal',
-      name: 'meal',
-      component: DailyMealView,
+    {
+      path: '/meals/create',
+      name: 'MealCreate',
+      component: MealCreateView,
+    },
+    {
+      path: '/meals/date/:date',
+      name: 'MealDaily',
+      component: MealDailyView,
+      props: true,
     },
   ],
 })

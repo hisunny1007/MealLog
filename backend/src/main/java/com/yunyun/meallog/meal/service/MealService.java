@@ -1,6 +1,7 @@
 package com.yunyun.meallog.meal.service;
 
 import com.yunyun.meallog.meal.dto.request.MealRequestDto;
+import com.yunyun.meallog.meal.dto.response.MealCalendarSummaryResponseDto;
 import com.yunyun.meallog.meal.dto.response.MealResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,4 +25,7 @@ public interface MealService {
 
     // 이미지 업로드
     MealResponseDto createMealWithImage(Long userId, MealRequestDto requestDto, MultipartFile image);
+
+    // 캘린더 요약 표시용
+    List<MealCalendarSummaryResponseDto> getCalendarSummary(Long userId, int year, int month);
 }

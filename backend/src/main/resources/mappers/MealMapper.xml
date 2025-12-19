@@ -96,4 +96,18 @@
           AND date = #{date}
     </select>
 
+<!--    캘린더 요약용-->
+    <select id="findCalendarSummary"
+            resultType="MealCalendarSummaryResponseDto">
+        SELECT
+            date,
+            MAX(CASE WHEN meal_type = 'BREAKFAST' THEN score END) AS breakfastScore,
+            MAX(CASE WHEN meal_type = 'LUNCH' THEN score END) AS lunchScore,
+            MAX(CASE WHEN meal_type = 'DINNER' THEN score END) AS dinnerScore
+        FROM meals
+        WHERE user_id = #{userId}
+          AND date BETWEEN #{start} AND #{end}
+        GROUP BY date
+    </select>
+
 </mapper>

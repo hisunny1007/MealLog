@@ -2,6 +2,7 @@ package com.yunyun.meallog.global.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,23 +26,32 @@ public class JwtUtil {
     public void init(){
         this.secretKey = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
     }
+
     //사용자 ID를 기반으로 jwt 토큰 생성
     public String generateToken(String userId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expirationMs);
 
         return Jwts.builder()
-                .subject(userId)
+                .claim("id", userId) // [수정]
+//                .subject(userId)
                 .issuedAt(now)
                 .expiration(expiryDate)
-                .signWith(secretKey)
+                .signWith(secretKey, SignatureAlgorithm.HS384) // [수정]
                 .compact();
     }
     //jwt 토큰을 파싱하여 사용자 id를 추출
-    public String getUserId(String token) {
-        return getClaims(token).getSubject();
+//    public String getUserId(String token) {
+//        return getClaims(token).getSubject();
+//
+//    }
 
+    // [수정]
+    public Long getUserId(String token) {
+        Claims claims = getClaims(token);
+        return Long.parseLong(claims.get("id").toString()); // [수정]
     }
+
 
     //jwt 토큰 유효성 검증
     public boolean isTokenValid(String token) {

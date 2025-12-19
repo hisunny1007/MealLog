@@ -1,0 +1,16 @@
+.page-title {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--main-brown);
+}
+
+.meal-type {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--main-brown);
+}
+
+.card-soft {
+  border-radius: 20px;
+  background: var(--bg-main);
+}

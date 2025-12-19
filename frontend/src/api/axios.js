@@ -4,7 +4,7 @@ import { useAuthStore } from "@/stores/auth";
 // vite.config.js 프록시 추가
 const api = axios.create({
   baseURL: '/api/v1',
-});
+})
 
 
 api.interceptors.request.use((config) => {
@@ -21,4 +21,4 @@ api.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-export default api;
+export default api

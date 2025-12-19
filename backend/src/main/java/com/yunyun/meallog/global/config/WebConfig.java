@@ -26,11 +26,14 @@ public class WebConfig implements WebMvcConfigurer {
                         "/users/signup",
                         "/users/*/profile",
                         "/swagger-ui/**",
-                        "/v3/api-docs/**"
+                        "/v3/api-docs/**",
+                        "meals/**"
                 );
 
         registry.addInterceptor(adminInterceptor)
                 .addPathPatterns("/api/v1/users");
+
+
     }
 
 
