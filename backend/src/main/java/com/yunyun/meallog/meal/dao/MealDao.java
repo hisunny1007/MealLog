@@ -37,7 +37,7 @@ public interface MealDao {
 
     // 캘린더 요약 표시
     List<MealCalendarSummaryResponseDto> findCalendarSummary(@Param("userId") Long userId,
-                                                             @Param("date") LocalDate start,
-                                                             @Param("date") LocalDate end);
+                                                             @Param("start") LocalDate start,
+                                                             @Param("end") LocalDate end);
 
 }
