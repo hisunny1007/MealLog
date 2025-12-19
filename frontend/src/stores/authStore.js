@@ -1,38 +1,62 @@
-import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+import { getMyProfile } from '@/api/auth'
 
 export const useAuthStore = defineStore('auth', () => {
-  const token = ref(localStorage.getItem('token') || null);
+  const token = ref(localStorage.getItem('token') || null)
 
   // 안전한 JSON 파싱
-  let parsedUser = null;
+  let parsedUser = null
   try {
-    const initialUser = localStorage.getItem('user');
-    parsedUser = initialUser ? JSON.parse(initialUser) : null;
+    const initialUser = localStorage.getItem('user')
+    parsedUser = initialUser ? JSON.parse(initialUser) : null
   } catch (e) {
-    console.error("Failed to parse user from localStorage:", e);
-    localStorage.removeItem('user'); // 잘못된 값 제거
+    console.error('Failed to parse user from localStorage:', e)
+    localStorage.removeItem('user') // 잘못된 값 제거
   }
 
-  const user = ref(parsedUser);
+  const user = ref(parsedUser)
 
-  const isAuthenticated = computed(() => token.value !== null);
+  const isAuthenticated = computed(() => token.value !== null)
 
   function setLogin(newToken, newUser) {
-    token.value = newToken;
-    user.value = newUser;
+    token.value = newToken
+    user.value = newUser
 
     // 여기서 token과 user 저장
-    localStorage.setItem('token', newToken);
-    localStorage.setItem('user', JSON.stringify(newUser));
+    localStorage.setItem('token', newToken)
+    localStorage.setItem('user', JSON.stringify(newUser))
   }
 
   function setLogout() {
-    token.value = null;
-    user.value = null;
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    token.value = null
+    user.value = null
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
   }
 
-  return { token, user, isAuthenticated, setLogin, setLogout };
-});
+  function updateUserPoints(newPoint) {
+    if (user.value) {
+      user.value.rewardPoint = newPoint
+      localStorage.setItem('user', JSON.stringify(user.value))
+    }
+  }
+
+  async function fetchUser() {
+    console.log('Attempting to fetch user profile...')
+    if (token.value) {
+      try {
+        const response = await getMyProfile()
+        console.log('Successfully fetched user profile:', response.data)
+        user.value = response.data
+        localStorage.setItem('user', JSON.stringify(response.data))
+      } catch (error) {
+        console.error('Failed to fetch user profile:', error)
+      }
+    } else {
+      console.warn('No token found, cannot fetch user profile.')
+    }
+  }
+
+  return { token, user, isAuthenticated, setLogin, setLogout, updateUserPoints, fetchUser }
+})

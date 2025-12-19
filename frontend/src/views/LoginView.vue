@@ -16,6 +16,7 @@
     </form>
   </div>
 </template>
+
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -31,55 +32,11 @@ const handleLogin = async () => {
   try {
     const credentials = { email: email.value, password: password.value }
     const response = await login(credentials)
-    
-    // ✅ accessToken으로 수정!
-    const token = response.data.accessToken  // ← token이 아니라 accessToken
-    const user = response.data.user || { email: email.value } // user 없으면 임시로 이메일 저장
-    
-    console.log('🟣 [로그인] 추출한 token:', token)
-    console.log('🟣 [로그인] 추출한 user:', user)
 
-    if (!token) {
-      console.error('❌ 토큰이 undefined입니다!')
-      alert('서버 응답에 토큰이 없습니다.')
-      return
-    }
+    const token = response.data.accessToken
 
     authStore.setLogin(token, user)
-    
-    console.log('🟣 [로그인] authStore.token:', authStore.token)
-    console.log('🟣 [로그인] localStorage token:', localStorage.getItem('token'))
-
-    alert('로그인 성공!')
-    router.push('/')
-  } catch (error) {
-    console.error('❌ [로그인] 실패:', error)
-    alert('로그인 실패: 이메일 또는 비밀번호를 확인해주세요.')
-  }
-}
-</script>
-<!-- <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { login } from '@/api/authApi'
-import { useAuthStore } from '@/stores/authStore'
-
-const email = ref('')
-const password = ref('')
-const router = useRouter()
-const authStore = useAuthStore()
-
-const handleLogin = async () => {
-  try {
-    const credentials = { email: email.value, password: password.value }
-    const response = await login(credentials)
-
-    // 1. 토큰 저장 및 전역 상태 업데이트
-    const token = response.data.token
-    const user = response.data.user
-
-    authStore.setLogin(token, user)
-    // setAuthHeader(token) // axios 인스턴스에 토큰 추가
+    await authStore.fetchUser()
 
     alert('로그인 성공!')
     router.push('/') // 홈 화면으로 이동
@@ -88,7 +45,7 @@ const handleLogin = async () => {
     alert('로그인 실패: 이메일 또는 비밀번호를 확인해주세요.')
   }
 }
-</script> -->
+</script>
 
 <style scoped>
 .login-container {

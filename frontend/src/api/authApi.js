@@ -18,4 +18,9 @@ const logout = () => {
   return api.post('/users/logout')
 }
 
-export { signup, signupComplete, login, logout }
+const getMyProfile = () => {
+  return instance.get('/users/me');
+};
+
+
+export { signup, signupComplete, login, logout, getMyProfile }

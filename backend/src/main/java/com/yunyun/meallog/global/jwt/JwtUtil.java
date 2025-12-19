@@ -47,9 +47,9 @@ public class JwtUtil {
 //    }
 
     // [수정]
-    public Long getUserId(String token) {
+    public Integer getUserId(String token) {
         Claims claims = getClaims(token);
-        return Long.parseLong(claims.get("id").toString()); // [수정]
+        return Integer.parseInt(claims.get("id").toString()); // [수정]
     }
 
 
@@ -67,7 +67,7 @@ public class JwtUtil {
     //토큰에서 클레임 정보를 추출
     private Claims getClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(secretKey) // 라이브러리 버전 수정
+                .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
