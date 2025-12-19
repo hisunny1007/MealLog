@@ -36,12 +36,12 @@ const handleLogin = async () => {
     const credentials = { email: email.value, password: password.value };
     const response = await login(credentials);
 
-    // 1. 토큰 저장 및 전역 상태 업데이트
-    const token = response.data.token;
-    const user = response.data.user;
-
-    authStore.setLogin(token, user);
-    setAuthHeader(token); // axios 인스턴스에 토큰 추가
+   
+    const token = response.data.accessToken;
+ 
+    authStore.setLogin(token, null);
+    
+    await authStore.fetchUser();
 
     alert('로그인 성공!');
     router.push('/'); // 홈 화면으로 이동

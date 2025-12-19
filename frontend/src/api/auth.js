@@ -25,4 +25,8 @@ const logout = () => {
   return instance.post('/users/logout');
 };
 
-export { signup, signupComplete, login, logout, setAuthHeader };
+const getMyProfile = () => {
+  return instance.get('/users/me');
+};
+
+export { signup, signupComplete, login, logout, setAuthHeader, getMyProfile };

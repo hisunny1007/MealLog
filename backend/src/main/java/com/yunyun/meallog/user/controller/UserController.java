@@ -4,7 +4,9 @@ import com.yunyun.meallog.user.dto.request.LoginRequestDto;
 import com.yunyun.meallog.user.dto.request.SignupStep1RequestDto;
 import com.yunyun.meallog.user.dto.request.SignupStep2RequestDto;
 import com.yunyun.meallog.user.dto.response.LoginResponseDto;
+import com.yunyun.meallog.user.dto.response.UserResponseDto;
 import com.yunyun.meallog.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +36,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/profile")
-    public ResponseEntity<String> updateProfile(@PathVariable Long userId, @RequestBody SignupStep2RequestDto requestDto) {
+    public ResponseEntity<String> updateProfile(@PathVariable Integer userId, @RequestBody SignupStep2RequestDto requestDto) {
         userService.updateProfile(userId, requestDto);
         return ResponseEntity.ok("프로필이 성공적으로 업데이트되었습니다.");
     }
@@ -57,5 +59,15 @@ public class UserController {
     public ResponseEntity<String> logout(HttpSession session) {
 
         return ResponseEntity.ok("로그아웃 되었습니다.");
+    }
+
+    /**
+     * 내 정보 조회
+     */
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDto> getMyProfile(HttpServletRequest request) {
+        Integer userId = (Integer) request.getAttribute("userId");
+        UserResponseDto response = userService.getMyProfile(userId);
+        return ResponseEntity.ok(response);
     }
 }

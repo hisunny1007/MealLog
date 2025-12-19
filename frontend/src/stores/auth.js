@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import { getMyProfile } from '@/api/auth';
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('token') || null);
@@ -36,5 +37,29 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('user');
   }
 
-  return { token, user, isAuthenticated, setLogin, setLogout };
+  function updateUserPoints(newPoint) {
+    if (user.value) {
+      user.value.rewardPoint = newPoint;
+      localStorage.setItem('user', JSON.stringify(user.value));
+    }
+  }
+
+  async function fetchUser() {
+    console.log("Attempting to fetch user profile...");
+    if (token.value) {
+      try {
+        const response = await getMyProfile();
+        console.log("Successfully fetched user profile:", response.data);
+        user.value = response.data;
+        localStorage.setItem('user', JSON.stringify(response.data));
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+ 
+      }
+    } else {
+      console.warn("No token found, cannot fetch user profile.");
+    }
+  }
+
+  return { token, user, isAuthenticated, setLogin, setLogout, updateUserPoints, fetchUser };
 });
