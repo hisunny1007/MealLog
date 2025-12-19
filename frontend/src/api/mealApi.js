@@ -1,4 +1,3 @@
-// meal.js
 import api from './axios'
 
 const ENDPOINT = '/meals'
@@ -35,6 +34,15 @@ const mealApi = {
   // 식단 삭제 api
   deleteMeal: async (id) => {
     const response = await api.delete(`${ENDPOINT}/${id}`)
+    return response.data
+  },
+
+  // 캘린더 요약용 조회 api
+  // params: { year, month } -> URL 쿼리 문자열로 자동 변환 (?year=2025&month=12)
+  getCalendarSummary: async (year, month) => {
+    const response = await api.get(`${ENDPOINT}/calendar`, {
+      params: { year, month },
+    })
     return response.data
   },
 }
