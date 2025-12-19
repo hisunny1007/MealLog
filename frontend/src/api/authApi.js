@@ -19,7 +19,7 @@ const logout = () => {
 }
 
 const getMyProfile = () => {
-  return instance.get('/users/me');
+  return api.get('/users/me');
 };
 
 
