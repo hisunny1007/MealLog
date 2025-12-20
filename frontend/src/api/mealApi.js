@@ -16,7 +16,7 @@ const mealApi = {
   // 식단 조회 api
   getMealsByDate: async (date) => {
     const response = await api.get(`${ENDPOINT}/date/${date}`)
-    return response.data
+    return response
   },
 
   // // 단일 식단 조회 (수정/상세용)
