@@ -1,6 +1,6 @@
 <template>
   <div class="calendar-page p-4">
-    <h2 class="text-center fw-bold mb-4">내 식단을 기록하는 가장 쉬운 방법🍽️</h2>
+    <h2 class="text-center fw-bold mb-4">하루 식단을 기록하는 가장 쉬운 방법🍽️</h2>
     <FullCalendar :options="calendarOptions" />
   </div>
 </template>
@@ -34,13 +34,13 @@ function getScoreColor(score) {
 // 식단 등록 표시
 async function loadCalendarMonth(year, month) {
   try {
-    const response = await mealApi.getCalendarSummary(year, month)
+    const summaries = await mealApi.getCalendarSummary(year, month)
 
     // 기존 이벤트 초기화
     calendarEvents.value = []
 
     // 각 날짜별로 아침/점심/저녁 점수 이벤트 생성
-    response.forEach((day) => {
+    summaries.forEach((day) => {
       ;['breakfastScore', 'lunchScore', 'dinnerScore'].forEach((key) => {
         const score = day[key]
 
@@ -104,13 +104,12 @@ const calendarOptions = ref({
 
     try {
       // 1. 클릭한 해당 날짜 식단 조회
-      const response = await mealApi.getMealsByDate(date)
-      meals.value = response.data
+      const result = await mealApi.getMealsByDate(date) // data그자체
+      const meals = result ?? []
 
       // 2. 결과에 따라 분기
-      if (meals.value.length === 0) {
+      if (meals.length === 0) {
         // 식단 없으면 CreateView 페이지로 이동
-
         router.push({
           name: 'MealCreate',
           params: { date },

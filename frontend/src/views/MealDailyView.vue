@@ -28,7 +28,6 @@ import mealApi from '@/api/mealApi'
 
 import MealTimeSection from '@/components/daily/MealTimeSection.vue'
 import ProductRecommendation from '@/components/daily/ProductRecommendation.vue'
-import DailyAnalysisView from './DailyAnalysisView.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -46,8 +45,8 @@ const meals = ref([])
 
 onMounted(async () => {
   try {
-    const response = await mealApi.getMealsByDate(date)
-    meals.value = response.data || []
+    const result = await mealApi.getMealsByDate(date)
+    meals.value = result ?? []
   } catch (error) {
     console.error('식단 조회 실패:', error)
     meals.value = []

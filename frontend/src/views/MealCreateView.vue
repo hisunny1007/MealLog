@@ -58,8 +58,8 @@ const loadMeals = async () => {
 
   loading.value = true
   try {
-    const response = await mealApi.getMealsByDate(selectedDate.value)
-    meals.value = response.data || []
+    const result = await mealApi.getMealsByDate(selectedDate.value)
+    meals.value = result ?? []
   } catch (e) {
     meals.value = [] // 에러 시 빈 배열로 초기화
   } finally {
@@ -104,6 +104,7 @@ const mealStatus = computed(() => [
 
 // 식단 등록
 const createMeal = async (formData) => {
+
   try {
     const isDuplicate = meals.value.some((meal) => meal.mealType === formData.mealType)
 

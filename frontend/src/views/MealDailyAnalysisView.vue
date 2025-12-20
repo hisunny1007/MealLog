@@ -81,17 +81,16 @@ const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 
 // 3. 오늘 식단 데이터
-const meals = ref([])
+const meals = ref([]) // meals -ref
 
 // 오늘 식단 불러오기
 const fetchMeals = async () => {
   if (!user.value) return
 
   try {
-    const response = await mealApi.getMealsByDate(date)
-
+    const result = await mealApi.getMealsByDate(date) // result-api 결과
     // 백엔드가 List<Dto>를 바로 내려주므로 data 자체가 배열
-    meals.value = response.data ?? []
+    meals.value = result ?? []
   } catch (e) {
     console.error('식단 조회 실패', e)
     meals.value = []
