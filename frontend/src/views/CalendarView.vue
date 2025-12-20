@@ -1,5 +1,6 @@
 <template>
   <div class="calendar-page p-4">
+    <h2 class="text-center fw-bold mb-4">내 식단을 기록하는 가장 쉬운 방법🍽️</h2>
     <FullCalendar :options="calendarOptions" />
   </div>
 </template>
@@ -43,7 +44,6 @@ async function loadCalendarMonth(year, month) {
       ;['breakfastScore', 'lunchScore', 'dinnerScore'].forEach((key) => {
         const score = day[key]
 
-        console.log('점수', score)
         if (score) {
           calendarEvents.value.push({
             date: day.date,
@@ -58,6 +58,8 @@ async function loadCalendarMonth(year, month) {
     console.error('캘린더 데이터 로드 실패', err)
   }
 }
+
+const meals = ref([])
 
 // FullCalendar 옵션
 const calendarOptions = ref({
@@ -74,14 +76,15 @@ const calendarOptions = ref({
 
     try {
       // 1. 클릭한 해당 날짜 식단 조회
-      const meals = await mealApi.getMealsByDate(date)
+      const response = await mealApi.getMealsByDate(date)
+      meals.value = response.data
 
       // 2. 결과에 따라 분기
-      if (meals.length === 0) {
+      if (meals.value.length === 0) {
         // 식단 없으면 CreateView 페이지로 이동
         router.push({
           name: 'MealCreate',
-          query: { date },
+          params: { date },
         })
       } else {
         // 식단 있으면 DailyView 페이지로 이동
@@ -94,7 +97,7 @@ const calendarOptions = ref({
       console.error('식단 조회 실패:', e)
       router.push({
         name: 'MealCreate',
-        query: { date },
+        params: { date },
       })
     }
   },
