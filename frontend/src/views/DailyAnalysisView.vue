@@ -1,20 +1,23 @@
 <template>
   <div class="analysis-page container py-4">
-    <div>
-      <!-- 제목 -->
-      <h2 class="text-center fw-bold mb-4">{{ formattedDate }} 데일리 분석</h2>
-    </div>
-
     <!-- 식단 없을 때 -->
-    <div v-if="meals.length === 0" class="text-center text-muted py-5">
-      <p class="fw-bold mb-2">오늘 기록된 식단이 없어요 🍽️</p>
-      <p class="text-muted mb-4">식단을 기록하면 분석 결과를 확인할 수 있어요</p>
-      <RouterLink :to="`/meals/create/${date}`" class="btn btn-primary rounded-pill px-4">
+    <div
+      v-if="meals.length === 0"
+      class="analysis-empty d-flex flex-column justify-content-center align-items-center text-center"
+    >
+      <p class="empty-title mb-2">아직 오늘의 식단 기록이 없어요 🍽️</p>
+      <p class="empty-desc mb-4">식단을 기록하면 오늘의 분석 리포트를 확인할 수 있어요!</p>
+
+      <RouterLink :to="`/meals/create/${date}`" class="btn btn-brown rounded-pill px-5 py-2">
         식단 기록하러 가기
       </RouterLink>
     </div>
     <!-- 식단 있을 때만 분석 보여줌 -->
     <div v-else>
+      <div>
+        <!-- 제목 -->
+        <h2 class="text-center fw-bold mb-4">{{ formattedDate }} 데일리 분석</h2>
+      </div>
       <!-- 요약 카드 -->
       <div class="row g-3 mb-4">
         <div class="col-md-6">
@@ -42,6 +45,12 @@
       <div class="card p-4 rounded-4">
         <h5 class="fw-bold mb-3">탄 · 단 · 지 비율</h5>
         <DoughnutChart :ratio="macroRatio" />
+
+        <!-- 탄단지 피드백 문구 -->
+        <div class="macro-feedback mt-3">
+          <p class="fw-semibold">{{ macroFeedback.line1 }}</p>
+          <p class="text-muted">{{ macroFeedback.line2 }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -203,6 +212,77 @@ const feedbackMessage = computed(() => {
 
   return { line1, line2 } // 객체로 반환
 })
+
+// 탄단지 평가 문구
+const macroFeedback = computed(() => {
+  if (!user.value) {
+    return { line1: '', line2: '' }
+  }
+
+  const { carbs, protein, fat } = macroRatio.value
+
+  let line1 = ''
+  let line2 = ''
+
+  // 공통 1줄 요약
+  line1 = `탄수화물 ${carbs}%, 단백질 ${protein}%, 지방 ${fat}% 섭취했어요.`
+
+  // 목표별 평가
+  if (user.value.exerciseGoal === 'DIET') {
+    if (protein < 25) {
+      line2 = '다이어트를 위해 단백질 섭취를 조금 늘려보세요 🥚'
+    } else if (carbs > 55) {
+      line2 = '탄수화물 비중이 높아요. 조금만 줄여도 좋아요 🍚'
+    } else {
+      line2 = '다이어트에 잘 맞는 균형 잡힌 비율이에요 👍'
+    }
+  }
+
+  if (user.value.exerciseGoal === 'MUSCLE') {
+    if (protein < 30) {
+      line2 = '근육 증가를 위해 단백질을 더 보충해 주세요 💪'
+    } else if (fat < 20) {
+      line2 = '지방도 에너지원이에요. 너무 낮지 않게 유지해요 🥑'
+    } else {
+      line2 = '근육 증가에 적절한 탄단지 비율이에요 🔥'
+    }
+  }
+
+  return { line1, line2 }
+})
 </script>
 
-<style scoped></style>
+<style scoped>
+.analysis-empty {
+  min-height: 60vh;
+}
+
+.empty-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--main-brown);
+}
+
+.empty-desc {
+  font-size: 1rem;
+  color: #7a6658;
+  line-height: 1.6;
+}
+
+.btn-brown {
+  background: var(--main-brown);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  transition: all 0.15s ease;
+}
+
+.btn-brown:hover {
+  background: var(--brown-50);
+  color: #fff;
+}
+
+.btn-brown:active {
+  transform: scale(0.96);
+}
+</style>

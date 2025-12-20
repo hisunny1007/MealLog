@@ -65,6 +65,34 @@ const meals = ref([])
 const calendarOptions = ref({
   plugins: [dayGridPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
+  locale: 'ko', // 날짜 제목 한국어로 (버튼텍스트는 자동적용x)
+
+  buttonText: {
+    today: '오늘',
+  },
+
+  // 식단 분석으로 이동하는 버튼 추가
+  customButtons: {
+    todayAnalysis: {
+      text: '오늘의 식단 분석',
+      click: () => {
+        const today = new Date().toISOString().slice(0, 10)
+
+        router.push({
+          name: 'MealDailyAnalysis',
+          params: { date: today },
+        })
+      },
+    },
+  },
+
+  // 버튼 위치 설정 // 무조건 다 명시해줘야 함
+  headerToolbar: {
+    left: 'todayAnalysis',
+    center: 'title',
+    right: 'today prev,next',
+  },
+
   events: calendarEvents, // 이벤트 연결
 
   // 날짜 클릭했을 때
@@ -82,6 +110,7 @@ const calendarOptions = ref({
       // 2. 결과에 따라 분기
       if (meals.value.length === 0) {
         // 식단 없으면 CreateView 페이지로 이동
+
         router.push({
           name: 'MealCreate',
           params: { date },
@@ -169,16 +198,6 @@ onMounted(() => {
 /* focus 제거 */
 .fc-button:focus {
   box-shadow: none !important;
-}
-
-/* today 버튼 */
-.fc-today-button {
-  border: 1px solid var(--main-brown) !important;
-  font-weight: 700;
-}
-
-.fc-today-button:hover {
-  background: rgba(75, 46, 30, 0.08) !important;
 }
 
 /* 요일 헤더 */
