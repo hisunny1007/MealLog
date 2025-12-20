@@ -1,5 +1,6 @@
 <template>
   <div class="calendar-page p-4">
+    <h2 class="text-center fw-bold mb-4">내 식단을 기록하는 가장 쉬운 방법🍽️</h2>
     <FullCalendar :options="calendarOptions" />
   </div>
 </template>
@@ -43,7 +44,6 @@ async function loadCalendarMonth(year, month) {
       ;['breakfastScore', 'lunchScore', 'dinnerScore'].forEach((key) => {
         const score = day[key]
 
-        console.log('점수', score)
         if (score) {
           calendarEvents.value.push({
             date: day.date,
@@ -59,10 +59,40 @@ async function loadCalendarMonth(year, month) {
   }
 }
 
+const meals = ref([])
+
 // FullCalendar 옵션
 const calendarOptions = ref({
   plugins: [dayGridPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
+  locale: 'ko', // 날짜 제목 한국어로 (버튼텍스트는 자동적용x)
+
+  buttonText: {
+    today: '오늘',
+  },
+
+  // 식단 분석으로 이동하는 버튼 추가
+  customButtons: {
+    todayAnalysis: {
+      text: '오늘의 식단 분석',
+      click: () => {
+        const today = new Date().toISOString().slice(0, 10)
+
+        router.push({
+          name: 'MealDailyAnalysis',
+          params: { date: today },
+        })
+      },
+    },
+  },
+
+  // 버튼 위치 설정 // 무조건 다 명시해줘야 함
+  headerToolbar: {
+    left: 'todayAnalysis',
+    center: 'title',
+    right: 'today prev,next',
+  },
+
   events: calendarEvents, // 이벤트 연결
 
   // 날짜 클릭했을 때
@@ -74,14 +104,16 @@ const calendarOptions = ref({
 
     try {
       // 1. 클릭한 해당 날짜 식단 조회
-      const meals = await mealApi.getMealsByDate(date)
+      const response = await mealApi.getMealsByDate(date)
+      meals.value = response.data
 
       // 2. 결과에 따라 분기
-      if (meals.length === 0) {
+      if (meals.value.length === 0) {
         // 식단 없으면 CreateView 페이지로 이동
+
         router.push({
           name: 'MealCreate',
-          query: { date },
+          params: { date },
         })
       } else {
         // 식단 있으면 DailyView 페이지로 이동
@@ -94,7 +126,7 @@ const calendarOptions = ref({
       console.error('식단 조회 실패:', e)
       router.push({
         name: 'MealCreate',
-        query: { date },
+        params: { date },
       })
     }
   },
@@ -166,16 +198,6 @@ onMounted(() => {
 /* focus 제거 */
 .fc-button:focus {
   box-shadow: none !important;
-}
-
-/* today 버튼 */
-.fc-today-button {
-  border: 1px solid var(--main-brown) !important;
-  font-weight: 700;
-}
-
-.fc-today-button:hover {
-  background: rgba(75, 46, 30, 0.08) !important;
 }
 
 /* 요일 헤더 */

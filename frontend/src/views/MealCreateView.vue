@@ -28,8 +28,7 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute() // url에서 값 꺼냄
 const router = useRouter()
 
-const selectedDate = computed(() => route.query.date) //
-// const selectedDate = route.query.date // "2025-12-16"
+const selectedDate = computed(() => route.params.date) //params 변경
 
 // 화면 표시용 날짜 포맷
 const formattedDate = computed(() => {
@@ -37,7 +36,7 @@ const formattedDate = computed(() => {
   if (!selectedDate.value) return ''
 
   // const date = new Date(selectedDate)
-  const date = new Date(selectedDate.value) // 
+  const date = new Date(selectedDate.value) //
 
   const year = date.getFullYear()
   // console.log(date.getMonth())
@@ -77,7 +76,7 @@ const loadMeals = async () => {
 
 // 날짜 변경 감지
 watch(
-  () => route.query.date,
+  () => route.params.date,
   () => {
     loadMeals()
   },

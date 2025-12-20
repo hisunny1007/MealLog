@@ -32,9 +32,10 @@ const router = createRouter({
       component: MyPageView,
     },
     {
-      path: '/meals/create',
+      path: '/meals/create/:date',
       name: 'MealCreate',
       component: MealCreateView,
+      props: true,
     },
     {
       path: '/meals/date/:date',

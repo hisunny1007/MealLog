@@ -47,7 +47,7 @@ const meals = ref([])
 onMounted(async () => {
   try {
     const response = await mealApi.getMealsByDate(date)
-    meals.value = response || []
+    meals.value = response.data || []
   } catch (error) {
     console.error('식단 조회 실패:', error)
     meals.value = []
