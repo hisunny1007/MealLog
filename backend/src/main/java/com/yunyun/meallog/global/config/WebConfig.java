@@ -26,6 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/users/login",
                         "/users/signup",
                         "/users/*/profile",
+                        "/users/me",
                         "/pointshop/products",
                         "/swagger-ui/**",
                         "/v3/api-docs/**",

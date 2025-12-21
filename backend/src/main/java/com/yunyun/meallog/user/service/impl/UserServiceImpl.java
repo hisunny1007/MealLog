@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Integer signUp(SignupStep1RequestDto requestDto) {
+    public Long signUp(SignupStep1RequestDto requestDto) {
         // 이메일 중복 체크
         userDao.findByEmail(requestDto.getEmail())
                 .ifPresent(user -> { throw new CustomException(ErrorCode.DUPLICATE_EMAIL); });
@@ -56,14 +56,14 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
 
-        String accessToken = jwtUtil.generateToken(String.valueOf(user.getId()));
+        String accessToken = jwtUtil.generateToken(user.getId());
 
         return new LoginResponseDto(accessToken);
     }
 
     @Override
     @Transactional
-    public void updateProfile(Integer userId, SignupStep2RequestDto requestDto) {
+    public void updateProfile(Long userId, SignupStep2RequestDto requestDto) {
         User userToUpdate = userDao.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto getMyProfile(Integer userId) {
+    public UserResponseDto getMyProfile(Long userId) {
         User user = userDao.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return UserResponseDto.from(user);

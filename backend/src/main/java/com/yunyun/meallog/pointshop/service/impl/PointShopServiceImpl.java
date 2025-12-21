@@ -43,7 +43,7 @@ public class PointShopServiceImpl implements PointShopService {
 
     @Override
     @Transactional
-    public OrderResponseDto processPointExchange(int userId, OrderRequestDto dto) {
+    public OrderResponseDto processPointExchange(Long userId, OrderRequestDto dto) {
         Product product = productDao.selectProductById(dto.getProductId());
         if (product == null) {
             throw new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
@@ -51,7 +51,7 @@ public class PointShopServiceImpl implements PointShopService {
 
         int totalPointsNeeded = product.getPricePoint() * dto.getAmount();
 
-        User user = userDao.findById((Integer) userId)
+        User user = userDao.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (user.getRewardPoint() < totalPointsNeeded) {
@@ -61,7 +61,7 @@ public class PointShopServiceImpl implements PointShopService {
         int newPoint = user.getRewardPoint() - totalPointsNeeded;
         userDao.updateRewardPoint(userId, newPoint);
 
-        Order order = new Order(0, userId, dto.getProductId(), totalPointsNeeded, dto.getAmount(), null);
+        Order order = new Order(0L, userId, dto.getProductId(), totalPointsNeeded, dto.getAmount(), null);
 
         orderDao.insertOrder(order);
 
@@ -69,7 +69,7 @@ public class PointShopServiceImpl implements PointShopService {
     }
 
     @Override
-    public List<OrderHistoryDto> getOrderHistory(int userId) {
+    public List<OrderHistoryDto> getOrderHistory(Long userId) {
         return orderDao.selectOrderHistoryByUserId(userId);
     }
 
