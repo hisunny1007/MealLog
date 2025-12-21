@@ -31,7 +31,7 @@
       class="form-control mb-3"
       v-model="keyword"
       placeholder="메뉴 검색"
-      @input="searchFood"
+      @input="onKeyWordChange"
     />
 
     <!-- 자동완성 리스트 추가 -->
@@ -208,8 +208,15 @@ const searchFood = async () => {
   }
 
   isSearching.value = true // 검색 시작
-  foods.value = await foodApi.searchAutoComplete(keyword.value) // 자동완성 api 호출
+  const result = await foodApi.searchAutoComplete(keyword.value) // 자동완성 api 호출
+  foods.value = result
   isSearching.value = false // 검색 종료
+
+  // 검색결과 없으면 검색했던 텍스트 그대로 메뉴 이름 자동 입력
+  if (result.length === 0) {
+    form.foodId = null
+    form.foodName = keyword.value
+  }
 }
 
 // 음식 선택 시 자동으로 영양정보 채우기
@@ -227,6 +234,13 @@ const selectFood = (food) => {
   isSearching.value = false
 }
 
+// 자동으로 입력된 음식 수정하기
+const onKeyWordChange = () => {
+  form.foodId = null
+  foods.value = []
+  searchFood()
+}
+
 const triggerFile = () => {
   fileInput.value.click()
 }
@@ -241,6 +255,10 @@ const onImageChange = (e) => {
 }
 
 const submit = () => {
+  if (!form.mealType || !form.foodName || !form.score) {
+    alert('필수 항목을 모두 선택해 주세요.')
+    return
+  }
   emit('submit', {
     ...form,
     date: props.date,
