@@ -22,14 +22,14 @@ public class JwtInterceptor implements HandlerInterceptor {
                              Object handler) throws Exception {
 
         String header = request.getHeader("Authorization");
-        System.out.println("Authorization header = " + header);
+        System.out.println("Received Authorization Header: " + header);
 
         if (header != null && header.startsWith("Bearer ")) {
 
             String token = header.substring(7);
 
             if (jwtUtil.isTokenValid(token)) {
-                
+                // String -> Integer 변환
                 Integer userId = Integer.parseInt(String.valueOf(jwtUtil.getUserId(token)));
                 request.setAttribute("userId", userId);
             } else {

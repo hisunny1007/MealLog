@@ -234,7 +234,7 @@ const handleSignupStep2 = async () => {
 
 .form-section label {
   font-weight: bold;
-  color: #444;
+  /* color: #444; */
   width: 120px;
   flex-shrink: 0;
   margin-bottom: 0;
@@ -280,7 +280,7 @@ const handleSignupStep2 = async () => {
   width: 100%;
   height: 100%;
   font-size: 0.9em;
-  color: #888;
+  /* color: #888; */
   pointer-events: none;
 }
 
@@ -331,7 +331,7 @@ h1 {
 
 .form-section label {
   font-weight: bold;
-  color: #444;
+  /* color: #444; */
   width: 120px;
   flex-shrink: 0;
 }
@@ -378,7 +378,7 @@ h1 {
   margin-right: 10px;
   border-radius: 20px;
   cursor: pointer;
-  color: #333;
+  /* color: #333; */
   flex-grow: 0;
 }
 

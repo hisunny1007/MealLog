@@ -2,6 +2,7 @@ package com.yunyun.meallog.user.dao;
 
 import com.yunyun.meallog.user.domain.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Optional;
 
@@ -11,4 +12,5 @@ public interface UserDao {
     Optional<User> findByEmail(String email);
     Optional<User> findById(Integer id);
     void updateProfile(User user);
+    void updateRewardPoint(@Param("id") long id, @Param("rewardPoint") int rewardPoint);
 }

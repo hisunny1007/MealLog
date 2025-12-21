@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunyun.meallog.pointshop.dao.ProductDao">
+    <resultMap id="productMap" type="com.yunyun.meallog.pointshop.domain.Product">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="description" column="description" />
+        <result property="pricePoint" column="price_point" />
+        <result property="imageUrl" column="image_url" />
+        <result property="category" column="category" />
+        <result property="createdAt" column="created_at" />
+    </resultMap>
+
+    <select id="selectProductsByCategory" resultMap="productMap">
+        SELECT
+        id, name, description, price_point, image_url, category, created_at
+        FROM products
+        <where>
+            <if test="category != null and category != ''">
+                category = #{category}
+            </if>
+        </where>
+        ORDER BY id ASC
+    </select>
+
+    <select id="selectProductById" resultMap="productMap">
+        SELECT
+        id, name, description, price_point, image_url, category, created_at
+        FROM products
+        WHERE id = #{productId}
+    </select>
+</mapper>

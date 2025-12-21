@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunyun.meallog.pointshop.dao.OrderDao">
+    <select id="selectOrderHistoryByUserId"
+            resultType="com.yunyun.meallog.pointshop.dto.OrderHistoryDto">
+
+        SELECT p.name        AS productName,
+               p.image_url   AS imageUrl,
+               o.total_point AS totalPoint,
+               o.amount      AS amount,
+               o.created_at  AS orderDate
+        FROM `orders` o
+                 JOIN products p ON o.product_id = p.id
+        WHERE o.user_id = #{userId}
+        ORDER BY o.created_at DESC
+    </select>
+
+    <insert id="insertOrder" parameterType="com.yunyun.meallog.pointshop.domain.Order" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `orders` (user_id, product_id, total_point, amount)
+        VALUES (#{userId}, #{productId}, #{totalPoint}, #{amount})
+    </insert>
+</mapper>

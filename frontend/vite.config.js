@@ -18,11 +18,10 @@ export default defineConfig({
 
   // 프록시 설정 추가
   server: {
-  proxy: {
-    '/api': {
-      target: 'http://localhost:8080',
-      changeOrigin: true,
-    },
-  },
-}
+      proxy: {
+        '/api/v1': {
+          target: 'http://localhost:8080',
+          changeOrigin: true,
+        },
+      },}
 })

@@ -42,4 +42,11 @@
         WHERE id = #{id}
     </update>
 
+    <update id="updateRewardPoint">
+        UPDATE users
+        SET
+            reward_point = #{rewardPoint}
+        WHERE id = #{id}
+    </update>
+
 </mapper>
