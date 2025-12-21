@@ -1,7 +1,7 @@
 <template>
   <div class="container my-5">
     <!-- 날짜 -->
-    <h2 class="text-center fw-bold mb-4">{{ formattedDate }} 식단</h2>
+    <h2 class="page-title text-center fw-bold mb-4">{{ formattedDate }} 식단</h2>
 
     <!-- 라벨 -->
     <!-- 자식한테 상태 넘김 -->
