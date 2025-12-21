@@ -9,7 +9,6 @@
 
 <style scoped>
 .meal-card {
-  background-color: #fdf6ef;
-
+  background-color: #faf7f5;
 }
 </style>
