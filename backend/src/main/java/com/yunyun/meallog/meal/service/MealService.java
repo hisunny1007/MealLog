@@ -2,6 +2,7 @@ package com.yunyun.meallog.meal.service;
 
 import com.yunyun.meallog.meal.dto.request.MealRequestDto;
 import com.yunyun.meallog.meal.dto.response.MealCalendarSummaryResponseDto;
+import com.yunyun.meallog.meal.dto.response.MealCreateResponseDto;
 import com.yunyun.meallog.meal.dto.response.MealResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +14,7 @@ public interface MealService {
 
     //service는 dto주고받는 레이어라 엔티티 대신 dto 반환이 더 바람직함
 
-    MealResponseDto createMeal(Long userId, MealRequestDto requestDto, MultipartFile image);
+    MealCreateResponseDto createMeal(Long userId, MealRequestDto requestDto, MultipartFile image);
 
     MealResponseDto getMeal(Long userId, Long mealId);
 
