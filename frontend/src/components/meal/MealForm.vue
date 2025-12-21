@@ -106,7 +106,7 @@
             <button
               type="button"
               class="meal-btn"
-              :class="form.mealType === 'BREAKFAST' ? 'btn-secondary' : 'btn-outline-secondary'"
+              :class="{ active: form.mealType === 'BREAKFAST' }"
               @click="form.mealType = 'BREAKFAST'"
             >
               아침
@@ -115,7 +115,7 @@
             <button
               type="button"
               class="meal-btn"
-              :class="form.mealType === 'LUNCH' ? 'btn-secondary' : 'btn-outline-secondary'"
+              :class="{ active: form.mealType === 'LUNCH' }"
               @click="form.mealType = 'LUNCH'"
             >
               점심
@@ -124,7 +124,7 @@
             <button
               type="button"
               class="meal-btn"
-              :class="form.mealType === 'DINNER' ? 'btn-secondary' : 'btn-outline-secondary'"
+              :class="{ active: form.mealType === 'DINNER' }"
               @click="form.mealType = 'DINNER'"
             >
               저녁
