@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const api = axios.create({
   baseURL: '/api/v1',
-})
+});
 
 // 요청 인터셉터
 api.interceptors.request.use(
@@ -32,4 +32,4 @@ api.interceptors.response.use(
   },
 )
 
-export default api
+export default api;

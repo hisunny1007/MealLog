@@ -82,7 +82,7 @@ p {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
-  color: #444;
+  /* color: #444; */
 }
 .input-group input {
   width: 100%;

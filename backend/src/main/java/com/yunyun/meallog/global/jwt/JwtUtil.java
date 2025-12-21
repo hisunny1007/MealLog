@@ -58,9 +58,22 @@ public class JwtUtil {
         try{
             Claims claims = getClaims(token);
             Date expiration = claims.getExpiration();
-            return expiration != null && !expiration.before(new Date());
+            boolean isValid = expiration != null && !expiration.before(new Date());
+            if (isValid) {
+                System.out.println("JWT 인증 성공!");
+            }
+            return isValid;
+        } catch (io.jsonwebtoken.security.SignatureException e) {
+            System.err.println("유효하지 않은 JWT: " + e.getMessage());
+            return false;
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            System.err.println("JWT 만료: " + e.getMessage());
+            return false;
+        } catch (io.jsonwebtoken.MalformedJwtException e) {
+            System.err.println("잘못된 JWT: " + e.getMessage());
+            return false;
         } catch (Exception e) {
-            //토큰 파싱 중 예외 발생 시 유효하지 않은 토큰으로 간주
+            System.err.println("JWT 인증 에러: " + e.getClass().getName() + " - " + e.getMessage());
             return false;
         }
     }

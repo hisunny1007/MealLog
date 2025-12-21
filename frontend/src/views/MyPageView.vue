@@ -1,14 +1,14 @@
 <template>
   <div class="mypage-container">
+    <h2 class="text-center fw-bold mb-4">마이 페이지</h2>
     <div class="mypage-content">
-      <h1>마이 페이지</h1>
 
       <div class="user-profile-card">
         <div class="profile-icon">👤</div>
 
         <div class="user-info">
           <p class="nickname">{{ authStore.user?.nickname }} 님</p>
-          <p class="point-balance">{{ authStore.user?.currentPoint ?? 0 }} P</p>
+          <p class="point-balance">{{ authStore.user?.rewardPoint ?? 0 }} P</p>
           <button class="edit-btn" @click="goToEditProfile">회원정보 수정</button>
         </div>
       </div>
@@ -16,11 +16,11 @@
       <div class="divider"></div>
 
       <nav class="mypage-nav">
-        <a @click="router.push('/pointshop')" class="nav-item">
+        <a @click="router.push('/point-shop')" class="nav-item">
           <i class="icon">🛒</i>
           <span>포인트샵</span>
         </a>
-        <a @click="router.push('/pointhistory')" class="nav-item">
+        <a @click="router.push('/point-history')" class="nav-item">
           <i class="icon">🪙</i>
           <span>포인트 교환 내역</span>
         </a>
@@ -42,12 +42,15 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 
-const router = useRouter()
-const authStore = useAuthStore()
+const router = useRouter();
+const authStore = useAuthStore();
 
 onMounted(() => {
-  authStore.fetchUser()
-})
+  // 컴포넌트가 마운트될 때 최신 사용자 정보를 가져옵니다.
+  authStore.fetchUser();
+  // 디버깅: 마이페이지가 마운트될 때 authStore.user의 실제 값을 확인합니다.
+  console.log('User object in MyPageView on mount:', authStore.user);
+});
 
 // 사용자 정보가 없으면, 홈으로 이동
 if (!authStore.isAuthenticated) {
@@ -60,7 +63,7 @@ const goToEditProfile = () => {
 }
 
 const goToInquiry = () => {
-  alert('문의하기 페이지로 이동')
+  alert('MealLog@naver.com 으로 문의부탁드립니다.')
   // router.push('/inquiry');
 }
 
@@ -74,11 +77,11 @@ const handleLogout = () => {
 <style scoped>
 .mypage-container {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   min-height: 100vh;
   padding: 50px 20px;
-  background-color: #f8f8f8;
+  background-color: #faf7f4;
 }
 
 .mypage-content {
@@ -90,18 +93,8 @@ const handleLogout = () => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-h1 {
-  font-size: 2em;
-  text-align: center;
-  margin-bottom: 40px;
-  color: #4b2e1e;
-}
-
 .user-profile-card {
   display: flex;
-  align-items: flex-start;
-  padding: 10px;
-  margin-bottom: 20px;
 }
 
 .profile-icon {
@@ -132,14 +125,14 @@ h1 {
 
 .point-balance {
   font-size: 1.2em;
-  color: #8d6e63;
+  /* color: #8d6e63; */
   margin-bottom: 10px;
 }
 
 .edit-btn {
   background: none;
   border: none;
-  color: #888;
+  /* color: #888; */
   font-size: 0.9em;
   text-decoration: underline;
   cursor: pointer;
@@ -166,7 +159,7 @@ h1 {
   align-items: center;
   padding: 15px 10px;
   text-decoration: none;
-  color: #333;
+  /* color: #333; */
   font-size: 1.1em;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -196,7 +189,7 @@ h1 {
 .deactivate-link {
   background: none;
   border: none;
-  color: #999;
+  /* color: #999; */
   cursor: pointer;
   font-size: 1em;
   text-decoration: none;
