@@ -24,6 +24,7 @@ import MealTimeLabel from '@/components/meal/MealTimeLabel.vue'
 import { useAuthStore } from '@/stores/authStore'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
 
 const authStore = useAuthStore()
 
@@ -111,7 +112,7 @@ const createMeal = async (formData) => {
     const isDuplicate = meals.value.some((meal) => meal.mealType === formData.mealType)
 
     if (isDuplicate) {
-      alert(`${getMealTypeLabel(formData.mealType)} 식단이 이미 등록되어 있습니다!`)
+      toast.error(`${getMealTypeLabel(formData.mealType)} 식단이 이미 등록되어 있습니다!`)
       return
     }
 

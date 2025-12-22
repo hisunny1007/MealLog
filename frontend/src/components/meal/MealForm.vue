@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submit" class="meal-form">
+  <form @submit.prevent="handleFormSubmit" class="meal-form">
     <div class="row g-4">
       <!-- 왼쪽: 사진 / 검색 / 영양정보 -->
       <div class="col-md-6 position-relative">
@@ -172,6 +172,7 @@
 <script setup>
 import foodApi from '@/api/foodApi'
 import { ref, reactive } from 'vue'
+import { toast } from 'vue3-toastify'
 
 const props = defineProps({
   date: String,
@@ -257,11 +258,12 @@ const form = reactive({
   memo: '',
 })
 
-const submit = () => {
+const handleFormSubmit = () => {
   if (!form.mealType || !form.foodName || !form.score) {
-    alert('필수 항목을 모두 선택해 주세요.')
+    toast.error('필수 항목을 모두 선택해 주세요.')
     return
   }
+
   emit('submit', {
     ...form,
     date: props.date,
