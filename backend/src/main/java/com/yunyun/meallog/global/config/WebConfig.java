@@ -30,7 +30,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/users/me",
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
-                        "/uploads/**" // 이미지 엑박 수정
+                        "/uploads/**", // 이미지 엑박 수정
+                        "/ai/**"
                 );
 
         registry.addInterceptor(adminInterceptor)

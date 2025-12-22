@@ -34,3 +34,6 @@ coverage
 
 # Vitest
 __screenshots__/
+
+### 환경변수 ###
+.env

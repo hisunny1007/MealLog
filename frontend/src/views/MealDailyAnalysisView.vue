@@ -6,18 +6,26 @@
       class="analysis-empty d-flex flex-column justify-content-center align-items-center text-center"
     >
       <p class="empty-title mb-2">아직 오늘의 식단 기록이 없어요 🍽️</p>
-      <p class="empty-desc mb-4">식단을 기록하면 오늘의 분석 리포트를 확인할 수 있어요!</p>
+      <p class="empty-desc mb-4">
+        식단을 기록하면 오늘의 분석 리포트를 확인할 수 있어요!
+      </p>
 
-      <RouterLink :to="`/meals/create/${date}`" class="btn btn-brown rounded-pill px-5 py-2">
+      <RouterLink
+        :to="`/meals/create/${date}`"
+        class="btn btn-brown rounded-pill px-5 py-2"
+      >
         식단 기록하러 가기
       </RouterLink>
     </div>
+
     <!-- 식단 있을 때만 분석 보여줌 -->
-    <div v-else>
-      <div>
-        <!-- 제목 -->
-        <h2 class="text-center fw-bold mb-4">{{ formattedDate }} 데일리 분석</h2>
-      </div>
+    <div v-if="meals.length > 0">
+
+      <!-- 제목 -->
+      <h2 class="text-center fw-bold mb-4">
+        {{ formattedDate }} 데일리 분석
+      </h2>
+
       <!-- 요약 카드 -->
       <div class="row g-3 mb-4">
         <div class="col-md-6">
@@ -36,23 +44,83 @@
       </div>
 
       <!-- 운동목표 반영 피드백 문구 -->
-      <div class="feedback-text">
-        <p>{{ feedbackMessage.line1 }}</p>
-        <p class="text-muted">{{ feedbackMessage.line2 }}</p>
+      <div class="feedback-text mb-4">
+        <p class="fw-semibold mb-1">{{ feedbackMessage.line1 }}</p>
+        <p class="text-muted mb-0">{{ feedbackMessage.line2 }}</p>
       </div>
 
       <!-- 탄단지 그래프 -->
       <div class="card p-4 rounded-4">
         <h5 class="fw-bold mb-3">탄 · 단 · 지 비율</h5>
+
         <DoughnutChart :ratio="macroRatio" />
 
         <!-- 탄단지 피드백 문구 -->
         <div class="macro-feedback mt-3">
-          <p class="fw-semibold">{{ macroFeedback.line1 }}</p>
-          <p class="text-muted">{{ macroFeedback.line2 }}</p>
+          <p class="fw-semibold mb-1">{{ macroFeedback.line1 }}</p>
+          <p class="text-muted mb-0">{{ macroFeedback.line2 }}</p>
         </div>
       </div>
+
+      <!-- AI 식단 분석 (독립 영역) -->
+      <div class="card p-4 rounded-4 mt-4">
+        <h5 class="fw-bold mb-3">🤖 AI 식단 분석</h5>
+
+        <!-- 버튼 -->
+        <button
+          class="btn btn-brown mb-3"
+          :disabled="aiLoading"
+          @click="fetchAnalysis"
+        >
+          {{ aiLoading ? '분석 중...' : 'AI 분석하기' }}
+        </button>
+
+        <!-- 로딩 -->
+        <div v-if="aiLoading" class="text-center py-3">
+          <div class="spinner-border text-secondary"></div>
+          <p class="mt-2 text-muted small">
+            AI가 오늘 식단을 분석하고 있어요...
+          </p>
+        </div>
+
+        <!-- 에러 -->
+        <p v-if="aiError" class="text-danger">
+          {{ aiError }}
+        </p>
+
+        <!-- 분석 결과 -->
+        <div v-if="analysisResult && !aiLoading">
+          <div class="mb-4">
+            <h6 class="fw-bold mb-2">📊 분석 결과</h6>
+            <p class="mb-0">
+              {{ analysisResult.analysis }}
+            </p>
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-2">🥗 추천 음식</h6>
+            <ul class="list-group list-group-flush">
+              <li
+                v-for="(food, idx) in analysisResult.recommendations"
+                :key="idx"
+                class="list-group-item px-0"
+              >
+                {{ food }}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 분석 전 안내 -->
+        <p
+          v-if="!analysisResult && !aiLoading && !aiError"
+          class="text-muted mb-0"
+        >
+          AI 분석 버튼을 눌러 오늘 식단에 대한 분석과 추천을 받아보세요.
+        </p>
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -63,6 +131,7 @@ import DoughnutChart from '@/components/daily/DoughnutChart.vue'
 import mealApi from '@/api/mealApi'
 import { useAuthStore } from '@/stores/authStore'
 import { storeToRefs } from 'pinia'
+import aiApi from '@/api/aiApi'
 
 // 1. 라우트에서 날짜 받기
 const route = useRoute()
@@ -98,6 +167,32 @@ const fetchMeals = async () => {
 }
 
 onMounted(fetchMeals)
+
+// 식단 ai 분석
+const analysisResult = ref(null)
+const aiLoading = ref(false)
+const aiError = ref(null)
+
+const fetchAnalysis = async () => {
+  if (meals.value.length === 0) return
+
+  try {
+    aiLoading.value = true
+    aiError.value = null
+
+    const result = await aiApi.analyzeMeals(meals.value)
+
+    analysisResult.value = result
+  } catch (e) {
+    console.error(e)
+    aiError.value = 'AI 분석에 실패했어요. 잠시 후 다시 시도해주세요.'
+  } finally {
+    aiLoading.value = false
+  }
+}
+
+// ai는 계속 호출하지 말고 버튼 클릭으로만 호출하기
+// onMounted(fetchAnalysis)
 
 // ▼ 계산 로직
 // 총 섭취 칼로리

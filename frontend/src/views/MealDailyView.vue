@@ -46,6 +46,7 @@ const meals = ref([])
 onMounted(async () => {
   try {
     const result = await mealApi.getMealsByDate(date)
+
     meals.value = result ?? []
   } catch (error) {
     console.error('식단 조회 실패:', error)
@@ -78,14 +79,10 @@ const goToCreate = (mealType) => {
   })
 }
 
-const props = defineProps({
-  date: String,
-})
-
 const goToAnalysis = () => {
   router.push({
     name: 'MealDailyAnalysis',
-    params: { date: props.date },
+    params: { date: date },
   })
 }
 </script>
