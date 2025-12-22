@@ -19,3 +19,11 @@
 body {
   background-color: #fafafa;
 }
+
+/* 토스트 전체 박스 커스텀 */
+.Toastify__toast {
+  border-radius: 20px !important;
+  font-family: 'Pretendard', sans-serif;
+  color: var(--main-brown);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}

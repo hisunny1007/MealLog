@@ -15,7 +15,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class JwtInterceptor implements HandlerInterceptor {
 
     private final JwtUtil jwtUtil;
-
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
@@ -29,9 +28,13 @@ public class JwtInterceptor implements HandlerInterceptor {
             String token = header.substring(7);
 
             if (jwtUtil.isTokenValid(token)) {
-                // String -> Integer 변환
-                Integer userId = Integer.parseInt(String.valueOf(jwtUtil.getUserId(token)));
+
+                Long userId = jwtUtil.getUserId(token);
+
                 request.setAttribute("userId", userId);
+
+                System.out.println("JWT userId = " + userId + " (" + userId.getClass() + ")");
+
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return false;

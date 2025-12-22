@@ -13,8 +13,8 @@ public interface PointShopService {
     List<ProductViewDto> getProducts(String category);
 
     // 포인트 교환 트랜잭션 처리
-    OrderResponseDto processPointExchange(int userId, OrderRequestDto dto);
+    OrderResponseDto processPointExchange(Long userId, OrderRequestDto dto);
 
-    List<OrderHistoryDto> getOrderHistory(int userId);
+    List<OrderHistoryDto> getOrderHistory(Long userId);
 
 }

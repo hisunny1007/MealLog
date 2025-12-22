@@ -2,6 +2,7 @@ package com.yunyun.meallog.meal.controller;
 
 import com.yunyun.meallog.meal.dto.request.MealRequestDto;
 import com.yunyun.meallog.meal.dto.response.MealCalendarSummaryResponseDto;
+import com.yunyun.meallog.meal.dto.response.MealCreateResponseDto;
 import com.yunyun.meallog.meal.dto.response.MealResponseDto;
 import com.yunyun.meallog.meal.service.MealService;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +28,12 @@ public class MealController {
 
     // 식단 등록 시 이미지 함께 업로드 + 이미지 없을 시 랜덤 이미지 제공
     @PostMapping
-    public ResponseEntity<MealResponseDto> createMeal(
+    public ResponseEntity<MealCreateResponseDto> createMeal(
             @RequestAttribute("userId") Long userId,
             @RequestPart(value = "data") MealRequestDto requestDto,
             @RequestPart(value = "image", required = false) MultipartFile image) {
 
-        MealResponseDto response = mealService.createMeal(userId, requestDto, image);
-
+        MealCreateResponseDto response = mealService.createMeal(userId, requestDto, image);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

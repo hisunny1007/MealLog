@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
-    private int id;
-    private int userId;
-    private int productId;
+    private Long id;
+    private Long userId;
+    private Long productId;
     private int totalPoint;
     private int amount;
     private LocalDateTime createdAt;

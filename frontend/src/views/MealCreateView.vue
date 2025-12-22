@@ -21,8 +21,12 @@ import mealApi from '@/api/mealApi'
 import MealCard from '@/components/meal/MealCard.vue'
 import MealForm from '@/components/meal/MealForm.vue'
 import MealTimeLabel from '@/components/meal/MealTimeLabel.vue'
+import { useAuthStore } from '@/stores/authStore'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
+
+const authStore = useAuthStore()
 
 // URL에서 받은 원본 날짜 (API용)
 const route = useRoute() // url에서 값 꺼냄
@@ -104,12 +108,11 @@ const mealStatus = computed(() => [
 
 // 식단 등록
 const createMeal = async (formData) => {
-
   try {
     const isDuplicate = meals.value.some((meal) => meal.mealType === formData.mealType)
 
     if (isDuplicate) {
-      alert(`${getMealTypeLabel(formData.mealType)} 식단이 이미 등록되어 있습니다!`)
+      toast.error(`${getMealTypeLabel(formData.mealType)} 식단이 이미 등록되어 있습니다!`)
       return
     }
 
@@ -143,7 +146,11 @@ const createMeal = async (formData) => {
       multipartForm.append('image', formData.imageFile)
     }
 
-    await mealApi.createMeal(multipartForm)
+    const response = await mealApi.createMeal(multipartForm)
+
+    // 포인트 최신 업데이트
+    const point = response.currentTotalPoint
+    authStore.updateUserPoints(point)
 
     // 바로 해당 날짜의 DailyView로 이동
     router.push({

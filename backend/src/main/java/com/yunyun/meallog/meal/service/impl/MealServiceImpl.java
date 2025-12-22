@@ -4,19 +4,26 @@ import com.yunyun.meallog.food.dto.request.FoodRequestDto;
 import com.yunyun.meallog.food.dto.response.FoodResponseDto;
 import com.yunyun.meallog.food.service.FoodService;
 import com.yunyun.meallog.global.common.FileService;
+import com.yunyun.meallog.global.exception.CustomException;
+import com.yunyun.meallog.global.exception.ErrorCode;
 import com.yunyun.meallog.meal.dao.MealDao;
 import com.yunyun.meallog.meal.domain.Meal;
 import com.yunyun.meallog.meal.dto.request.MealRequestDto;
 import com.yunyun.meallog.meal.dto.response.MealCalendarSummaryResponseDto;
+import com.yunyun.meallog.meal.dto.response.MealCreateResponseDto;
 import com.yunyun.meallog.meal.dto.response.MealResponseDto;
 import com.yunyun.meallog.meal.service.MealService;
+import com.yunyun.meallog.user.dao.UserDao;
+import com.yunyun.meallog.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,9 +33,11 @@ public class MealServiceImpl implements MealService {
     private final MealDao mealDao;
     private final FileService fileService;
     private final FoodService foodService;
+    private final UserDao userDao;
 
     @Override
-    public MealResponseDto createMeal(Long userId, MealRequestDto requestDto, MultipartFile image) {
+    @Transactional
+    public MealCreateResponseDto createMeal(Long userId, MealRequestDto requestDto, MultipartFile image) {
         // 같은 날짜, 같은 식단 타입 존재하는지 확인 필요
         boolean exist = mealDao.existsByDateAndMealType(userId, requestDto.getDate(), requestDto.getMealType());
 
@@ -70,13 +79,23 @@ public class MealServiceImpl implements MealService {
         }
 
         // dto -> entity
+        // 식단 엔티티 생성 및 저장
         Meal meal = requestDto.toEntity(userId);
         meal.setImageUrl(imageUrl);
-
         mealDao.insertMeal(meal);
 
-        return MealResponseDto.from(meal);
-    }
+        // 유저 포인트 업데이트
+        // 식단 등록하면 포인트 적립 +100 (트랜잭션)
+        User user = userDao.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        int newPoint = user.getRewardPoint() + 100;
+        userDao.updateRewardPoint(userId, newPoint);
+
+        return MealCreateResponseDto.builder()
+                .meal(MealResponseDto.from(meal))
+                .currentTotalPoint(newPoint)
+                .build();    }
 
 
     @Override

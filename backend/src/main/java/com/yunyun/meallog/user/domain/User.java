@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User {
 
-    private Integer id;
+    private Long id;
 
     private String email;
 

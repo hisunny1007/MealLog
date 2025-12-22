@@ -7,11 +7,11 @@ import com.yunyun.meallog.user.dto.response.LoginResponseDto;
 import com.yunyun.meallog.user.dto.response.UserResponseDto;
 
 public interface UserService {
-    Integer signUp(SignupStep1RequestDto requestDto);
+    Long signUp(SignupStep1RequestDto requestDto);
 
     LoginResponseDto login(LoginRequestDto loginRequestDto);
 
-    void updateProfile(Integer userId, SignupStep2RequestDto requestDto);
+    void updateProfile(Long userId, SignupStep2RequestDto requestDto);
 
-    UserResponseDto getMyProfile(Integer userId);
+    UserResponseDto getMyProfile(Long userId);
 }

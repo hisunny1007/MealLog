@@ -11,5 +11,5 @@ import java.util.List;
 public interface OrderDao {
     int insertOrder(Order order);
     //사용자의 포인트 교환내역 조회
-    List<OrderHistoryDto> selectOrderHistoryByUserId(@Param("userId") int userId);
+    List<OrderHistoryDto> selectOrderHistoryByUserId(@Param("userId") Long userId);
 }
