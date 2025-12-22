@@ -33,9 +33,9 @@ class JwtTest {
         assertTrue(isTokenValid, "생성된 토큰은 유효해야 합니다.");
 
         // When: 토큰에서 사용자 ID 추출
-        String extractedUserId = jwtUtil.getUserId(token);
+        Long extractedUserId = jwtUtil.getUserId(token);
 
         // Then: 추출된 사용자 ID가 원래 ID와 일치하는지 확인
-        assertEquals(userId, extractedUserId, "토큰에서 추출한 사용자 ID는 원래 ID와 일치해야 합니다.");
+        assertEquals(Long.valueOf(userId), extractedUserId, "토큰에서 추출한 사용자 ID는 원래 ID와 일치해야 합니다.");
     }
 }

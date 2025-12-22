@@ -1,22 +1,21 @@
-import instance from './axios';
-
+import instance from './axios'
 
 const getProducts = (category) => {
   return instance.get('/pointshop/products', {
-    params: { category }
-  });
-};
-
+    params: { category },
+  })
+}
 
 const purchaseProduct = (orderRequest) => {
-
-  return instance.post('/pointshop/purchase', orderRequest);
-};
-
+  return instance.post('/pointshop/purchase', orderRequest)
+}
 
 const getOrderHistory = () => {
-  
-  return instance.get('/pointshop/history');
-};
+  return instance.get('/pointshop/history')
+}
 
-export { getProducts, purchaseProduct, getOrderHistory };
+const getPersonalizedRecommendation = () => {
+  return instance.get('/pointshop/recommendation')
+}
+
+export { getProducts, purchaseProduct, getOrderHistory, getPersonalizedRecommendation }

@@ -48,6 +48,7 @@ public class JwtUtil {
                 .compact();
     }
 
+
     /**
      *  JWT 토큰에서 userId 추출
      * - 기존 Integer 토큰과의 호환을 위해 타입 분기 처리
@@ -55,6 +56,7 @@ public class JwtUtil {
      */
     public Long getUserId(String token) {
         Claims claims = getClaims(token);
+
 
         Object userId = claims.get("userId");
 
