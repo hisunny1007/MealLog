@@ -109,5 +109,13 @@
           AND date BETWEEN #{start} AND #{end}
         GROUP BY date
     </select>
+<!-- GPT 추천 쿼리 -->
+    <select id="selectFoodNamesLastSevenDays" resultType="string">
+        SELECT food_name
+        FROM meals
+        WHERE user_id = #{userId}
+          AND date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        ORDER BY date DESC
+    </select>
 
 </mapper>

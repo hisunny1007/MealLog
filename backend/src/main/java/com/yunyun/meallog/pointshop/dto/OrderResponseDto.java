@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderResponseDto {
-    private int orderId;
+    private Long orderId;
     private String productName;
     private int remainingPoint;
 }

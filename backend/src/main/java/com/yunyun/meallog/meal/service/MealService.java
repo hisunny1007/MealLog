@@ -25,4 +25,7 @@ public interface MealService {
 
     // 캘린더 요약 표시용
     List<MealCalendarSummaryResponseDto> getCalendarSummary(Long userId, int year, int month);
+
+    // AI 추천용 - 최근 7일 식단 메뉴 이름 조회
+    List<String> getFoodNamesLastSevenDays(Long userId);
 }

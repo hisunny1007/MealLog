@@ -39,8 +39,10 @@ import { useAuthStore } from '@/stores/authStore';
 import { getProducts, purchaseProduct } from '@/api/pointshop';
 import ProductCard from '@/components/pointshop/ProductCard.vue';
 import PurchaseModal from '@/components/pointshop/PurchaseModal.vue';
+import { useRoute } from 'vue-router';
 
 const authStore = useAuthStore();
+const route = useRoute();
 
 const categories = ref([
   { name: '단백질', value: 'protein' },
@@ -48,6 +50,7 @@ const categories = ref([
   { name: '야채', value: 'vegetable' },
 ]);
 
+// ref 변수 선언
 const selectedCategory = ref('protein');
 const products = ref([]);
 const userPoints = computed(() => authStore.user?.rewardPoint || 0);
@@ -55,26 +58,39 @@ const userPoints = computed(() => authStore.user?.rewardPoint || 0);
 const isModalVisible = ref(false);
 const selectedProduct = ref(null);
 
+// 상품 목록 조회 함수
 const fetchProducts = async (category) => {
   try {
     const response = await getProducts(category);
     if (Array.isArray(response.data)) {
       products.value = response.data;
     } else {
-      console.warn('API response for products is not an array:', response.data);
-      products.value = []; // 렌더링 오류를 방지하기 위해 빈 배열로 초기화
+      products.value = [];
     }
   } catch (error) {
     console.error('Error fetching products:', error);
-    products.value = []; // 에러 발생 시에도 빈 배열로 초기화
+    products.value = [];
   }
 };
 
+// 탭 선택 함수
 const selectCategory = (category) => {
-  selectedCategory.value = category;
+  selectedCategory.value = category; // .value 추가
   fetchProducts(category);
 };
 
+// 생명주기 훅 통합
+onMounted(() => {
+  // URL 쿼리 파라미터 체크 (추천 제품 클릭 시 넘어온 정보)
+  if (route.query.category) {
+    selectedCategory.value = route.query.category; // .value 추가
+  }
+
+  // 최종 결정된 카테고리로 제품 로드
+  fetchProducts(selectedCategory.value);
+});
+
+// 모달 관련 핸들러들
 const openPurchaseModal = (product) => {
   selectedProduct.value = product;
   isModalVisible.value = true;
@@ -88,7 +104,6 @@ const closePurchaseModal = () => {
 const handlePurchase = async ({ productId, amount }) => {
   try {
     const response = await purchaseProduct({ productId, amount });
-  
     authStore.updateUserPoints(response.data.remainingPoint);
     alert('교환이 완료되었습니다.');
     closePurchaseModal();
@@ -97,16 +112,12 @@ const handlePurchase = async ({ productId, amount }) => {
     alert('포인트가 부족하거나 오류가 발생했습니다.');
   }
 };
-
-onMounted(() => {
-  fetchProducts(selectedCategory.value);
-});
 </script>
 
 <style scoped>
 .point-shop-container {
   padding: 2rem;
-  background-color: #fdfaf6; 
+  background-color: #fdfaf6;
 }
 
 .title {

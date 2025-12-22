@@ -30,4 +30,20 @@
         FROM products
         WHERE id = #{productId}
     </select>
+
+    <select id="selectOneRandomByCategory" resultType="com.yunyun.meallog.pointshop.domain.Product">
+        SELECT
+            id, name, description, price_point, image_url, created_at, category
+        FROM products
+        WHERE category = #{category}
+        ORDER BY RAND()
+            LIMIT 1
+    </select>
+
+    <select id="selectRandomProducts" resultType="com.yunyun.meallog.pointshop.domain.Product">
+        SELECT * FROM products
+        ORDER BY RAND()
+            LIMIT #{limit}
+    </select>
+
 </mapper>
