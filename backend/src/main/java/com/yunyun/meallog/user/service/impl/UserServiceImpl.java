@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
 
-        String accessToken = jwtUtil.generateToken(String.valueOf(user.getId()));
+        String accessToken = jwtUtil.generateToken(user.getId());
 
         return new LoginResponseDto(accessToken);
     }
