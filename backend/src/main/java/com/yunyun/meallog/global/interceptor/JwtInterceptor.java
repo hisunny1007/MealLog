@@ -21,7 +21,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                              Object handler) throws Exception {
 
         String header = request.getHeader("Authorization");
-        System.out.println("Received Authorization Header: " + header);
+
 
         if (header != null && header.startsWith("Bearer ")) {
 

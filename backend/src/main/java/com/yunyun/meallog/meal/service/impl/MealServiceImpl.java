@@ -159,4 +159,9 @@ public class MealServiceImpl implements MealService {
 
         return mealDao.findCalendarSummary(userId, start, end);
     }
+
+    @Override
+    public List<String> getFoodNamesLastSevenDays(Long userId) {
+        return mealDao.selectFoodNamesLastSevenDays(userId);
+    }
 }

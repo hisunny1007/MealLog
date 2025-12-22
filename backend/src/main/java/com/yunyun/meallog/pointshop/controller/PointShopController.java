@@ -27,14 +27,18 @@ public class PointShopController {
     @PostMapping("/purchase")
     public ResponseEntity<OrderResponseDto> purchase(@RequestHeader("Authorization") String token, @RequestBody OrderRequestDto orderRequestDto) {
         String jwt = token.substring(7);
-        Long userId = Long.valueOf(jwtUtil.getUserId(jwt));
+
+        Long userId = jwtUtil.getUserId(jwt);
+
         return ResponseEntity.ok(pointShopService.processPointExchange(userId, orderRequestDto));
     }
 
     @GetMapping("/history")
     public ResponseEntity<?> getOrderHistory(@RequestHeader("Authorization") String token) {
         String jwt = token.substring(7);
-        Long userId = Long.valueOf(jwtUtil.getUserId(jwt));
+
+        Long userId = jwtUtil.getUserId(jwt);
+
 
         return ResponseEntity.ok(pointShopService.getOrderHistory(userId));
     }

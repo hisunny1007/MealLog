@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @Mapper
@@ -39,5 +40,9 @@ public interface MealDao {
     List<MealCalendarSummaryResponseDto> findCalendarSummary(@Param("userId") Long userId,
                                                              @Param("start") LocalDate start,
                                                              @Param("end") LocalDate end);
+
+    // GPT 추천 시스템 최근 7일 식단 이름 조회
+    List<String> selectFoodNamesLastSevenDays(@Param("userId") Long userId);
+
 
 }

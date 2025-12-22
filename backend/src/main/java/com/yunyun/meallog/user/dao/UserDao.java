@@ -12,5 +12,5 @@ public interface UserDao {
     Optional<User> findByEmail(String email);
     Optional<User> findById(Long id);
     void updateProfile(User user);
-    void updateRewardPoint(@Param("id") long id, @Param("rewardPoint") int rewardPoint);
+    void updateRewardPoint(@Param("id") Long id, @Param("rewardPoint") int rewardPoint);
 }

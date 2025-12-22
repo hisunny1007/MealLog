@@ -12,4 +12,9 @@ public interface ProductDao {
     List<Product> selectProductsByCategory(@Param("category") String category);
     
     Product selectProductById(Long productId);
+
+    // 추천 시스템용 - 특정 카테고리에서 랜덤으로 1개 상품 조회
+    Product selectOneRandomByCategory(@Param("category") String category);
+
+    List<Product> selectRandomProducts(@Param("limit") int limit);
 }

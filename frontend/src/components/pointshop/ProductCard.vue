@@ -1,16 +1,18 @@
 <template>
   <div class="product-card">
     <img :src="product.imageUrl" :alt="product.name" class="product-image" />
+    
     <div class="product-info">
       <h3 class="product-name">{{ product.name }}</h3>
-      <p class="product-description">{{ product.description }}</p>
+      <p class="product-description">{{ parsedData.desc }}</p>
+      
       <div class="product-details">
- 
-        <span>Weight: 100g</span>
-        <span>Protein: 25g</span>
-        <span>Calories: 130kcal</span>
+        <span>Carbs: {{ parsedData.carbs }}</span>
+        <span>Protein: {{ parsedData.protein }}</span>
+        <span>Fat: {{ parsedData.fat }}</span>
       </div>
     </div>
+
     <div class="product-actions">
       <div class="product-price">{{ product.pricePoint }}p</div>
       <button @click="onPurchase" class="purchase-button">구매</button>
@@ -19,14 +21,28 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
 const props = defineProps({
-  product: {
-    type: Object,
-    required: true,
-  },
+  product: { type: Object, required: true },
 });
 
 const emit = defineEmits(['purchase']);
+
+
+const parsedData = computed(() => {
+  const fullDesc = props.product.description || "";
+ 
+  const [nutrientPart, ...descParts] = fullDesc.split('|');
+  const pureDesc = descParts.join('|').trim(); 
+
+  return {
+    carbs: nutrientPart.match(/탄:(\d+g)/)?.[1] || "0g",
+    protein: nutrientPart.match(/단:(\d+g)/)?.[1] || "0g",
+    fat: nutrientPart.match(/지:(\d+g)/)?.[1] || "0g",
+    desc: pureDesc || fullDesc 
+  };
+});
 
 const onPurchase = () => {
   emit('purchase', props.product);
@@ -39,68 +55,78 @@ const onPurchase = () => {
   background-color: #fff;
   border-radius: 12px;
   padding: 1rem;
-  gap: 1rem;
+  gap: 1.5rem; 
   align-items: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s;
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
+  min-height: 140px; 
 }
 
 .product-image {
-  width: 100px;
-  height: 100px;
+  width: 110px; 
+  height: 110px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
+  flex-shrink: 0; 
 }
 
 .product-info {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .product-name {
   font-size: 1.1rem;
   font-weight: bold;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.3rem 0;
 }
 
 .product-description {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0 0 0.5rem 0;
+  font-size: 0.85rem;
+  color: #777;
+  margin: 0 0 0.8rem 0;
+  line-height: 1.4;
+ 
 }
 
 .product-details {
-  font-size: 0.8rem;
-  color: #888;
+  font-size: 0.75rem;
+  color: #999;
   display: flex;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .product-actions {
-  text-align: right;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
-  height: 100%;
+  height: 100px; 
+  flex-shrink: 0;
 }
 
 .product-price {
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: 800;
   color: #ff8c00;
-  margin-bottom: 1rem;
 }
 
 .purchase-button {
   background-color: #ff8c00;
   color: #fff;
   border: none;
-  padding: 0.5rem 1.5rem;
+  padding: 0.8rem 1.2rem; 
   border-radius: 8px;
   cursor: pointer;
+  font-weight: bold;
+  white-space: nowrap; 
+  min-width: 65px;     
+  transition: background-color 0.2s;
+}
+
+.purchase-button:hover {
+  background-color: #e67e00;
 }
 </style>
