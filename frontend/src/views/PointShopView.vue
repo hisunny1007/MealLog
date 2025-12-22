@@ -75,22 +75,19 @@ const fetchProducts = async (category) => {
 
 // 탭 선택 함수
 const selectCategory = (category) => {
-  selectedCategory.value = category; // .value 추가
+  selectedCategory.value = category; 
   fetchProducts(category);
 };
 
-// 생명주기 훅 통합
-onMounted(() => {
-  // URL 쿼리 파라미터 체크 (추천 제품 클릭 시 넘어온 정보)
-  if (route.query.category) {
-    selectedCategory.value = route.query.category; // .value 추가
-  }
 
-  // 최종 결정된 카테고리로 제품 로드
+onMounted(() => {
+  if (route.query.category) {
+    selectedCategory.value = route.query.category; 
+  }
   fetchProducts(selectedCategory.value);
 });
 
-// 모달 관련 핸들러들
+
 const openPurchaseModal = (product) => {
   selectedProduct.value = product;
   isModalVisible.value = true;
