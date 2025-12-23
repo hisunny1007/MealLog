@@ -14,7 +14,7 @@ defineProps({ label: String })
 <style scoped>
 .add-card-wrapper {
   background-color: rgba(165, 124, 94, 0.02);
-  border: 1px dashed #e2d1c3;
+  border: 1px dashed var(--border);
   border-radius: 1rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -22,7 +22,7 @@ defineProps({ label: String })
 .add-card-wrapper:hover {
   background-color: rgba(165, 124, 94, 0.05);
   border-color: #a57c5e;
-  transform: translateX(5px);
+  transform: translateY(-2px);
 }
 .add-circle {
   width: 40px;

@@ -141,15 +141,12 @@ onMounted(() => {
 
 <style>
 /* FullCalendar 전용 CSS (scope 제외시킴) */
-/* .calendar-page {
-  background: #faf7f4;
-} */
-
 .fc {
   background: #ffffff;
   border: 2px solid #faf7f4;
   border-radius: 16px;
   padding: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   font-family: 'Pretendard', sans-serif;
 }
 
