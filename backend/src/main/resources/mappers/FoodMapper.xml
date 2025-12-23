@@ -4,14 +4,22 @@
 
 <mapper namespace="com.yunyun.meallog.food.dao.FoodDao">
 
-<!--    로직 추가 -->
-        <!-- 자동완성: 앞글자로 빠르게 검색 -->
-        <select id="autoComplete" parameterType="string" resultType="FoodAutoCompleteResponseDto">
+    <!-- 자동완성: 앞글자로 빠르게 검색 -->
+<!--    김치를 검색했는데 가자미튀김이 나옴. 정렬 기준이 없어서 추가 필요!-->
+<!--    정확히 일치, 시작 일치, 중간 포함, 길이 짧은 순-->
+    <select id="autoComplete" parameterType="string" resultType="FoodAutoCompleteResponseDto">
             SELECT MIN(id) AS id, name
             FROM foods
             WHERE name LIKE CONCAT('%', #{query}, '%')
             GROUP BY name
-            ORDER BY name
+            ORDER BY
+                CASE
+                    WHEN name = #{query} THEN 0
+                    WHEN name LIKE CONCAT(#{query}, '%') THEN 1
+                    ELSE 2
+                    END,
+                LENGTH(name),
+                name
                 LIMIT 10
         </select>
 
