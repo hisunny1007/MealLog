@@ -6,12 +6,13 @@
 
 <!--    로직 추가 -->
         <!-- 자동완성: 앞글자로 빠르게 검색 -->
-        <select id="autoComplete" parameterType="string" resultType="Food">
-            SELECT *
+        <select id="autoComplete" parameterType="string" resultType="FoodAutoCompleteResponseDto">
+            SELECT MIN(id) AS id, name
             FROM foods
             WHERE name LIKE CONCAT('%', #{query}, '%')
+            GROUP BY name
             ORDER BY name
-                LIMIT 100;
+                LIMIT 10
         </select>
 
         <!-- 일반 검색 -->

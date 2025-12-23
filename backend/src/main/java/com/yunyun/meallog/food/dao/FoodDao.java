@@ -1,6 +1,7 @@
 package com.yunyun.meallog.food.dao;
 
 import com.yunyun.meallog.food.domain.Food;
+import com.yunyun.meallog.food.dto.response.FoodAutoCompleteResponseDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public interface FoodDao {
 
     // 자동완성
-    List<Food> autoComplete(@Param("query") String query);
+    List<FoodAutoCompleteResponseDto> autoComplete(@Param("query") String query);
 
     // 검색
     List<Food> searchFood(@Param("query") String query);

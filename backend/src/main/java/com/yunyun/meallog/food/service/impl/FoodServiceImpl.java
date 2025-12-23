@@ -3,6 +3,7 @@ package com.yunyun.meallog.food.service.impl;
 import com.yunyun.meallog.food.dao.FoodDao;
 import com.yunyun.meallog.food.domain.Food;
 import com.yunyun.meallog.food.dto.request.FoodRequestDto;
+import com.yunyun.meallog.food.dto.response.FoodAutoCompleteResponseDto;
 import com.yunyun.meallog.food.dto.response.FoodResponseDto;
 import com.yunyun.meallog.food.service.FoodService;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +19,8 @@ public class FoodServiceImpl implements FoodService {
     private final FoodDao foodDao;
 
     @Override
-    public List<FoodResponseDto> autoComplete(String query) {
-        System.out.println(">>>> query: " + query);
-
-//        return List.of();
-        return foodDao.autoComplete(query)
-                .stream()
-                .map(FoodResponseDto::from)
-                .collect(Collectors.toList());
+    public List<FoodAutoCompleteResponseDto> autoComplete(String query) {
+        return foodDao.autoComplete(query);
     }
 
     @Override
