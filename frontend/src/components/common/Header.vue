@@ -26,14 +26,15 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import { toast } from 'vue3-toastify'
 
 const authStore = useAuthStore()
 const router = useRouter()
 
 const handleLogout = () => {
   authStore.setLogout()
-  alert('로그아웃 되었습니다.')
-  router.push('/')
+  toast.success('로그아웃 되었습니다.')
+  window.location.href = '/'
 }
 </script>
 
