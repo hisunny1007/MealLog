@@ -15,6 +15,9 @@ const app = createApp(App)
 app.use(Vue3Toastify, {
   autoClose: 2000, // 2초
   position: 'top-center',
+  style: {
+    width: '400px',
+  },
 })
 app.use(createPinia())
 app.use(router)

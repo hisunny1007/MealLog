@@ -72,26 +72,40 @@
               <input
                 v-model="form.calories"
                 type="number"
+                step="any"
                 class="form-control"
                 placeholder="칼로리 kcal"
               />
             </div>
             <div class="col-4">
               <label class="form-label">탄수화물 g</label>
-              <input v-model="form.carbs" type="number" class="form-control" placeholder="탄수 g" />
+              <input
+                v-model="form.carbs"
+                type="number"
+                step="any"
+                class="form-control"
+                placeholder="탄수 g"
+              />
             </div>
             <div class="col-4">
               <label class="form-label">단백질 g</label>
               <input
                 v-model="form.protein"
                 type="number"
+                step="any"
                 class="form-control"
                 placeholder="단백질 g"
               />
             </div>
             <div class="col-4">
               <label class="form-label">지방 g</label>
-              <input v-model="form.fat" type="number" class="form-control" placeholder="지방 g" />
+              <input
+                v-model="form.fat"
+                type="number"
+                step="any"
+                class="form-control"
+                placeholder="지방 g"
+              />
             </div>
           </div>
         </div>
@@ -164,6 +178,14 @@
       <!-- 등록 버튼 -->
       <div class="col-12 text-center mt-4">
         <button type="submit" class="submit-btn px-5">식단 등록</button>
+        <Modal
+          :isOpen="isModalOpen"
+          :title="modalConfig.title"
+          :message="modalConfig.message"
+          :type="modalConfig.type"
+          @confirm="handleModalConfirm"
+          @close="isModalOpen = false"
+        />
       </div>
     </div>
   </form>
@@ -173,6 +195,7 @@
 import foodApi from '@/api/foodApi'
 import { ref, reactive } from 'vue'
 import { toast } from 'vue3-toastify'
+import Modal from '../common/Modal.vue'
 
 const props = defineProps({
   date: String,
@@ -258,17 +281,54 @@ const form = reactive({
   memo: '',
 })
 
+const isModalOpen = ref(false)
+const modalConfig = reactive({
+  title: '',
+  message: '',
+  type: 'confirm',
+})
+
 const handleFormSubmit = () => {
-  if (!form.mealType || !form.foodName || !form.score) {
-    toast.error('필수 항목을 모두 선택해 주세요.')
+  // if (!form.mealType || !form.foodName || !form.score) {
+  //   toast.error('필수 항목을 모두 선택해 주세요.')
+  //   return
+  // }
+  if (!form.foodName || form.foodName.trim() === '') {
+    toast.warn('🥗 음식을 검색하거나 직접 추가해 보세요!')
+    return
+  }
+  if (!form.mealType) {
+    toast.warn('🍽️ 식단 분류를 선택해 주세요! 🍽️')
     return
   }
 
-  emit('submit', {
-    ...form,
-    date: props.date,
-    imageFile: imageFile.value,
-  })
+  if (!form.score) {
+    toast.warn('⭐오늘의 식단 점수를 선택해 주세요! ')
+    return
+  }
+
+  // 등록 버튼 클릭 시 (모달에는 확인, 취소버튼)
+  modalConfig.title = '등록 확인'
+  modalConfig.message = '입력하신 식단을 등록하시겠습니까?'
+  modalConfig.type = 'confirm'
+  isModalOpen.value = true
+}
+
+const handleModalConfirm = () => {
+  if (modalConfig.type === 'confirm') {
+    // 등록하시겠습니까? 모달의 확인 버튼 클릭 시
+    emit('submit', {
+      ...form,
+      date: props.date,
+      imageFile: imageFile.value,
+    })
+
+    modalConfig.title = '등록 완료'
+    modalConfig.message = '식단이 기록되었습니다. 100 포인트가 적립되었어요!'
+    modalConfig.type = 'alert'
+  } else {
+    isModalOpen.value = false
+  }
 }
 </script>
 
