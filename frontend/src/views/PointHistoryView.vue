@@ -1,6 +1,6 @@
 <template>
   <div class="history-container">
-    <h1 class="title">포인트 교환 내역</h1>
+    <h2 class="text-center fw-bold mb-4">포인트 교환내역</h2>
     <div v-if="isLoading" class="loading-message">
       불러오는 중...
     </div>
@@ -11,7 +11,10 @@
       <div v-for="item in history" :key="item.orderDate" class="history-item">
         <div class="item-date">{{ formatDate(item.orderDate) }}</div>
         <div class="item-details">
-          <img :src="item.productImageUrl || defaultImage" :alt="item.productName" class="product-image" />
+          <img :src="item.imageUrl"
+               :alt="item.productName"
+               class="product-image"
+               @error="(e) => handleImageError(e, item)"/>
           <div class="product-info">
             <div class="product-name">{{ item.productName }} x {{ item.amount }}</div>
           </div>
@@ -30,8 +33,13 @@ import { getOrderHistory } from '@/api/pointshop';
 
 const history = ref([]);
 const isLoading = ref(true);
-// Placeholder for product images if not provided by backend DTO
-const defaultImage = "https://via.placeholder.com/100";
+
+const historyDefault = new URL('@/assets/history-default.png', import.meta.url).href;
+
+const handleImageError = (e) => {
+  e.target.onerror = null; // 무한 루프 방지
+  e.target.src = historyDefault;
+};
 
 const fetchHistory = async () => {
   try {
@@ -122,6 +130,6 @@ onMounted(fetchHistory);
 .points-spent {
   font-size: 1.1rem;
   font-weight: bold;
-  color: #ff8c00;
+  color: #4b2e1e;
 }
 </style>

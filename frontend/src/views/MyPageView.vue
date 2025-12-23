@@ -2,13 +2,15 @@
   <div class="mypage-container">
     <h2 class="text-center fw-bold mb-4">마이 페이지</h2>
     <div class="mypage-content">
-
       <div class="user-profile-card">
-        <div class="profile-icon">👤</div>
+        <div class="icon-wrapper profile-main">
+        <img src="@/assets/profile-icon.png" alt="프로필" class="custom-icon" />
+
+        </div>
 
         <div class="user-info">
           <p class="nickname">{{ authStore.user?.nickname }} 님</p>
-          <p class="point-balance">{{ authStore.user?.rewardPoint ?? 0 }} P</p>
+          <p class="point-balance">{{ authStore.user?.rewardPoint.toLocaleString() ?? 0 }} P</p>
           <button class="edit-btn" @click="goToEditProfile">회원정보 수정</button>
         </div>
       </div>
@@ -17,16 +19,24 @@
 
       <nav class="mypage-nav">
         <a @click="router.push('/point-shop')" class="nav-item">
-          <i class="icon">🛒</i>
-          <span>포인트샵</span>
+          <div class="icon-wrapper">
+            <img src="@/assets/pointshop-icon.png" alt="포인트샵" class="custom-icon" />
+          </div>
+          <span class="nav-text">포인트샵</span>
         </a>
+
         <a @click="router.push('/point-history')" class="nav-item">
-          <i class="icon">🪙</i>
-          <span>포인트 교환 내역</span>
+          <div class="icon-wrapper">
+            <img src="@/assets/pointhistory-icon.png" alt="내역" class="custom-icon" />
+          </div>
+          <span class="nav-text">포인트 교환 내역</span>
         </a>
+
         <a @click="goToInquiry" class="nav-item">
-          <i class="icon">❓</i>
-          <span>문의하기</span>
+          <div class="icon-wrapper">
+            <img src="@/assets/inquiry-icon.png" alt="문의" class="custom-icon" />
+          </div>
+          <span class="nav-text">문의하기</span>
         </a>
       </nav>
 
@@ -42,15 +52,15 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 
-const router = useRouter();
-const authStore = useAuthStore();
+const router = useRouter()
+const authStore = useAuthStore()
 
 onMounted(() => {
   // 컴포넌트가 마운트될 때 최신 사용자 정보를 가져옵니다.
-  authStore.fetchUser();
+  authStore.fetchUser()
   // 디버깅: 마이페이지가 마운트될 때 authStore.user의 실제 값을 확인합니다.
-  console.log('User object in MyPageView on mount:', authStore.user);
-});
+  console.log('User object in MyPageView on mount:', authStore.user)
+})
 
 // 사용자 정보가 없으면, 홈으로 이동
 if (!authStore.isAuthenticated) {
@@ -66,49 +76,59 @@ const goToInquiry = () => {
   alert('MealLog@naver.com 으로 문의부탁드립니다.')
   // router.push('/inquiry');
 }
-
-const handleLogout = () => {
-  authStore.setLogout()
-  alert('로그아웃 되었습니다.')
-  router.push('/')
-}
 </script>
 
 <style scoped>
+
+
+.icon-wrapper {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.icon-wrapper.profile-main {
+  width: 70px;
+  height: 70px;
+  margin-left: 10px;
+  margin-right: 25px;
+}
+
+.mypage-content {
+  max-width: 500px;
+  width: 100%;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
 .mypage-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  padding: 50px 20px;
+  padding: 60px 20px;
   background-color: #faf7f4;
 }
 
-.mypage-content {
-  max-width: 600px;
-  width: 100%;
-  background-color: #fff;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
 
 .user-profile-card {
   display: flex;
+  align-items: center;
+  padding: 10px 0;
 }
 
-.profile-icon {
-  font-size: 40px;
-  background-color: #e0e0e0;
-  border-radius: 50%;
-  width: 70px;
-  height: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 25px;
-  flex-shrink: 0;
+.custom-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
+
 
 .user-info {
   display: flex;
@@ -125,7 +145,6 @@ const handleLogout = () => {
 
 .point-balance {
   font-size: 1.2em;
-  /* color: #8d6e63; */
   margin-bottom: 10px;
 }
 
@@ -134,7 +153,6 @@ const handleLogout = () => {
   border: none;
   /* color: #888; */
   font-size: 0.9em;
-  text-decoration: underline;
   cursor: pointer;
   text-align: left;
   padding: 0;
@@ -147,11 +165,11 @@ const handleLogout = () => {
   margin: 30px 0;
 }
 
+/* 네비게이션 */
 .mypage-nav {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  color: #4b2e1e;
+  gap: 5px;
 }
 
 .nav-item {
@@ -159,33 +177,29 @@ const handleLogout = () => {
   align-items: center;
   padding: 15px 10px;
   text-decoration: none;
-  /* color: #333; */
   font-size: 1.1em;
   cursor: pointer;
   transition: background-color 0.2s;
 }
-
 .nav-item:hover {
   background-color: #fafafa;
   border-radius: 5px;
 }
 
-.icon {
-  font-size: 1.5em;
-  margin-right: 25px;
-  width: 30px;
-  text-align: center;
+  .nav-text {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #444;
 }
 
+
+/* 하단 탈퇴 링크 */
 .bottom-links {
-  text-align: center;
-  margin-top: 40px;
+  margin-top: 50px;
   display: flex;
   justify-content: center;
-  gap: 20px;
 }
 
-.logout-link,
 .deactivate-link {
   background: none;
   border: none;

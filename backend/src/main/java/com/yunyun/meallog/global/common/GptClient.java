@@ -22,7 +22,7 @@ public class GptClient {
     private final ObjectMapper objectMapper;
 
     public GptClient(
-            @Value("${gpt.api.key}") String apiKey,
+            @Value("${GMS_API_KEY}") String apiKey,
             @Value("${gpt.api.url}") String apiUrl,
             @Value("${gpt.model}") String model) {
         this.apiKey = apiKey;

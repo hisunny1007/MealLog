@@ -54,17 +54,17 @@ const handleLogin = async () => {
   align-items: center;
   padding: 50px 20px;
   min-height: 100vh;
-  background-color: #f8f8f8;
+  background-color: var(--bg-main); /* 수정 */
 }
 
 h1 {
   font-size: 2.5em;
   margin-bottom: 5px;
-  color: #4b2e1e;
+  color: var(--main-brown); /* 수정 */
 }
 
 p {
-  color: #4b2e1e;
+  color: var(--main-brown); /* 수정 */
 }
 
 .login-form {
@@ -82,24 +82,27 @@ p {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
-  /* color: #444; */
 }
 .input-group input {
   width: 100%;
   padding: 12px 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border); /* 수정 */
   border-radius: 6px;
   box-sizing: border-box;
 }
 .btn-login {
-  background-color: #5c4533;
+  background-color: var(--main-brown); /* 수정 */
   color: white;
   padding: 12px;
+  border: none;
+  border-radius: 6px;
 }
 .btn-signup {
-  background-color: #a99a8d;
+  background-color: var(--border); /* 수정 */
   color: white;
   margin-top: 10px;
   padding: 12px;
+  border: none;
+  border-radius: 6px;
 }
 </style>
