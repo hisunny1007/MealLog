@@ -25,5 +25,6 @@ body {
   border-radius: 20px !important;
   font-family: 'Pretendard', sans-serif;
   color: var(--main-brown);
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
