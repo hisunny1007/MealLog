@@ -1,7 +1,10 @@
 <template>
-  <div class="container my-5">
-    <!-- 날짜 -->
-    <h2 class="page-title text-center fw-bold mb-4">{{ formattedDate }} 식단</h2>
+  <div class="create-page container py-5">
+ <!-- 날짜 -->
+    <div class="page-title text-center mb-5">
+      <h2 class="fw-bold mb-4">{{ formattedDate }} 식단</h2>
+    </div>
+
 
     <!-- 라벨 -->
     <!-- 자식한테 상태 넘김 -->
@@ -172,3 +175,10 @@ const getMealTypeLabel = (type) => {
   return labels[type] || type
 }
 </script>
+
+<style scoped>
+.meal-daily-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+</style>

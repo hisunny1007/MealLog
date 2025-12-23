@@ -1,23 +1,31 @@
 <template>
-  <h2 class="text-center fw-bold mb-4">{{ formattedDate }} 식단 기록</h2>
-  <button class="btn btn-outline-secondary mb-4" @click="goToAnalysis">데일리 레포트</button>
+  <div class="meal-daily-page container py-5">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold mb-3">{{ formattedDate }} 식단</h2>
+      <button class="btn btn-outline-brown rounded-pill px-4 shadow-sm mt-4" @click="goToAnalysis">
+        📊 데일리 분석 리포트 보기
+      </button>
+    </div>
 
-  <div class="meal-daily-layout">
-    <!-- 왼쪽 -->
-    <section class="meal-left">
-      <MealTimeSection
-        v-for="section in mealSections"
-        :key="section.type"
-        :meal="section.meal"
-        :label="section.label"
-        :mealType="section.type"
-        :date="date"
-        @add="goToCreate"
-      />
-    </section>
+    <div class="row g-4">
+      <section class="col-lg-8">
+        <div class="timeline-container ps-4">
+          <MealTimeSection
+            v-for="(section, index) in mealSections"
+            :key="section.type"
+            :meal="section.meal"
+            :label="section.label"
+            :mealType="section.type"
+            :isLast="index === mealSections.length - 1"
+            @add="goToCreate"
+          />
+        </div>
+      </section>
 
-    <!-- 오른쪽 -->
-    <ProductRecommendation />
+      <aside class="col-lg-4">
+        <ProductRecommendation />
+      </aside>
+    </div>
   </div>
 </template>
 
@@ -88,9 +96,24 @@ const goToAnalysis = () => {
 </script>
 
 <style scoped>
-.meal-daily-layout {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 24px;
+.meal-daily-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.timeline-container {
+  position: relative;
+  border-left: 2px dashed #e2d1c3;
+}
+
+.btn-outline-brown {
+  border: 1px solid #a57c5e;
+  color: #a57c5e;
+  background: white;
+  transition: all 0.2s;
+}
+.btn-outline-brown:hover {
+  background: #a57c5e;
+  color: #fff;
 }
 </style>

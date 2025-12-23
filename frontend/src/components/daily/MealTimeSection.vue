@@ -5,14 +5,20 @@ MealDailyView.vue          (페이지 / 데이터 책임)
  │   └─ MealAddCard.vue    (추가 버튼 카드)
  ├─ ProductRecommendation.vue    (상품 추천) -->
 <template>
-  <section class="meal-time-section">
-    <header class="section-header">
-      <h4 class="fw-bold mb-3">{{ title }}</h4>
-    </header>
+  <div class="meal-section-wrapper mb-5 position-relative">
+    <div class="timeline-dot"></div>
 
-    <MealItemCard v-if="meal" :meal="meal" />
-    <MealAddCard v-else @click="$emit('add', mealType)" />
-  </section>
+    <div class="ms-4">
+      <div class="d-flex align-items-center mb-3">
+        <span class="meal-label-badge">{{ label }}</span>
+      </div>
+
+      <div class="content-area">
+        <MealItemCard v-if="meal" :meal="meal" />
+        <MealAddCard v-else @click="$emit('add', mealType)" :label="label" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -20,41 +26,42 @@ import MealItemCard from './MealItemCard.vue'
 import MealAddCard from './MealAddCard.vue'
 
 defineProps({
-  title: String,
+  label: String,
   meal: Object,
   mealType: String,
-  date: String,
+  isLast: Boolean
 })
 </script>
 
 <style scoped>
-.meal-time-section {
-  margin-bottom: 24px;
+.meal-section-wrapper {
+  position: relative;
 }
 
-/* 상단 */
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.section-header h4 {
-  font-weight: 700;
-  color: var(--main-brown);
-}
-
-/* ✅ 점수 원 */
-.circle-score {
-  width: 28px;
-  height: 28px;
+.timeline-dot {
+  position: absolute;
+  left: -9px;
+  top: 5px;
+  width: 16px;
+  height: 16px;
+  background-color: #a57c5e;
+  border: 3px solid #fff;
   border-radius: 50%;
-  background-color: var(--bg-main);
-  border: 1px solid var(--border);
-  font-size: 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 1;
+  box-shadow: 0 0 0 3px rgba(165, 124, 94, 0.1);
+}
+
+.meal-label-badge {
+  background-color: #a57c5e;
+  color: white;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(165, 124, 94, 0.2);
+}
+
+.content-area {
+  transition: all 0.3s ease;
 }
 </style>
