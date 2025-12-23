@@ -12,7 +12,7 @@
       </div>
 
       <div class="total-points">
-        총 필요 포인트: <strong>{{ totalPoints }}p</strong>
+        총 필요 포인트: <strong>{{ totalPoints.toLocaleString() }}p</strong>
       </div>
 
       <div class="modal-actions">
@@ -97,7 +97,7 @@ const confirmPurchase = () => {
 }
 
 .total-points strong {
-  color: #ff8c00;
+  color:  #4b2e1e;
 }
 
 .modal-actions {
@@ -120,7 +120,7 @@ const confirmPurchase = () => {
 }
 
 .confirm-button {
-  background-color: #ff8c00;
+  background-color:  #4b2e1e;
   color: #fff;
 }
 </style>

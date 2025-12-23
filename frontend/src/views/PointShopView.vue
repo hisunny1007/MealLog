@@ -1,6 +1,7 @@
 <template>
   <div class="point-shop-container">
-    <h1 class="title">카테고리</h1>
+    <h2 class="text-center fw-bold mb-4">포인트샵</h2>
+
     <div class="category-tabs">
       <button
         v-for="cat in categories"
@@ -13,7 +14,7 @@
     </div>
 
     <div class="user-points">
-      <span>잔여 포인트 {{ userPoints }}p</span>
+      <span>잔여 포인트 {{ userPoints.toLocaleString() }}p</span>
     </div>
 
     <div class="product-grid">
@@ -75,14 +76,14 @@ const fetchProducts = async (category) => {
 
 // 탭 선택 함수
 const selectCategory = (category) => {
-  selectedCategory.value = category; 
+  selectedCategory.value = category;
   fetchProducts(category);
 };
 
 
 onMounted(() => {
   if (route.query.category) {
-    selectedCategory.value = route.query.category; 
+    selectedCategory.value = route.query.category;
   }
   fetchProducts(selectedCategory.value);
 });
@@ -125,11 +126,13 @@ const handlePurchase = async ({ productId, amount }) => {
 
 .category-tabs {
   display: flex;
+  justify-content: center;
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
 
 .category-tabs button {
+
   padding: 0.5rem 1rem;
   border: 1px solid #ddd;
   background-color: #fff;
@@ -139,9 +142,9 @@ const handlePurchase = async ({ productId, amount }) => {
 }
 
 .category-tabs button.active {
-  background-color: #ff8c00;
+  background-color: var(--main-brown);
   color: #fff;
-  border-color: #ff8c00;
+
 }
 
 .user-points {
@@ -156,6 +159,6 @@ const handlePurchase = async ({ productId, amount }) => {
 .product-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: 2.2rem;
 }
 </style>

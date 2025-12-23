@@ -15,6 +15,11 @@
   color: var(--main-brown);
 }
 
+/* 배경 - 식별을 위해 임시로 추가*/
+/*body {*/
+/*  background-color: #fafafa;*/
+/*}*/
+
 /* 토스트 전체 박스 커스텀 */
 .Toastify__toast {
   border-radius: 20px !important;
