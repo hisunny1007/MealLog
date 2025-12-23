@@ -35,6 +35,7 @@
             v-model="keyword"
             placeholder="음식 검색"
             @input="onKeyWordChange"
+            @keydown.enter.prevent="onEnterSelect"
           />
 
           <!-- 자동완성 -->
