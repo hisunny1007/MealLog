@@ -201,19 +201,18 @@ const checkEmailDup = async () => {
     return
   }
   try {
-    // 실제 API 연동 시 주석 해제
+ 
     await checkEmailDuplication(step1Data.email)
     isEmailChecked.value = true
     toast.info('사용 가능한 이메일입니다.')
   } catch (error) {
     console.error('이메일 중복 확인 에러 상세:', error)
 
-    // 만약 백엔드가 409(Conflict)를 보냈다면 정상적인 중복
+
     if (error.response && error.response.status === 409) {
       toast.warn('이미 사용 중인 이메일입니다.')
     } else {
-      // 200인데도 여기로 왔다면, 데이터 파싱 에러
-      // 일단 성공으로 간주하거나, 에러 메시지를 확인
+
       toast.warn('중복 확인 중 오류가 발생했습니다: ' + (error.message || '알 수 없는 오류'))
     }
   }
@@ -234,7 +233,7 @@ const handleSignupStep1 = async () => {
   }
 }
 
-// Step 2 상태 및 제출 로직 (기존 유지)
+// Step 2 상태 및 제출 로직
 const step2Data = reactive({
   gender: '',
   age: '',
@@ -268,15 +267,14 @@ const handleSignupStep2 = async () => {
   flex-direction: column;
   align-items: center;
   padding: 80px 20px;
-  background-color: var(--bg-main);
-  color: #333;
+  color: var(--main-brown);
 }
 
 .title {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 50px;
-  color: #000;
+  color: var(--main-brown);
 }
 
 .signup-form {
@@ -453,6 +451,7 @@ const handleSignupStep2 = async () => {
   flex: 1;
   display: flex;
   flex-direction: column;
+  transition-duration: 0.3s;
 }
 .input-wrapper input {
   width: 100%;

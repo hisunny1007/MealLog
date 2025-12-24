@@ -17,6 +17,7 @@
 
         <!-- 비로그인 상태 -->
         <template v-else>
+          <a href="#" @click.prevent="handleGuestClick" class="btn btn-brown-outline"> 포인트샵 </a>
           <router-link to="/login" class="btn btn-brown"> 로그인 </router-link>
         </template>
       </div>
@@ -25,6 +26,7 @@
 </template>
 
 <script setup>
+import { h } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { toast } from 'vue3-toastify'
@@ -32,16 +34,65 @@ import { toast } from 'vue3-toastify'
 const authStore = useAuthStore()
 const router = useRouter()
 
+const handleGuestClick = () => {
+  toast.info(
+    (t) =>
+      h(
+        'div',
+        {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '15px',
+            width: '100%',
+          },
+        },
+        [
+          // (1) 메시지 텍스트
+          h('span', '로그인이 필요한 서비스입니다.'),
+
+          // (2) 로그인 버튼
+          h(
+            'button',
+            {
+              onClick: () => {
+                router.push('/login') // 로그인 페이지 이동
+                toast.remove(t.toastId) // 이동 후 토스트 닫기
+              },
+
+              style: {
+                padding: '6px 12px',
+                backgroundColor: '#7a6658',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                fontSize: '0.9rem',
+              },
+            },
+            '로그인 하기',
+          ),
+        ],
+      ),
+
+
+    {
+      autoClose: false,
+      closeOnClick: false,
+      position: 'top-right',
+    },
+  )
+}
+
 const handleLogout = () => {
   authStore.setLogout()
   toast.success('로그아웃 되었습니다.')
   window.location.href = '/'
-
 }
 </script>
 
 <style scoped>
-
 .custom-navbar {
   background: #ffffff;
   padding: 14px 0;
