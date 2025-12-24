@@ -22,6 +22,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { login } from '@/api/authApi'
 import { useAuthStore } from '@/stores/authStore'
+import { toast } from 'vue3-toastify'
 
 const email = ref('')
 const password = ref('')
@@ -38,11 +39,11 @@ const handleLogin = async () => {
     authStore.setLogin(token)
     await authStore.fetchUser()
 
-    alert('로그인 성공!')
+    toast.success('로그인 성공!')
     router.push('/') // 홈 화면으로 이동
   } catch (error) {
     console.error('로그인 실패:', error)
-    alert('로그인 실패: 이메일 또는 비밀번호를 확인해주세요.')
+    toast.info('로그인 실패: 이메일 또는 비밀번호를 확인해주세요.')
   }
 }
 </script>
@@ -52,57 +53,77 @@ const handleLogin = async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 50px 20px;
-  min-height: 100vh;
-  background-color: var(--bg-main); /* 수정 */
+  padding: 80px 20px;
+  background-color: var(--bg-main);
 }
 
 h1 {
   font-size: 2.5em;
   margin-bottom: 5px;
-  color: var(--main-brown); /* 수정 */
+  color: var(--main-brown);
 }
 
 p {
-  color: var(--main-brown); /* 수정 */
+  color: var(--main-brown);
 }
 
 .login-form {
   display: flex;
-  width: 300px;
+  width: 400px;
+  display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 25px;
 }
 
 .input-group {
+  display: flex;
+  flex-direction: column;
   text-align: left;
-  margin-bottom: 0;
 }
+
 .input-group label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
 }
 .input-group input {
+
   width: 100%;
-  padding: 12px 10px;
-  border: 1px solid var(--border); /* 수정 */
-  border-radius: 6px;
-  box-sizing: border-box;
+  padding: 10px 5px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background: transparent;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+  border-radius: 0;
 }
+
+.input-group input:focus {
+  border-bottom-color: #5d4037;
+}
+
 .btn-login {
-  background-color: var(--main-brown); /* 수정 */
+  background-color: var(--main-brown);
   color: white;
   padding: 12px;
   border: none;
   border-radius: 6px;
 }
+
+.btn-login:hover {
+  background-color: #ede0d4;
+}
 .btn-signup {
-  background-color: var(--border); /* 수정 */
+  background-color: var(--border);
   color: white;
   margin-top: 10px;
   padding: 12px;
   border: none;
   border-radius: 6px;
+}
+
+.btn-signup:hover {
+  background-color: #ede0d4;
 }
 </style>

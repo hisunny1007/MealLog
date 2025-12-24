@@ -29,9 +29,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Long signUp(SignupStep1RequestDto requestDto) {
-        // 이메일 중복 체크
+       
         userDao.findByEmail(requestDto.getEmail())
-                .ifPresent(user -> { throw new CustomException(ErrorCode.DUPLICATE_EMAIL); });
+                .ifPresent(user -> {
+                    throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
+                });
 
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
@@ -76,7 +78,7 @@ public class UserServiceImpl implements UserService {
                 case "2" -> ExerciseFrequency.MEDIUM;
                 case "3" -> ExerciseFrequency.HIGH;
                 case "4" -> ExerciseFrequency.VERY_HIGH;
-                default -> null; // 또는 예외 처리
+                default -> null; 
             };
         }
 
@@ -107,6 +109,16 @@ public class UserServiceImpl implements UserService {
         User user = userDao.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return UserResponseDto.from(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true) 
+    public void checkEmailDuplication(String email) {
+        userDao.findByEmail(email)
+                .ifPresent(user -> {
+                    
+                    throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
+                });
     }
 }
 

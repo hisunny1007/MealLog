@@ -10,6 +10,7 @@
       <div class="d-flex gap-2">
         <!-- 로그인 상태 -->
         <template v-if="authStore.isAuthenticated">
+          <router-link to="/point-shop" class="btn btn-brown-outline"> 포인트샵 </router-link>
           <router-link to="/mypage" class="btn btn-brown-outline"> 마이페이지 </router-link>
           <button @click="handleLogout" class="btn btn-brown">로그아웃</button>
         </template>
@@ -26,19 +27,20 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import { toast } from 'vue3-toastify'
 
 const authStore = useAuthStore()
 const router = useRouter()
 
 const handleLogout = () => {
   authStore.setLogout()
-  alert('로그아웃 되었습니다.')
+  toast.info('로그아웃 되었습니다.')
   router.push('/')
 }
 </script>
 
 <style scoped>
-/* 헤더구조 */
+
 .custom-navbar {
   background: #ffffff;
   padding: 14px 0;

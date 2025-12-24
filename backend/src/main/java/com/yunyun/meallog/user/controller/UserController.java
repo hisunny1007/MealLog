@@ -41,9 +41,7 @@ public class UserController {
         return ResponseEntity.ok("프로필이 성공적으로 업데이트되었습니다.");
     }
 
-    /**
-     * 로그인
-     */
+   
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
 
@@ -52,22 +50,24 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * 로그아웃
-     */
+ 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {
 
         return ResponseEntity.ok("로그아웃 되었습니다.");
     }
 
-    /**
-     * 내 정보 조회
-     */
+  
     @GetMapping("/me")
     public ResponseEntity<UserResponseDto> getMyProfile(HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
         UserResponseDto response = userService.getMyProfile(userId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/emailcheck")
+    public ResponseEntity<String> checkEmailDuplication(@RequestParam String email) {
+        userService.checkEmailDuplication(email);
+        return ResponseEntity.ok("사용 가능한 이메일입니다.");
     }
 }

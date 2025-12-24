@@ -64,19 +64,16 @@ onMounted(fetchHistory);
 
 <style scoped>
 .history-container {
-  padding: 2rem;
-  background-color: #fdfaf6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+  background-color: var(--bg-main);
 }
 
-.title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
-}
 
 .loading-message, .empty-message {
   text-align: center;
-  /* color: #888; */
   font-size: 1.1rem;
   padding: 3rem 0;
 }
@@ -85,6 +82,8 @@ onMounted(fetchHistory);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  width: 100%;
+  max-width: 800px;
 }
 
 .history-item {
@@ -92,12 +91,12 @@ onMounted(fetchHistory);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
 }
 
 .item-date {
   text-align: right;
   font-size: 0.9rem;
-  /* color: #888; */
   margin-bottom: 1rem;
 }
 
