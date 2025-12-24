@@ -1,48 +1,73 @@
 <template>
-  <div class="card-soft meal-card-layout">
-    <!-- 왼쪽: 이미지 -->
-    <section class="meal-image-wrapper">
-      <img
-        v-if="meal.imageUrl"
-        :src="getImageUrl(meal.imageUrl)"
-        class="meal-image"
-        alt="식단 이미지"
-      />
-    </section>
+  <div class="card rounded-4 shadow-sm border-0 meal-card-hover">
+    <div class="p-3">
+      <div class="row g-0 align-items-center">
+        <div class="col-3 col-md-2">
+          <div class="ratio ratio-1x1 overflow-hidden rounded-3 shadow-sm">
+            <img
+              :src="meal.imageUrl ? getImageUrl(meal.imageUrl) : '/default-meal.png'"
+              class="object-fit-cover"
+              alt="식단 이미지"
+            />
+          </div>
+        </div>
 
-    <!-- 오른쪽: 정보 -->
-    <section class="meal-info">
-      <!-- 음식 이름 -->
-      <div class="title-row">
-        <h5 class="meal-title">{{ meal.foodName }}</h5>
+        <div class="col-9 col-md-10 ps-4">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h5 class="fw-bold text-dark mb-1">{{ meal.foodName }}</h5>
+              <p class="text-brown fw-bold mb-2">{{ meal.calories }} kcal</p>
+            </div>
+            <div
+              class="score-pill"
+              :style="{
+                color: scoreColor,
+                borderColor: scoreColor,
+                backgroundColor: scoreColor + '15',
+              }"
+            >
+              <span class="fs-4 fw-black">{{ meal.score }}</span
+              ><small>점</small>
+            </div>
+          </div>
 
-        <!-- 점수 -->
-        <div class="score-badge">{{ meal.score }}점</div>
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="nutrient-tag">탄수화물 {{ meal.carbs }}g</span>
+            <span class="nutrient-tag">단백질 {{ meal.protein }}g</span>
+            <span class="nutrient-tag">지방 {{ meal.fat }}g</span>
+          </div>
+
+          <div v-if="meal.memo" class="memo-box">
+            {{ meal.memo }}
+          </div>
+        </div>
       </div>
-
-      <!-- 영양 정보 -->
-      <div class="nutrient">
-        <span>칼로리 {{ meal.calories }} kcal</span>
-        <span>탄수화물 {{ meal.carbs }}g</span>
-        <span>단백질 {{ meal.protein }}g</span>
-        <span>지방 {{ meal.fat }}g</span>
-      </div>
-
-      <!-- 메모 -->
-      <p v-if="meal.memo" class="memo">
-        메모 | {{ meal.memo }}
-      </p>
-    </section>
+    </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   meal: Object,
 })
 
+// 식단 점수별 색상
+const scoreColors = {
+  1: '#F28B82',
+  2: '#F6AD55',
+  3: '#F4D35E',
+  4: '#8BCF9B',
+  5: '#7EA6E0',
+}
+
+// 식단 점수에 맞는 색상 계산
+const scoreColor = computed(() => {
+  return scoreColors[props.meal.score] || '#ccc'
+})
+
 const getImageUrl = (filename) => {
-  console.log('사진이름', filename)
 
   if (!filename) return '/default-meal.png' // 기본 이미지
   return `http://localhost:8080/api/v1/uploads/${filename}`
@@ -50,64 +75,35 @@ const getImageUrl = (filename) => {
 </script>
 
 <style scoped>
-/* ✅ 카드 전체 */
-.meal-card-layout {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 20px;
-  padding: 16px;
+.meal-card-hover {
+  background-color: #ffffff;
+  border: 1px solid rgba(165, 124, 94, 0.05) !important;
+}
+.text-brown {
+  color: #a57c5e;
 }
 
-/* 이미지 */
-.meal-image {
-  width: 120px;
-  height: 150px;
-  padding-left: 20px;
-  object-fit: cover;
-  border-radius: 16px;
+.nutrient-tag {
+  background-color: #f8f5f2;
+  color: #7d6e63;
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-weight: 600;
 }
 
-/* 오른쪽 정보 */
-.meal-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.score-pill {
+  padding: 4px 16px;
+  border-radius: 15px;
+  font-weight: 600;
+  border: 1px solid;
 }
 
-/* 제목 + 점수 */
-.title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.meal-title {
-  font-weight: 700;
-  color: var(--main-brown);
-}
-
-/*  점수 뱃지 */
-.score-badge {
-  font-size: 0.8rem;
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  color: var(--main-brown);
-}
-
-/* 영양 정보 */
-.nutrient {
-  display: flex;
-  gap: 12px;
+.memo-box {
   font-size: 0.85rem;
-  color: #555;
-  margin-top: 6px;
-}
-
-/* 메모 */
-.memo {
-  font-size: 0.85rem;
-  color: #777;
-  margin-top: 8px;
+  color: #8a7b6e;
+  padding: 10px;
+  background: #fcfaf9;
+  border-radius: 10px;
 }
 </style>

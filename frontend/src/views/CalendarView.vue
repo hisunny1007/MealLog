@@ -1,6 +1,6 @@
 <template>
-  <div class="calendar-page p-4">
-    <h2 class="text-center fw-bold mb-4">하루 식단을 기록하는 가장 쉬운 방법🍽️</h2>
+  <div class="calendar-page py-5">
+    <h2 class="text-center fw-bold mb-4">하루 식단을 기록하는 가장 쉬운 방법 🍽️</h2>
     <FullCalendar :options="calendarOptions" />
   </div>
 </template>
@@ -20,11 +20,11 @@ const calendarEvents = ref([])
 
 // 식단 점수별 색상
 const scoreColors = {
-  1: '#f3ede7',
-  2: '#e6d6c8',
-  3: '#d3bba7',
-  4: '#b8997f',
-  5: '#8a6a55',
+  1: '#F28B82',
+  2: '#F6AD55',
+  3: '#F4D35E',
+  4: '#8BCF9B',
+  5: '#7EA6E0',
 }
 
 function getScoreColor(score) {
@@ -66,7 +66,6 @@ const calendarOptions = ref({
   plugins: [dayGridPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
   locale: 'ko', // 날짜 제목 한국어로 (버튼텍스트는 자동적용x)
-
   buttonText: {
     today: '오늘',
   },
@@ -142,14 +141,12 @@ onMounted(() => {
 
 <style>
 /* FullCalendar 전용 CSS (scope 제외시킴) */
-.calendar-page {
-  background: #faf7f4;
-}
-
 .fc {
   background: #ffffff;
+  border: 2px solid #faf7f4;
   border-radius: 16px;
-  padding: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   font-family: 'Pretendard', sans-serif;
 }
 
@@ -233,7 +230,8 @@ onMounted(() => {
 }
 
 .fc-day-today .fc-daygrid-day-frame {
-  background: #f0e6dd;
+  border: 1px dashed;
+  border-color: var(--border);
   border-radius: 14px;
 }
 

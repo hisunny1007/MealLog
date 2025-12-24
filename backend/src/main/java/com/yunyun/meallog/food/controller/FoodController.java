@@ -1,6 +1,7 @@
 package com.yunyun.meallog.food.controller;
 
 import com.yunyun.meallog.food.dto.request.FoodRequestDto;
+import com.yunyun.meallog.food.dto.response.FoodAutoCompleteResponseDto;
 import com.yunyun.meallog.food.dto.response.FoodResponseDto;
 import com.yunyun.meallog.food.service.FoodService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class  FoodController {
 
     // 자동완성 검색
     @GetMapping("/auto-complete")
-    public List<FoodResponseDto> searchAutoComplete(@RequestParam String query) {
+    public List<FoodAutoCompleteResponseDto> searchAutoComplete(@RequestParam String query) {
         return foodService.autoComplete(query);
     }
 
