@@ -177,7 +177,14 @@
 
       <!-- 등록 버튼 -->
       <div class="col-12 text-center mt-4">
-        <button type="submit" class="submit-btn px-5">식단 등록</button>
+        <button
+          type="submit"
+          class="submit-btn px-5"
+          :class="{ disabled: !isLoggedIn }"
+          @click="handleRegisterClick"
+        >
+          식단 등록
+        </button>
         <Modal
           :isOpen="isModalOpen"
           :title="modalConfig.title"
@@ -193,15 +200,42 @@
 
 <script setup>
 import foodApi from '@/api/foodApi'
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { toast } from 'vue3-toastify'
 import Modal from '../common/Modal.vue'
+import { useAuthStore } from '@/stores/authStore'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   date: String,
 })
 
 const emit = defineEmits(['submit'])
+
+// 비로그인 - 유저 구분
+const authStore = useAuthStore()
+const router = useRouter()
+
+const isLoggedIn = computed(() => authStore.isAuthenticated)
+
+// 비로그인 유저한테는 폼 미리보기까지 보여주는데 식단 등록 막고 회원가입 페이지로
+const handleRegisterClick = (e) => {
+  if (!isLoggedIn.value) {
+    e.preventDefault()
+
+    toast.info('회원가입 후 식단을 기록할 수 있어요 🍽️', {
+      closeOnClick: true, // 클릭하면 닫힘
+      pauseOnHover: true,
+      onClose: () => {
+        router.push('/signup')
+      },
+    })
+    return
+  }
+
+  // 로그인 상태면 기존 submit 로직으로 흘려보냄
+  handleFormSubmit()
+}
 
 // 음식 검색 관련
 const keyword = ref('') // 검색어
@@ -300,6 +334,8 @@ const modalConfig = reactive({
 })
 
 const handleFormSubmit = () => {
+  if (!isLoggedIn.value) return
+
   if (!form.foodName || form.foodName.trim() === '') {
     toast.warn('🥗 음식을 검색하거나 직접 추가해 보세요!')
     return

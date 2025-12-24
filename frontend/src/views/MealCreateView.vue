@@ -1,10 +1,9 @@
 <template>
   <div class="create-page container py-5">
- <!-- 날짜 -->
+    <!-- 날짜 -->
     <div class="page-title text-center mb-5">
       <h2 class="fw-bold mb-4">{{ formattedDate }} 식단</h2>
     </div>
-
 
     <!-- 라벨 -->
     <!-- 자식한테 상태 넘김 -->
@@ -111,6 +110,11 @@ const mealStatus = computed(() => [
 
 // 식단 등록
 const createMeal = async (formData) => {
+  if (!authStore.isAuthenticated) {
+    toast.info('회원가입 후 이용이 가능합니다!')
+    router.push('/signup')
+    return
+  }
   try {
     const isDuplicate = meals.value.some((meal) => meal.mealType === formData.mealType)
 
