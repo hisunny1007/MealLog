@@ -16,4 +16,8 @@ public interface UserService {
     UserResponseDto getMyProfile(Long userId);
 
     void checkEmailDuplication(String email);
+
+    boolean checkNicknameDuplication(String nickname);
+
+
 }

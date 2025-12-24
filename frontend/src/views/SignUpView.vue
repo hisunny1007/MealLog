@@ -26,6 +26,9 @@
         <small v-if="step1Data.password && step1Data.password.length < 8" class="msg error">
           8 ~ 16자리를 입력해 주세요.
         </small>
+        <small v-else-if="step1Data.password.length > 16" class="msg error">
+          16자리 이상입니다.
+        </small>
         <small v-else-if="step1Data.password.length >= 8" class="msg success">
           8자리 이상입니다.
         </small>
@@ -44,14 +47,16 @@
         </small>
       </div>
 
-      <div class="input-group">
+      <div class="input-group nickname-group">
         <input
           type="text"
           placeholder="닉네임"
           id="nickname"
           v-model="step1Data.nickname"
+          @input="isNicknameChecked = false"
           required
         />
+        <button type="button" class="check-btn" @click="checkNicknameDup">중복 확인</button>
         <small v-if="step1Data.nickname && step1Data.nickname.length < 2" class="msg error">
           2 ~ 12자를 입력해 주세요.
         </small>
@@ -164,7 +169,12 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { signup, signupComplete, checkEmailDuplication } from '@/api/authApi'
+import {
+  signup,
+  signupComplete,
+  checkEmailDuplication,
+  checkNicknameDuplication,
+} from '@/api/authApi'
 import { toast } from 'vue3-toastify'
 
 const router = useRouter()
@@ -174,7 +184,7 @@ const step = ref(1)
 const userId = ref(null)
 const confirmPassword = ref('')
 const isEmailChecked = ref(false)
-
+const isNicknameChecked = ref(false)
 const step1Data = reactive({
   email: '',
   password: '',
@@ -185,6 +195,7 @@ const step1Data = reactive({
 const isStep1Valid = computed(() => {
   return (
     isEmailChecked.value &&
+    isNicknameChecked.value &&
     step1Data.password.length >= 8 &&
     step1Data.password.length <= 16 &&
     step1Data.password === confirmPassword.value &&
@@ -212,6 +223,36 @@ const checkEmailDup = async () => {
     } else {
       toast.warn('중복 확인 중 오류가 발생했습니다: ' + (error.message || '알 수 없는 오류'))
     }
+  }
+}
+
+const checkNicknameDup = async () => {
+ 
+  if (step1Data.nickname.length < 2 || step1Data.nickname.length > 12) {
+    toast.warn('닉네임은 2자 이상 12자 이하로 입력해주세요.')
+    return
+  }
+
+  try {
+    
+    const response = await checkNicknameDuplication(step1Data.nickname)
+
+    const isDuplicate = response.data
+
+    if (isDuplicate) {
+      
+      toast.warn('이미 사용 중인 닉네임입니다.')
+      isNicknameChecked.value = false
+    } else {
+      
+      toast.info('사용 가능한 닉네임입니다.')
+      isNicknameChecked.value = true
+    }
+
+  } catch (error) {
+    console.error('닉네임 중복 확인 에러:', error)
+    toast.warn('중복 확인 중 오류가 발생했습니다.')
+    isNicknameChecked.value = false
   }
 }
 
@@ -473,7 +514,8 @@ const handleSignupStep2 = async () => {
   text-align: center;
 }
 
-.input-group.email-group {
+.input-group.email-group,
+.input-group.nickname-group {
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
@@ -486,7 +528,8 @@ const handleSignupStep2 = async () => {
   border-bottom-color: #5d4037;
 }
 
-.input-group.email-group input {
+.input-group.email-group input,
+.input-group.nickname-group input {
   border-bottom: none !important;
   flex-grow: 1;
   width: auto !important;

@@ -28,6 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/users/*/profile",
                         "/pointshop/**",
                         "/users/emailcheck",
+                        "/users/checknickname/**",
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
                         "/uploads/**", // 이미지 엑박 수정

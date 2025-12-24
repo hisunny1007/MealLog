@@ -5,7 +5,7 @@ const signup = (step1Data) => {
 }
 
 const signupComplete = (userId, step2Data) => {
-  
+
   return api.put(`/users/${userId}/profile`, step2Data)
 }
 
@@ -14,7 +14,7 @@ const login = (credentials) => {
 }
 
 const logout = () => {
-  
+
   return api.post('/users/logout')
 }
 
@@ -28,6 +28,10 @@ const checkEmailDuplication = (email) => {
       email: email
     }
   })
+}
+
+export const checkNicknameDuplication = async (nickname) => {
+  return api.get(`/users/checknickname/${nickname}`)
 }
 
 export { signup, signupComplete, login, logout, getMyProfile, checkEmailDuplication }

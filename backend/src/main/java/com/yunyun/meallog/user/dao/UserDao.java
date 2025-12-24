@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface UserDao {
     int signUp(User user);
     Optional<User> findByEmail(String email);
+    Optional<User> findByNickname(String nickname);
     Optional<User> findById(Long id);
     void updateProfile(User user);
     void updateRewardPoint(@Param("id") Long id, @Param("rewardPoint") int rewardPoint);

@@ -20,6 +20,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "U001", "User is not found."),
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "U002", "email 또는 password를 확인해보세요."),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "U003", "이미 사용중인 이메일입니다."),
+    DUPLICATE_NICKNAME(HttpStatus.CONFLICT, "U004", "이미 사용중인 닉네임입니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A001", "유효하지 않은 토큰입니다."),
 
     // PointShop

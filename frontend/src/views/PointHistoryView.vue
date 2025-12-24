@@ -19,7 +19,7 @@
             <div class="product-name">{{ item.productName }} x {{ item.amount }}</div>
           </div>
           <div class="points-info">
-            <span class="points-spent">{{ item.totalPoint }} p 소진</span>
+            <span class="points-spent">{{ item.totalPoint.toLocaleString() }} p 소진</span>
           </div>
         </div>
       </div>
