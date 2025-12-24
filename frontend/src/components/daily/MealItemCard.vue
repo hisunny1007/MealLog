@@ -18,25 +18,30 @@
               <h5 class="fw-bold text-dark mb-1">{{ meal.foodName }}</h5>
               <p class="text-brown fw-bold mb-2">{{ meal.calories }} kcal</p>
             </div>
-            <div
-              class="score-pill"
-              :style="{
-                color: scoreColor,
-                borderColor: scoreColor,
-                backgroundColor: scoreColor + '15',
-              }"
-            >
-              <span class="fs-4 fw-black">{{ meal.score }}</span
-              ><small>점</small>
-            </div>
 
-            <!-- 여기다 버튼 만드는게  -->
-            <button class="btn btn-sm btn-outline-secondary" @click="$emit('edit', meal.id)">
-              수정
-            </button>
-            <button class="btn btn-sm btn-outline-danger" @click="$emit('delete', meal.id)">
-              삭제
-            </button>
+            <!-- 점수랑 버튼 -->
+            <div class="d-flex flex-column align-items-end gap-2">
+              <!-- 점수 -->
+              <div
+                class="score-pill"
+                :style="{
+                  color: scoreColor,
+                  borderColor: scoreColor,
+                  backgroundColor: scoreColor + '15',
+                }"
+              >
+                <span class="fs-4 fw-black">{{ meal.score }}</span
+                ><small>점</small>
+              </div>
+
+              <!-- 수정 / 삭제 -->
+              <div class="meal-action-group">
+                <button class="meal-action-btn edit" @click="$emit('edit', meal.id)">수정</button>
+                <button class="meal-action-btn delete" @click="$emit('delete', meal.id)">
+                  삭제
+                </button>
+              </div>
+            </div>
           </div>
 
           <div class="d-flex flex-wrap gap-2 mb-3">
@@ -112,5 +117,38 @@ const getImageUrl = (filename) => {
   padding: 10px;
   background: #fcfaf9;
   border-radius: 10px;
+}
+.meal-action-group {
+  display: flex;
+  gap: 6px;
+}
+
+/* 공통 버튼 */
+.meal-action-btn {
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(165, 124, 94, 0.35);
+  background: transparent;
+  color: #8a6a55;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+/* 수정 */
+.meal-action-btn.edit:hover {
+  background: rgba(165, 124, 94, 0.12);
+  border-color: #a57c5e;
+}
+
+/* 삭제 - danger 느낌 최소화 */
+.meal-action-btn.delete {
+  color: #a57c5e;
+}
+
+.meal-action-btn.delete:hover {
+  background: rgba(165, 124, 94, 0.18);
+  border-color: #a57c5e;
 }
 </style>
