@@ -208,6 +208,7 @@ import { useRoute, useRouter } from 'vue-router'
 import mealApi from '@/api/mealApi'
 
 const route = useRoute()
+const BASE_URL = 'http://localhost:8080'
 
 const props = defineProps({
   date: String,
@@ -234,7 +235,9 @@ onMounted(async () => {
     form.memo = detail.memo
 
     // 이미지 미리보기
-    previewUrl.value = detail.imageUrl
+    // previewUrl.value = detail.imageUrl
+
+    previewUrl.value = detail.imageUrl ? BASE_URL + '/uploads/' + detail.imageUrl : null
     keyword.value = detail.foodName
   }
 })
@@ -409,6 +412,7 @@ const handleModalConfirm = async () => {
       ...form,
       date: props.date,
       imageFile: imageFile.value,
+      originImageUrl: detail.imageUrl, // 기존 이미지
     })
   }
 }

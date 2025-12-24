@@ -173,10 +173,6 @@ const createMeal = async (formData) => {
         params: { date: selectedDate.value },
       })
     }, 1000)
-    // router.push({
-    //   name: 'MealDaily',
-    //   params: { date: selectedDate.value },
-    // })
   } catch (e) {
     toast.error('식단 등록 중 오류가 발생했습니다.')
   }

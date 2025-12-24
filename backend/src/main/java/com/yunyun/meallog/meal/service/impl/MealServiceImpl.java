@@ -135,8 +135,21 @@ public class MealServiceImpl implements MealService {
             throw new IllegalArgumentException("해당 날짜에는 이미 같은 식단 종류가 존재합니다.");
         }
 
+        String imageUrl = meal.getImageUrl(); // 기존 이미지
+
+        try {
+            if (image != null && !image.isEmpty()) {
+                imageUrl = fileService.saveFile(image); // 새 이미지
+            }
+        } catch (FileUploadException e) {
+            throw new RuntimeException("이미지 처리 실패");
+        }
+
+        // dto -> entity
         Meal updated = requestDto.toEntity(userId);
         updated.setId(mealId);
+        updated.setImageUrl(imageUrl);
+
         mealDao.updateMeal(updated);
         return MealResponseDto.from(updated);
     }
