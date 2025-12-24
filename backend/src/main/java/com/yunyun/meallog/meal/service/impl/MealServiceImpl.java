@@ -123,7 +123,7 @@ public class MealServiceImpl implements MealService {
 
 
     @Override
-    public MealResponseDto updateMeal(Long userId, Long mealId, MealRequestDto requestDto) {
+    public MealResponseDto updateMeal(Long userId, Long mealId, MealRequestDto requestDto, MultipartFile image) {
         Meal meal = mealDao.findById(mealId);
         if (meal == null || !meal.getUserId().equals(userId)) {
             throw new IllegalArgumentException("해당 식단을 찾을 수 없습니다.");
@@ -137,7 +137,7 @@ public class MealServiceImpl implements MealService {
 
         Meal updated = requestDto.toEntity(userId);
         updated.setId(mealId);
-        mealDao.insertMeal(updated); // update 쿼리 필요
+        mealDao.updateMeal(updated);
         return MealResponseDto.from(updated);
     }
 

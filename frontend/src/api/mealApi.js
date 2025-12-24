@@ -13,27 +13,32 @@ const mealApi = {
     return response.data
   },
 
-  // 식단 조회 api
+  // 특정 날짜 전체 식단 조회 api
   getMealsByDate: async (date) => {
     const response = await api.get(`${ENDPOINT}/date/${date}`)
     return response.data
   },
 
-  // // 단일 식단 조회 (수정/상세용)
-  // getMeal(mealId) {
-  //   return api.get(`${ENDPOINT}/${mealId}`)
-  //     .then(res => res.data)
-  // },
+  // 식단 단일 조회 api (수정/상세용)
+  getMealDetail: async (mealId) => {
+    const response = await api.get(`${ENDPOINT}/${mealId}`)
+    return response.data
+  },
 
   // 식단 수정 api
-  updateMeal: async (id, data) => {
-    const response = await api.put(`${ENDPOINT}/${id}`, data)
+  updateMeal: async (mealId, formData) => {
+    // 수정할 때 기본 식단 정보는 가지고 와야 함
+    const response = await api.put(`${ENDPOINT}/${mealId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
     return response.data
   },
 
   // 식단 삭제 api
-  deleteMeal: async (id) => {
-    const response = await api.delete(`${ENDPOINT}/${id}`)
+  deleteMeal: async (mealId) => {
+    const response = await api.delete(`${ENDPOINT}/${mealId}`)
     return response.data
   },
 

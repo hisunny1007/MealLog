@@ -58,8 +58,7 @@
     <!-- U -->
     <update id="updateMeal" parameterType="Meal">
         UPDATE meals
-        SET date = #{date},
-            meal_type = #{mealType},
+        SET meal_type = #{mealType},
             memo = #{memo},
             image_url = #{imageUrl},
             food_id = #{foodId},
