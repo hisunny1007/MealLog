@@ -29,11 +29,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Long signUp(SignupStep1RequestDto requestDto) {
-       
-        userDao.findByEmail(requestDto.getEmail())
-                .ifPresent(user -> {
-                    throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
-                });
+
+        checkEmailDuplication(requestDto.getEmail());
+
+
+        if (checkNicknameDuplication(requestDto.getNickname())) {
+            throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
+        }
 
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
@@ -119,6 +121,14 @@ public class UserServiceImpl implements UserService {
                     
                     throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
                 });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean checkNicknameDuplication(String nickname) {
+        // findByNickname이 Optional을 반환한다고 가정했을 때,
+        // 값이 존재하면(isPresent) 중복이므로 true를 반환합니다.
+        return userDao.findByNickname(nickname).isPresent();
     }
 }
 

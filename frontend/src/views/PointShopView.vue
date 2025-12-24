@@ -161,7 +161,7 @@ const handlePurchase = async ({ productId, amount }) => {
     closePurchaseModal();
   } catch (error) {
     console.error('Error purchasing product:', error);
-    toast.warn('포인트가 부족하거나 오류가 발생했습니다.');
+    toast.warn('포인트가 부족합니다.');
   }
 };
 </script>

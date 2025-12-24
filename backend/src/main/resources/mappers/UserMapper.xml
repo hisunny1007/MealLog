@@ -21,6 +21,15 @@
         WHERE email = #{email}
     </select>
 
+    <select id="findByNickname" parameterType="String" resultType="com.yunyun.meallog.user.domain.User">
+        SELECT
+            id, email, password, nickname, gender,
+            age, height, weight, exercise_frequency, exercise_goal,
+            reward_point
+        FROM users
+        WHERE nickname = #{nickname}
+    </select>
+
     <select id="findById" parameterType="Long" resultType="com.yunyun.meallog.user.domain.User">
         SELECT
             id, email, password, nickname, gender,
