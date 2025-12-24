@@ -37,8 +37,6 @@ public class MealRequestDto {
     private int score;
 
     private String memo;
-    private String imageUrl;
-
     private float calories;
     private float carbs;
     private float protein;
@@ -55,7 +53,6 @@ public class MealRequestDto {
                 .foodId(selectedFood != null ? selectedFood.getId() : null) // db에 있으면 foodId가져오고 아니면 null
                 .foodName(selectedFood != null ? selectedFood.getName() : this.foodName) // db에 있으면 foodName 가져오고 아니면 직접 등록
                 .score(this.score)
-                .imageUrl(this.imageUrl)
                 .memo(this.memo)
                 .calories(selectedFood != null ? selectedFood.getCalories() : this.calories)
                 .carbs(selectedFood != null ? selectedFood.getCarbs() : this.carbs)
