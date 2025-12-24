@@ -183,7 +183,7 @@
           :class="{ disabled: !isLoggedIn }"
           @click="handleRegisterClick"
         >
-          식단 등록
+          {{ props.mode === 'create' ? '식단 등록' : '식단 수정' }}
         </button>
         <Modal
           :isOpen="isModalOpen"
@@ -200,17 +200,44 @@
 
 <script setup>
 import foodApi from '@/api/foodApi'
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { toast } from 'vue3-toastify'
 import Modal from '../common/Modal.vue'
 import { useAuthStore } from '@/stores/authStore'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import mealApi from '@/api/mealApi'
+
+const route = useRoute()
 
 const props = defineProps({
   date: String,
+  mode: { type: String, default: 'create' }, // create, edit 두 가지로 나누어서 구분
+  mealId: Number,
 })
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit', 'update'])
+
+// mode: edit일 때 기존에 등록했던 폼 내용 그대로 보여주기
+onMounted(async () => {
+  if (props.mode === 'edit' && props.mealId) {
+    const detail = await mealApi.getMealDetail(props.mealId)
+
+    // 기존 값 세팅
+    form.mealType = detail.mealType
+    form.foodId = detail.foodId
+    form.foodName = detail.foodName
+    form.calories = detail.calories
+    form.carbs = detail.carbs
+    form.protein = detail.protein
+    form.fat = detail.fat
+    form.score = detail.score
+    form.memo = detail.memo
+
+    // 이미지 미리보기
+    previewUrl.value = detail.imageUrl
+    keyword.value = detail.foodName
+  }
+})
 
 // 비로그인 - 유저 구분
 const authStore = useAuthStore()
@@ -224,7 +251,7 @@ const handleRegisterClick = (e) => {
     e.preventDefault()
 
     toast.info('회원가입 후 식단을 기록할 수 있어요 🍽️', {
-      closeOnClick: true, // 클릭하면 닫힘
+      closeOnClick: true,
       pauseOnHover: true,
       onClose: () => {
         router.push('/signup')
@@ -315,7 +342,7 @@ const onImageChange = (e) => {
 }
 
 const form = reactive({
-  mealType: null, // 기본 선택 없음
+  mealType: null,
   foodId: null,
   foodName: '',
   calories: '',
@@ -341,36 +368,48 @@ const handleFormSubmit = () => {
     return
   }
   if (!form.mealType) {
-    toast.warn('🍽️ 식단 분류를 선택해 주세요! 🍽️')
+    toast.warn('🍽️ 식단 분류를 선택해 주세요!')
     return
   }
 
   if (!form.score) {
-    toast.warn('⭐오늘의 식단 점수를 선택해 주세요! ')
+    toast.warn('⭐ 오늘의 식단 점수를 선택해 주세요!')
     return
   }
 
   // 등록 버튼 클릭 시 (모달에는 확인, 취소버튼)
-  modalConfig.title = '등록 확인'
-  modalConfig.message = '입력하신 식단을 등록하시겠습니까?'
+  if (props.mode === 'create') {
+    modalConfig.title = '등록 확인'
+    modalConfig.message = '입력하신 식단을 등록하시겠습니까?'
+  } else {
+    modalConfig.title = '수정 확인'
+    modalConfig.message = '입력하신 식단을 수정하시겠습니까?'
+  }
+
   modalConfig.type = 'confirm'
   isModalOpen.value = true
 }
 
-const handleModalConfirm = () => {
-  if (modalConfig.type === 'confirm') {
-    // 등록하시겠습니까? 모달의 확인 버튼 클릭 시
+const handleModalConfirm = async () => {
+  // 등록하시겠습니까? 모달의 확인 버튼 클릭 시 모다 닫고
+  isModalOpen.value = false
+
+  // emit으로 부모에게 데이터 전달
+  if (props.mode === 'create') {
+    // 등록일 때
     emit('submit', {
       ...form,
       date: props.date,
       imageFile: imageFile.value,
     })
-
-    modalConfig.title = '등록 완료'
-    modalConfig.message = '식단이 기록되었습니다. 100 포인트가 적립되었어요!'
-    modalConfig.type = 'alert'
   } else {
-    isModalOpen.value = false
+    emit('update', {
+      // 수정일 때
+      mealId: props.mealId,
+      ...form,
+      date: props.date,
+      imageFile: imageFile.value,
+    })
   }
 }
 </script>

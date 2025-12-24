@@ -13,7 +13,13 @@
 
     <!-- 카드 (slot 사용) -->
     <MealCard class="mt-4">
-      <MealForm :date="selectedDate" :key="formKey" @submit="createMeal" />
+      <MealForm
+        :date="selectedDate"
+        :mode="mode"
+        :mealId="mealId"
+        @submit="createMeal"
+        @update="updateMeal"
+      />
     </MealCard>
   </div>
 </template>
@@ -33,6 +39,12 @@ const authStore = useAuthStore()
 // URL에서 받은 원본 날짜 (API용)
 const route = useRoute() // url에서 값 꺼냄
 const router = useRouter()
+
+// form에 넘겨야 함
+// const mode
+const mode = route.props?.mode ?? route.meta?.mode ?? 'create'
+
+const mealId = route.params.mealId
 
 const selectedDate = computed(() => route.params.date) //params 변경
 
@@ -56,7 +68,7 @@ const formattedDate = computed(() => {
 const meals = ref([]) // // 식단 목록 담을 상태 -useState랑 같은 거임
 const selectedMealType = ref(null)
 const loading = ref(false)
-const formKey = ref(0)
+// const formKey = ref(0)
 
 // 식단 조회
 const loadMeals = async () => {
@@ -72,13 +84,6 @@ const loadMeals = async () => {
     loading.value = false
   }
 }
-
-// 이건 처음 실행 시에만 진행
-// onMounted(() => {
-//   if (selectedDate) {
-//     loadMeals()
-//   }
-// })
 
 // 날짜 변경 감지
 watch(
@@ -115,6 +120,7 @@ const createMeal = async (formData) => {
     router.push('/signup')
     return
   }
+
   try {
     const isDuplicate = meals.value.some((meal) => meal.mealType === formData.mealType)
 
@@ -158,14 +164,68 @@ const createMeal = async (formData) => {
     // 포인트 최신 업데이트
     const point = response.currentTotalPoint
     authStore.updateUserPoints(point)
+    toast.success('🎉 식단이 기록되었습니다. 100 포인트가 적립되었어요!')
 
     // 바로 해당 날짜의 DailyView로 이동
-    router.push({
-      name: 'MealDaily',
-      params: { date: selectedDate.value },
-    })
+    setTimeout(() => {
+      router.push({
+        name: 'MealDaily',
+        params: { date: selectedDate.value },
+      })
+    }, 1000)
+    // router.push({
+    //   name: 'MealDaily',
+    //   params: { date: selectedDate.value },
+    // })
   } catch (e) {
-    console.error('식단 등록 실패', e)
+    toast.error('식단 등록 중 오류가 발생했습니다.')
+  }
+}
+
+// 식단 수정
+const updateMeal = async (updateFormData) => {
+  // 수정도  JSON -> data 변환 필요
+  try {
+    const multipartForm = new FormData()
+
+    // JSON -> data
+    multipartForm.append(
+      'data',
+      new Blob(
+        [
+          JSON.stringify({
+            mealType: updateFormData.mealType,
+            foodId: updateFormData.foodId,
+            foodName: updateFormData.foodName,
+            calories: updateFormData.calories,
+            carbs: updateFormData.carbs,
+            protein: updateFormData.protein,
+            fat: updateFormData.fat,
+            score: updateFormData.score,
+            memo: updateFormData.memo,
+            date: updateFormData.date || selectedDate.value,
+          }),
+        ],
+        { type: 'application/json' },
+      ),
+    )
+
+    // 새 이미지 잇다면 추가
+    if (updateFormData.imageFile) {
+      multipartForm.append('image', updateFormData.imageFile)
+    }
+
+    await mealApi.updateMeal(mealId, multipartForm)
+    toast.success('✏️ 식단이 수정되었습니다.')
+
+    setTimeout(() => {
+      router.push({
+        name: 'MealDaily',
+        params: { date: selectedDate.value },
+      })
+    }, 1000)
+  } catch (e) {
+    toast.error('수정 중 오류가 발생했습니다.')
   }
 }
 

@@ -29,6 +29,14 @@
               <span class="fs-4 fw-black">{{ meal.score }}</span
               ><small>점</small>
             </div>
+
+            <!-- 여기다 버튼 만드는게  -->
+            <button class="btn btn-sm btn-outline-secondary" @click="$emit('edit', meal.id)">
+              수정
+            </button>
+            <button class="btn btn-sm btn-outline-danger" @click="$emit('delete', meal.id)">
+              삭제
+            </button>
           </div>
 
           <div class="d-flex flex-wrap gap-2 mb-3">
@@ -68,7 +76,6 @@ const scoreColor = computed(() => {
 })
 
 const getImageUrl = (filename) => {
-
   if (!filename) return '/default-meal.png' // 기본 이미지
   return `http://localhost:8080/api/v1/uploads/${filename}`
 }
