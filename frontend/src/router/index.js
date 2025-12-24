@@ -46,6 +46,12 @@ const router = createRouter({
       props: true,
     },
     {
+      path: '/meals/update/:mealId/:date',
+      name: 'MealEdit',
+      component: MealCreateView, // 같은 페이지 재사용
+      meta: { mode: 'edit' },
+    },
+    {
       path: '/point-shop',
       name: 'point-shop',
       component: PointShopView,

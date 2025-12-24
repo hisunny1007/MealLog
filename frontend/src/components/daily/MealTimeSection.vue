@@ -14,7 +14,12 @@ MealDailyView.vue          (페이지 / 데이터 책임)
       </div>
 
       <div class="content-area">
-        <MealItemCard v-if="meal" :meal="meal" />
+        <MealItemCard
+          v-if="meal"
+          :meal="meal"
+          @edit="$emit('edit', meal.id)"
+          @delete="$emit('delete', meal.id)"
+        />
         <MealAddCard v-else @click="$emit('add', mealType)" :label="label" />
       </div>
     </div>
@@ -29,7 +34,7 @@ defineProps({
   label: String,
   meal: Object,
   mealType: String,
-  isLast: Boolean
+  isLast: Boolean,
 })
 </script>
 
@@ -63,5 +68,9 @@ defineProps({
 
 .content-area {
   transition: all 0.3s ease;
+}
+
+.btn {
+  margin: 0 0 0 0;
 }
 </style>

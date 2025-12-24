@@ -65,8 +65,11 @@ public class MealController {
     public ResponseEntity<MealResponseDto> updateMeal(
             @RequestAttribute("userId") Long userId,
             @PathVariable Long mealId,
-            @RequestBody MealRequestDto requestDto) {
-        MealResponseDto response = mealService.updateMeal(userId, mealId, requestDto);
+            @RequestPart(value = "data") MealRequestDto requestDto,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+
+        // 이미지 같이 받으려면 @RequestBody 아니고 @RequestPart로
+        MealResponseDto response = mealService.updateMeal(userId, mealId, requestDto, image);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);

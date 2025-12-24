@@ -18,6 +18,8 @@
             :mealType="section.type"
             :isLast="index === mealSections.length - 1"
             @add="goToCreate"
+            @edit="goToEdit"
+            @delete="deleteMeal"
           />
         </div>
       </section>
@@ -83,7 +85,15 @@ const mealSections = computed(() => [
 const goToCreate = (mealType) => {
   router.push({
     name: 'MealCreate',
-    query: { date, mealType },
+    params: { date: date },
+    query: { mealType: mealType }, // mealType만 쿼리로 보냄
+  })
+}
+
+const goToEdit = (mealId) => {
+  router.push({
+    name: 'MealEdit',
+    params: { mealId: mealId, date: date },
   })
 }
 
@@ -92,6 +102,16 @@ const goToAnalysis = () => {
     name: 'MealDailyAnalysis',
     params: { date: date },
   })
+}
+
+const deleteMeal = async (mealId) => {
+  const ok = confirm('삭제하시겠습니까?')
+  
+  if (!ok) return
+
+  await mealApi.deleteMeal(mealId)
+
+  meals.value = meals.value.filter((m) => m.id !== mealId)
 }
 </script>
 

@@ -20,7 +20,7 @@ public interface MealService {
 
     List<MealResponseDto> getMealsByDate(Long userId, LocalDate date);
 
-    MealResponseDto updateMeal(Long userId, Long mealId, MealRequestDto requestDto);
+    MealResponseDto updateMeal(Long userId, Long mealId, MealRequestDto requestDto, MultipartFile image);
 
     void deleteMeal(Long userId, Long mealId);
 
