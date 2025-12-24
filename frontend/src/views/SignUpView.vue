@@ -3,7 +3,6 @@
     <h1 class="title">가입하기</h1>
 
     <form v-if="step === 1" @submit.prevent="handleSignupStep1" class="signup-form">
-
       <div class="input-group email-group">
         <input
           type="email"
@@ -58,13 +57,7 @@
         </small>
       </div>
 
-      <button
-        type="submit"
-        :disabled="!isStep1Valid"
-        class="btn btn-next"
-      >
-        다음
-      </button>
+      <button type="submit" :disabled="!isStep1Valid" class="btn btn-next">다음</button>
     </form>
 
     <form v-else @submit.prevent="handleSignupStep2" class="signup-form">
@@ -172,6 +165,7 @@
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { signup, signupComplete, checkEmailDuplication } from '@/api/authApi'
+import { toast } from 'vue3-toastify'
 
 const router = useRouter()
 
@@ -187,7 +181,7 @@ const step1Data = reactive({
   nickname: '',
 })
 
-// 유효성 검사 (Computed)
+// 유효성 검사
 const isStep1Valid = computed(() => {
   return (
     isEmailChecked.value &&
@@ -203,31 +197,40 @@ const isStep1Valid = computed(() => {
 const checkEmailDup = async () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(step1Data.email)) {
-    alert('유효한 이메일 형식을 입력해주세요.')
+    toast.warn('유효한 이메일 형식을 입력해주세요.')
     return
   }
   try {
     // 실제 API 연동 시 주석 해제
-    // await checkEmailDuplication(step1Data.email)
+    await checkEmailDuplication(step1Data.email)
     isEmailChecked.value = true
-    alert('사용 가능한 이메일입니다.')
+    toast.info('사용 가능한 이메일입니다.')
   } catch (error) {
-    alert('이미 사용 중인 이메일입니다.')
+    console.error('이메일 중복 확인 에러 상세:', error)
+
+    // 만약 백엔드가 409(Conflict)를 보냈다면 정상적인 중복
+    if (error.response && error.response.status === 409) {
+      toast.warn('이미 사용 중인 이메일입니다.')
+    } else {
+      // 200인데도 여기로 왔다면, 데이터 파싱 에러
+      // 일단 성공으로 간주하거나, 에러 메시지를 확인
+      toast.warn('중복 확인 중 오류가 발생했습니다: ' + (error.message || '알 수 없는 오류'))
+    }
   }
 }
 
 // Step 1 제출
 const handleSignupStep1 = async () => {
   if (!isStep1Valid.value) {
-    alert('입력 정보를 다시 확인해주세요.')
+    toast.warn('입력 정보를 다시 확인해주세요.')
     return
   }
   try {
-    // const response = await signup(step1Data)
-    // userId.value = response.data.userId
+    const response = await signup(step1Data)
+    userId.value = response.data.userId
     step.value = 2
   } catch (error) {
-    alert('가입 진행 중 오류가 발생했습니다.')
+    toast.warn('가입 진행 중 오류가 발생했습니다.')
   }
 }
 
@@ -243,30 +246,29 @@ const step2Data = reactive({
 
 const handleSignupStep2 = async () => {
   if (!userId.value) {
-    alert('잘못된 접근입니다. 다시 시작해주세요.')
+    toast.warn('잘못된 접근입니다. 다시 시작해주세요.')
     router.push('/signup')
     return
   }
   try {
     await signupComplete(userId.value, step2Data)
-    alert('회원가입이 완료되었습니다. 로그인해 주세요.')
+    toast.info('회원가입이 완료되었습니다. 로그인해 주세요.', {autoClose: 3000})
     router.push('/login')
   } catch (error) {
     console.error('회원가입 2단계 실패:', error)
-    alert('정보 저장에 실패했습니다. 다시 시도해 주세요.')
+    toast.warn('정보 저장에 실패했습니다. 다시 시도해 주세요.')
   }
 }
 </script>
 
 <style scoped>
-/* 전체 컨테이너 및 폰트 설정 */
+
 .signup-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 80px 20px;
-  min-height: 100vh;
-  background-color: #faf7f4; /* 요청하신 배경색 */
+  background-color: var(--bg-main);
   color: #333;
 }
 
@@ -282,68 +284,35 @@ const handleSignupStep2 = async () => {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 25px; /* 입력 필드 간 간격 */
+  gap: 25px;
 }
 
-/* 입력 필드 공통 스타일 (피그마 시안 반영) */
+
 .input-group {
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
+  transition: border-color 0.3s;
 }
 
 .input-group input {
   width: 100%;
   padding: 10px 5px;
   border: none;
-  border-bottom: 1px solid #ccc; /* 하단 라인만 표시 */
+  border-bottom: 1px solid #ccc;
   background: transparent;
   font-size: 1rem;
   outline: none;
-  border-radius: 0; /* 기본 둥글기 제거 */
+  border-radius: 0;
   transition: border-color 0.3s;
 }
 
 .input-group input:focus {
-  border-bottom-color: #5d4037; /* 포커스 시 갈색 라인 */
-}
-
-/* 이메일 그룹 (Flexbox 사용) */
-.email-group {
-  flex-direction: row;
-  align-items: center; /* 수직 중앙 정렬 */
-  border-bottom: 1px solid #ccc; /* 그룹 전체에 라인 적용 */
-}
-
-.email-group input {
-  border-bottom: none; /* 내부 인풋 라인 제거 */
-  flex-grow: 1; /* 인풋이 남은 공간 차지 */
-}
-
-.email-group:focus-within {
   border-bottom-color: #5d4037;
 }
 
-/* 중복 확인 버튼 (시안 스타일) */
-.check-btn {
-  background-color: #fff;
-  border: 1px solid #999;
-  border-radius: 4px;
-  padding: 5px 10px;
-  font-size: 0.85rem;
-  color: #333;
-  cursor: pointer;
-  white-space: nowrap;
-  margin-left: 10px;
-  margin-bottom: 5px; /* 라인 위로 살짝 띄우기 */
-}
 
-.check-btn:hover {
-  background-color: #f0f0f0;
-}
-
-/* 에러 및 성공 메시지 스타일 */
 .msg {
   font-size: 0.75rem;
   margin-top: 6px;
@@ -352,26 +321,33 @@ const handleSignupStep2 = async () => {
 }
 
 .error {
-  color: #ff5252; /* 빨간색 */
+  color: #ff5252;
 }
 
 .success {
-  color: #2196f3; /* 파란색 */
+  color: #2196f3;
 }
 
-/* 다음 버튼 */
+
 .btn-next,
 .btn-complete {
-  background-color: #7a6658; /* 메인 갈색 */
+  background-color: #7a6658;
   color: white;
   width: 100%;
-  padding: 15px;
+  padding: 12px;
   border: none;
-  border-radius: 8px;
-  margin-top: 30px;
-  font-size: 1.1rem;
+  border-radius: 6px;
+  margin-top: 20px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-next:hover,
+.btn-complete:hover{
+  background-color: #ede0d4;
+  color: var(--main-brown);
 }
 
 .btn-next:disabled {
@@ -379,7 +355,7 @@ const handleSignupStep2 = async () => {
   cursor: not-allowed;
 }
 
-/* Step 2 관련 스타일 (기존 유지) */
+
 .form-section {
   position: relative;
   display: flex;
@@ -399,7 +375,7 @@ const handleSignupStep2 = async () => {
   flex-grow: 1;
 }
 .radio-group button {
-  background-color: white;
+  background-color: #ede0d4;
   border: 1px solid #ccc;
   padding: 8px 15px;
   border-radius: 20px;
@@ -426,10 +402,10 @@ const handleSignupStep2 = async () => {
 }
 .frequency-buttons {
   flex-grow: 1;
-  text-align: right;
+  text-align: left;
 }
 .frequency-group {
-  gap: 5px;
+  gap: 10px;
   display: inline-flex;
 }
 .frequency-group button {
@@ -455,19 +431,95 @@ const handleSignupStep2 = async () => {
   bottom: 0;
   color: #888;
 }
-.frequency-labels .label-count { left: 0; }
-.frequency-labels .label-under { right: 80px; }
-.frequency-labels .label-over { right: 10px; }
+.frequency-labels .label-count {
+  left: 0;
+}
+.frequency-labels .label-under {
+  left: 100px;
+}
+.frequency-labels .label-over {
+  left: 265px;
+}
 
 .input-group-inline {
   display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
   gap: 15px;
+  margin-bottom: 30px;
+  width: 100%;
 }
 .input-wrapper {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 .input-wrapper input {
+  width: 100%;
+  padding: 5px 0;
+  border: none;
   border-bottom: 1px solid #ccc;
+  background: transparent;
+  font-size: 1rem;
   text-align: center;
+  outline: none;
+  border-radius: 0;
+  transition: border-color 0.3s;
+}
+
+.input-wrapper input:focus {
+  border-bottom-color: #5d4037;
+}
+
+
+.input-wrapper input::placeholder {
+  color: #999;
+  text-align: center;
+}
+
+
+.input-group.email-group {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+
+
+.input-group.email-group:focus-within {
+  border-bottom-color: #5d4037;
+}
+
+
+.input-group.email-group input {
+  border-bottom: none !important;
+  flex-grow: 1;
+  width: auto !important;
+  padding: 5px 5px;
+  margin: 0;
+}
+
+
+.check-btn {
+  flex-shrink: 0;
+  margin-left: 10px;
+
+  background-color: #ede0d4;
+  border: 1px solid #ccc;
+  border-radius: 10px !important;
+  padding: 5px 12px;
+  font-size: 0.85rem;
+  color: #333;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.check-btn:hover {
+  background-color: #f5f5f5;
+  border-color: #5d4037;
+  color: #5d4037;
 }
 </style>

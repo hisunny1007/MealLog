@@ -19,13 +19,36 @@
 
     <div class="product-grid">
       <ProductCard
-        v-for="product in products"
+        v-for="product in paginatedProducts"
         :key="product.id"
         :product="product"
         @purchase="openPurchaseModal"
       />
     </div>
+    <div v-if="products.length === 0" class="empty-message">
+      상품이 없습니다.
+    </div>
+
+    <div v-if="products.length > 0" class="pagination-controls">
+      <button
+        class="page-btn"
+        @click="prevPage"
+        :disabled="currentPage === 1"
+      >
+        &lt; </button>
+
+      <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
+
+      <button
+        class="page-btn"
+        @click="nextPage"
+        :disabled="currentPage === totalPages"
+      >
+        &gt; </button>
+    </div>
   </div>
+
+
   <PurchaseModal
     v-if="isModalVisible"
     :product="selectedProduct"
@@ -41,6 +64,7 @@ import { getProducts, purchaseProduct } from '@/api/pointshop';
 import ProductCard from '@/components/pointshop/ProductCard.vue';
 import PurchaseModal from '@/components/pointshop/PurchaseModal.vue';
 import { useRoute } from 'vue-router';
+import { toast } from 'vue3-toastify'
 
 const authStore = useAuthStore();
 const route = useRoute();
@@ -59,6 +83,21 @@ const userPoints = computed(() => authStore.user?.rewardPoint || 0);
 const isModalVisible = ref(false);
 const selectedProduct = ref(null);
 
+//페이지 상태 관리
+const currentPage = ref(1);
+const itemsPerPage = 20;
+
+//현재 페이지에 보여줄 제품 계산
+const paginatedProducts = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return products.value.slice(start, end);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(products.value.length / itemsPerPage) || 1;
+});
+
 // 상품 목록 조회 함수
 const fetchProducts = async (category) => {
   try {
@@ -68,6 +107,7 @@ const fetchProducts = async (category) => {
     } else {
       products.value = [];
     }
+    currentPage.value = 1;
   } catch (error) {
     console.error('Error fetching products:', error);
     products.value = [];
@@ -78,6 +118,20 @@ const fetchProducts = async (category) => {
 const selectCategory = (category) => {
   selectedCategory.value = category;
   fetchProducts(category);
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // 페이지 이동 시 맨 위로
+  }
 };
 
 
@@ -103,26 +157,21 @@ const handlePurchase = async ({ productId, amount }) => {
   try {
     const response = await purchaseProduct({ productId, amount });
     authStore.updateUserPoints(response.data.remainingPoint);
-    alert('교환이 완료되었습니다.');
+    toast.info('교환이 완료되었습니다.');
     closePurchaseModal();
   } catch (error) {
     console.error('Error purchasing product:', error);
-    alert('포인트가 부족하거나 오류가 발생했습니다.');
+    toast.warn('포인트가 부족하거나 오류가 발생했습니다.');
   }
 };
 </script>
 
 <style scoped>
 .point-shop-container {
-  padding: 2rem;
-  background-color: #fdfaf6;
+  padding: 60px 20px;
+  background-color: var(--bg-main);
 }
 
-.title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
 
 .category-tabs {
   display: flex;
@@ -154,6 +203,29 @@ const handlePurchase = async ({ productId, amount }) => {
   font-size: 1.1rem;
   border-top: 1px solid #eee;
   padding-top: 1rem;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.page-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  color: var(--main-brown);
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s;
 }
 
 .product-grid {

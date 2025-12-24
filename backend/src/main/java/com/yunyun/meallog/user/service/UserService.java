@@ -14,4 +14,6 @@ public interface UserService {
     void updateProfile(Long userId, SignupStep2RequestDto requestDto);
 
     UserResponseDto getMyProfile(Long userId);
+
+    void checkEmailDuplication(String email);
 }

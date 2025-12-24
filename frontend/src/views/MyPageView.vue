@@ -51,14 +51,15 @@
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import { toast } from 'vue3-toastify'
 
 const router = useRouter()
 const authStore = useAuthStore()
 
 onMounted(() => {
-  // 컴포넌트가 마운트될 때 최신 사용자 정보를 가져옵니다.
+
   authStore.fetchUser()
-  // 디버깅: 마이페이지가 마운트될 때 authStore.user의 실제 값을 확인합니다.
+
   console.log('User object in MyPageView on mount:', authStore.user)
 })
 
@@ -68,13 +69,13 @@ if (!authStore.isAuthenticated) {
 }
 
 const goToEditProfile = () => {
-  alert('회원정보 수정 페이지로 이동')
-  // router.push('/mypage/edit');
+  toast.info('회원정보 수정 페이지로 이동')
+  // router.push('/mypage/edit'); 시간 여유 있으면 추가
 }
 
 const goToInquiry = () => {
-  alert('MealLog@naver.com 으로 문의부탁드립니다.')
-  // router.push('/inquiry');
+  toast.info('MealLog@naver.com 으로 문의부탁드립니다.')
+  // router.push('/inquiry'); 시간 여유 있으면 추가
 }
 </script>
 
@@ -111,9 +112,8 @@ const goToInquiry = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
   padding: 60px 20px;
-  background-color: #faf7f4;
+  background-color: var(--bg-main);
 }
 
 
@@ -151,7 +151,6 @@ const goToInquiry = () => {
 .edit-btn {
   background: none;
   border: none;
-  /* color: #888; */
   font-size: 0.9em;
   cursor: pointer;
   text-align: left;
@@ -165,7 +164,7 @@ const goToInquiry = () => {
   margin: 30px 0;
 }
 
-/* 네비게이션 */
+
 .mypage-nav {
   display: flex;
   flex-direction: column;
@@ -193,7 +192,7 @@ const goToInquiry = () => {
 }
 
 
-/* 하단 탈퇴 링크 */
+
 .bottom-links {
   margin-top: 50px;
   display: flex;
@@ -203,7 +202,6 @@ const goToInquiry = () => {
 .deactivate-link {
   background: none;
   border: none;
-  /* color: #999; */
   cursor: pointer;
   font-size: 1em;
   text-decoration: none;
