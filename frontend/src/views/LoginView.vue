@@ -54,7 +54,7 @@ const handleLogin = async () => {
   flex-direction: column;
   align-items: center;
   padding: 80px 20px;
-  background-color: var(--bg-main);
+
 }
 
 h1 {

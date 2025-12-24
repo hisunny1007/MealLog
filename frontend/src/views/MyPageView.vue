@@ -102,7 +102,7 @@ const goToInquiry = () => {
 .mypage-content {
   max-width: 500px;
   width: 100%;
-  background-color: #fff;
+  background-color: var(--bg-main);
   padding: 40px;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -113,7 +113,7 @@ const goToInquiry = () => {
   flex-direction: column;
   align-items: center;
   padding: 60px 20px;
-  background-color: var(--bg-main);
+
 }
 
 
@@ -181,14 +181,15 @@ const goToInquiry = () => {
   transition: background-color 0.2s;
 }
 .nav-item:hover {
-  background-color: #fafafa;
+  background-color: #8a7b6e;
   border-radius: 5px;
+  color: var(--bg-main);
 }
 
   .nav-text {
   font-size: 1.05rem;
   font-weight: 500;
-  color: #444;
+  color: var(--main-brown);
 }
 
 
