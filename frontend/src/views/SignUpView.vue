@@ -201,18 +201,15 @@ const checkEmailDup = async () => {
     return
   }
   try {
- 
     await checkEmailDuplication(step1Data.email)
     isEmailChecked.value = true
     toast.info('사용 가능한 이메일입니다.')
   } catch (error) {
     console.error('이메일 중복 확인 에러 상세:', error)
 
-
     if (error.response && error.response.status === 409) {
       toast.warn('이미 사용 중인 이메일입니다.')
     } else {
-
       toast.warn('중복 확인 중 오류가 발생했습니다: ' + (error.message || '알 수 없는 오류'))
     }
   }
@@ -251,8 +248,14 @@ const handleSignupStep2 = async () => {
   }
   try {
     await signupComplete(userId.value, step2Data)
-    toast.info('회원가입이 완료되었습니다. 로그인해 주세요.', {autoClose: 3000})
-    router.push('/login')
+    toast.info('회원가입이 완료되었습니다. 로그인해 주세요.', {
+      autoClose: 1500,
+      hideProgressBar: false,
+    })
+
+    setTimeout(() => {
+      router.push('/login')
+    }, 1500)
   } catch (error) {
     console.error('회원가입 2단계 실패:', error)
     toast.warn('정보 저장에 실패했습니다. 다시 시도해 주세요.')
@@ -261,7 +264,6 @@ const handleSignupStep2 = async () => {
 </script>
 
 <style scoped>
-
 .signup-container {
   display: flex;
   flex-direction: column;
@@ -284,7 +286,6 @@ const handleSignupStep2 = async () => {
   flex-direction: column;
   gap: 25px;
 }
-
 
 .input-group {
   position: relative;
@@ -310,7 +311,6 @@ const handleSignupStep2 = async () => {
   border-bottom-color: #5d4037;
 }
 
-
 .msg {
   font-size: 0.75rem;
   margin-top: 6px;
@@ -325,7 +325,6 @@ const handleSignupStep2 = async () => {
 .success {
   color: #2196f3;
 }
-
 
 .btn-next,
 .btn-complete {
@@ -343,7 +342,7 @@ const handleSignupStep2 = async () => {
 }
 
 .btn-next:hover,
-.btn-complete:hover{
+.btn-complete:hover {
   background-color: #ede0d4;
   color: var(--main-brown);
 }
@@ -352,7 +351,6 @@ const handleSignupStep2 = async () => {
   background-color: #d7ccc8;
   cursor: not-allowed;
 }
-
 
 .form-section {
   position: relative;
@@ -470,12 +468,10 @@ const handleSignupStep2 = async () => {
   border-bottom-color: #5d4037;
 }
 
-
 .input-wrapper input::placeholder {
   color: #999;
   text-align: center;
 }
-
 
 .input-group.email-group {
   display: flex !important;
@@ -486,11 +482,9 @@ const handleSignupStep2 = async () => {
   padding-bottom: 5px;
 }
 
-
 .input-group.email-group:focus-within {
   border-bottom-color: #5d4037;
 }
-
 
 .input-group.email-group input {
   border-bottom: none !important;
@@ -499,7 +493,6 @@ const handleSignupStep2 = async () => {
   padding: 5px 5px;
   margin: 0;
 }
-
 
 .check-btn {
   flex-shrink: 0;
