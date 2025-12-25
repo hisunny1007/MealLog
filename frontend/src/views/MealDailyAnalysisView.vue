@@ -1,9 +1,12 @@
 <template>
   <div class="analysis-page container py-5">
 
+    <!-- 비로그인 미리보기 -->
+    <AnalysisPreview v-if="!isLoggedIn" :date="date" />
+
     <!-- 로그인 - 오늘의 식단 없음 -->
     <AnalysisEmpty
-      v-if="meals.length === 0"
+      v-else-if="meals.length === 0"
       :date="date"
     />
 
@@ -25,6 +28,7 @@ import mealApi from '@/api/mealApi'
 
 import AnalysisEmpty from '@/components/analysis/AnalysisEmpty.vue'
 import AnalysisContent from '@/components/analysis/AnalysisContent.vue'
+import AnalysisPreview from '@/components/analysis/AnalysisPreview.vue'
 
 const route = useRoute()
 const date = route.params.date
