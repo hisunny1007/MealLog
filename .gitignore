@@ -149,7 +149,6 @@ vite.config.timestamp-*
 dump.rdb
 
 # SQLite, H2, other local DB
-*.sql
 *.sqlite
 *.sqlite3
 *.db.mv.db
