@@ -61,6 +61,13 @@ async function loadCalendarMonth(year, month) {
 
 const meals = ref([])
 
+function getLocalDateString(date = new Date()) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 // FullCalendar 옵션
 const calendarOptions = ref({
   plugins: [dayGridPlugin, interactionPlugin],
@@ -70,6 +77,34 @@ const calendarOptions = ref({
     today: '오늘',
   },
 
+  // 오늘 날짜에 + 버튼 삽입 (클릭 유도)
+  dayCellDidMount(info) {
+    const todayStr = getLocalDateString()
+    const cellDateStr = getLocalDateString(info.date)
+
+    // 오늘 날짜만 +
+    if (cellDateStr !== todayStr) return
+
+    const frame = info.el.querySelector('.fc-daygrid-day-frame')
+    if (!frame) return
+
+    frame.style.position = 'relative'
+
+    const plusBtn = document.createElement('div')
+    plusBtn.className = 'today-plus-btn'
+    plusBtn.innerText = '+'
+    plusBtn.setAttribute('data-tooltip', '🥗 식단 기록하기')
+
+    plusBtn.addEventListener('click', (e) => {
+      e.stopPropagation()
+      router.push({
+        name: 'MealCreate',
+        params: { date: todayStr },
+      })
+    })
+
+    frame.appendChild(plusBtn)
+  },
   // 식단 분석으로 이동하는 버튼 추가
   customButtons: {
     todayAnalysis: {
@@ -267,5 +302,49 @@ onMounted(() => {
 
 .meal-dinner {
   opacity: 0.8;
+}
+.today-plus-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--main-brown);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.today-plus-btn:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+}
+.today-plus-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: var(--main-brown);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.today-plus-btn:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
 }
 </style>
