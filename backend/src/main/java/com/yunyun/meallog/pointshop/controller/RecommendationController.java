@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/pointshop/recommendation")
+@RequestMapping("/pointshop")
 @RequiredArgsConstructor
 public class RecommendationController {
 
     private final RecommendationService recommendationService;
     private final JwtUtil jwtUtil;
 
-    @GetMapping
+    @GetMapping("/recommendation")
     public ResponseEntity<RecommendationResponseDto> getRecommendation(
             @RequestHeader("Authorization") String authHeader) {
 
