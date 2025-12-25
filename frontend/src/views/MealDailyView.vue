@@ -19,7 +19,7 @@
             :isLast="index === mealSections.length - 1"
             @add="goToCreate"
             @edit="goToEdit"
-            @delete="deleteMeal"
+            @delete="openDeleteModal"
           />
         </div>
       </section>
@@ -28,6 +28,14 @@
         <ProductRecommendation />
       </aside>
     </div>
+    <Modal
+      :isOpen="isModalOpen"
+      :title="'식단 삭제'"
+      :message="'정말 이 식단을 삭제하시겠습니까?'"
+      :type="'confirm'"
+      @confirm="handleDeleteConfirm"
+      @close="isModalOpen = false"
+    />
   </div>
 </template>
 
@@ -38,10 +46,15 @@ import mealApi from '@/api/mealApi'
 
 import MealTimeSection from '@/components/daily/MealTimeSection.vue'
 import ProductRecommendation from '@/components/daily/ProductRecommendation.vue'
+import Modal from '@/components/common/Modal.vue'
+import { toast } from 'vue3-toastify'
 
 const route = useRoute()
 const router = useRouter()
 const date = route.params.date
+
+const isModalOpen = ref(false)
+const mealIdToDelete = ref(null)
 
 const formattedDate = computed(() => {
   const rawDate = new Date(date)
@@ -54,15 +67,18 @@ const formattedDate = computed(() => {
 const meals = ref([])
 
 onMounted(async () => {
+  fetchMeals()
+})
+
+const fetchMeals = async () => {
   try {
     const result = await mealApi.getMealsByDate(date)
-
     meals.value = result ?? []
   } catch (error) {
     console.error('식단 조회 실패:', error)
     meals.value = []
   }
-})
+}
 
 const mealSections = computed(() => [
   {
@@ -104,14 +120,28 @@ const goToAnalysis = () => {
   })
 }
 
-const deleteMeal = async (mealId) => {
-  const ok = confirm('삭제하시겠습니까?')
-  
-  if (!ok) return
+const openDeleteModal = (mealId) => {
+  mealIdToDelete.value = mealId
+  isModalOpen.value = true
+}
 
-  await mealApi.deleteMeal(mealId)
+const handleDeleteConfirm = async () => {
+  isModalOpen.value = false
+  const id = mealIdToDelete.value
 
-  meals.value = meals.value.filter((m) => m.id !== mealId)
+  if (!id) return
+
+  try {
+    await mealApi.deleteMeal(id)
+
+    // 상태 업데이트
+    meals.value = meals.value.filter((m) => m.id !== id)
+    toast.success('🗑️ 식단이 삭제되었습니다.')
+  } catch (error) {
+    toast.error('식단 삭제 중 오류가 발생했습니다.')
+  } finally {
+    mealIdToDelete.value = null
+  }
 }
 </script>
 
