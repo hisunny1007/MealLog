@@ -307,6 +307,7 @@ onMounted(() => {
   position: absolute;
   top: 50%;
   left: 50%;
+  line-height: 40px; /* + 버튼 정중앙 */
   transform: translate(-50%, -50%);
   width: 38px;
   height: 38px;
@@ -340,7 +341,9 @@ onMounted(() => {
 
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
 }
 
 .today-plus-btn:hover::after {
