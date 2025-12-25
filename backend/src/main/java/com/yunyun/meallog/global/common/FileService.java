@@ -16,9 +16,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileService {
 
-    @Value("${file.dir}")
+    @Value("${file.upload-dir}")
     // spring 환경 설정 값을 직접 필드에 주입할 때 사용
-    private String fileDir;
+    private String uploadDir;;
 
     private static final List<String> DEFAULT_MEAL_IMAGES = List.of(
             "default/meal1.png",
@@ -32,7 +32,7 @@ public class FileService {
             String projectDir = Paths.get("").toAbsolutePath().toString();
 
             // 디렉토리 관련 객체 생성
-            File directory = new File(projectDir, fileDir);
+            File directory = new File(projectDir, uploadDir);
 
             // 디렉토리가 없으면 생성
             if (!directory.exists()) {

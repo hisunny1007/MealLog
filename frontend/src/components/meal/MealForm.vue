@@ -208,7 +208,6 @@ import { useRoute, useRouter } from 'vue-router'
 import mealApi from '@/api/mealApi'
 
 const route = useRoute()
-const BASE_URL = 'http://localhost:8080'
 
 const props = defineProps({
   date: String,
@@ -218,11 +217,14 @@ const props = defineProps({
 
 const emit = defineEmits(['submit', 'update'])
 
+// 기존 이미지 url 저장용
+const originImageUrl = ref(null)
+
 // mode: edit일 때 기존에 등록했던 폼 내용 그대로 보여주기
 onMounted(async () => {
   if (props.mode === 'edit' && props.mealId) {
     const detail = await mealApi.getMealDetail(props.mealId)
-
+    console.log('detail.imageurl =', detail.imageUrl)
     // 기존 값 세팅
     form.mealType = detail.mealType
     form.foodId = detail.foodId
@@ -234,10 +236,15 @@ onMounted(async () => {
     form.score = detail.score
     form.memo = detail.memo
 
-    // 이미지 미리보기
-    // previewUrl.value = detail.imageUrl
+    // 기존 이미지 url 따로 저장
+    originImageUrl.value = detail.imageUrl
 
-    previewUrl.value = detail.imageUrl ? BASE_URL + '/uploads/' + detail.imageUrl : null
+    previewUrl.value = imageFile.value
+      ? URL.createObjectURL(imageFile.value)
+      : detail.imageUrl
+        ? `/api/v1/uploads/${detail.imageUrl}`
+        : null
+
     keyword.value = detail.foodName
   }
 })
@@ -344,6 +351,7 @@ const onImageChange = (e) => {
   previewUrl.value = URL.createObjectURL(file) // 미리보기용 url 생성
 }
 
+// 폼데이터
 const form = reactive({
   mealType: null,
   foodId: null,
@@ -356,6 +364,7 @@ const form = reactive({
   memo: '',
 })
 
+// 모달
 const isModalOpen = ref(false)
 const modalConfig = reactive({
   title: '',
@@ -389,12 +398,11 @@ const handleFormSubmit = () => {
     modalConfig.message = '입력하신 식단을 수정하시겠습니까?'
   }
 
-  modalConfig.type = 'confirm'
   isModalOpen.value = true
 }
 
 const handleModalConfirm = async () => {
-  // 등록하시겠습니까? 모달의 확인 버튼 클릭 시 모다 닫고
+  // 등록하시겠습니까? 모달의 확인 버튼 클릭 시 모달닫고
   isModalOpen.value = false
 
   // emit으로 부모에게 데이터 전달
@@ -412,7 +420,7 @@ const handleModalConfirm = async () => {
       ...form,
       date: props.date,
       imageFile: imageFile.value,
-      originImageUrl: detail.imageUrl, // 기존 이미지
+      originImageUrl: originImageUrl.value,
     })
   }
 }
