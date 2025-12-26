@@ -236,11 +236,12 @@ cd backend
 
 ### 윤상현 (팀원)
 * Backend
-  * user, pointshop
-  * AI API 활용 recommendtaion 구현
+  * user CRUD 기능 및 JWT 인증 기반 로그인 기능 구현
+  * pointshop 카테고리 별 제품조회 및 포인트 교환 기능 구현
+  * AI API 활용 recommendtaion 기능 구현
 
 * Frontend
-  * auth / api / signup / login / pointshop / orderhistory / mypage / productcard / modal
+  * auth / api연동 / signup / login / pointshop / orderhistory / mypage / productcard / modal 구현
 
 
 ## 소감
