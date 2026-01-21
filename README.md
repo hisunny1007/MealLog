@@ -1,4 +1,3 @@
-
 # 🥗 MealLog
 > ### 하루 식단 기록과 분석, AI 기반 추천까지 한 번에! <br> 누구나 쉽고 간편하게 하는 식단 기록
 </br>
@@ -220,6 +219,29 @@ cd backend
 ./gradlew bootrun
 ```
 </br>
+
+## 시연 영상
+- 신규 유저 온보딩 UI 및 튤팁 가이드 적용
+
+https://github.com/user-attachments/assets/55d717ff-b2a1-49bb-aeea-5ecaceb7b119
+
+- 식단 등록 및 AI 분석 리포트
+
+
+https://github.com/user-attachments/assets/18265894-cb6b-4cbf-8afc-a24c7e3e4f6e
+
+- 포인트샵 교환
+
+
+https://github.com/user-attachments/assets/e916ea67-b2a0-4651-9829-cb49e92164cb
+
+
+
+- 회원가입
+
+
+https://github.com/user-attachments/assets/a4ddaaa4-8e51-4ce5-9c1c-cb40d36b7680
+
 
 ## 👥 팀원 소개
 ### 차윤선 (팀장)
